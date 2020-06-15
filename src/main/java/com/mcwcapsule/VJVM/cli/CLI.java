@@ -3,6 +3,8 @@ package com.mcwcapsule.VJVM.cli;
 import org.apache.commons.cli.*;
 import org.apache.commons.cli.ParseException;
 
+import lombok.*;
+
 /**
  * The CLI interface
  */
@@ -27,9 +29,9 @@ public final class CLI {
             printHelp();
             return;
         }
-        DefaultParser parser = new DefaultParser();
+        var parser = new DefaultParser();
         try {
-            CommandLine cmd = parser.parse(options, args);
+            var cmd = parser.parse(options, args);
             if (cmd.hasOption("h")) {
                 printHelp();
                 return;
@@ -44,7 +46,7 @@ public final class CLI {
     }
 
     static void printHelp() {
-        HelpFormatter formatter = new HelpFormatter();
+        var formatter = new HelpFormatter();
         formatter.printHelp("jvvm [options] class [args...]", "options:", options, "");
     }
 }

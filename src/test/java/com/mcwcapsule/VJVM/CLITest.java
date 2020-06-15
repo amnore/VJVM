@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import lombok.*;
+
 /**
  * Unit test for CLI.
  */
@@ -33,7 +35,7 @@ class CLITest {
 
     @Test
     void testHelp() {
-        String[] args = new String[] { "-h", "-cp", "/lib", "VJVM" };
+        var args = new String[] { "-h", "-cp", "/lib", "VJVM" };
         CLI.main(args);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteBufferInputStream(outBuf)))) {
             assertTrue(reader.readLine().startsWith("usage"));
@@ -44,7 +46,7 @@ class CLITest {
 
     @Test
     void testEmpty() {
-        String[] args = new String[] {};
+        var args = new String[] {};
         CLI.main(args);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteBufferInputStream(outBuf)))) {
             assertTrue(reader.readLine().startsWith("usage"));
@@ -55,7 +57,7 @@ class CLITest {
 
     @Test
     void testMissingClass() {
-        String[] args = new String[] { "-cp", "/usr/" };
+        var args = new String[] { "-cp", "/usr/" };
         CLI.main(args);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteBufferInputStream(errBuf)))) {
             assertEquals("Main class required.", reader.readLine());
