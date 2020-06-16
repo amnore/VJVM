@@ -7,6 +7,6 @@ public class UTF8Constant extends ValueConstant {
 
     @Override
     public String getValue() {
-        return (String) super.getValue();
+        return (String) value;
     }
 }

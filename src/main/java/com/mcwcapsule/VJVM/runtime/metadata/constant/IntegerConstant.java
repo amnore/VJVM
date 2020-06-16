@@ -7,6 +7,6 @@ public class IntegerConstant extends ValueConstant {
 
     @Override
     public Integer getValue() {
-        return (Integer) super.getValue();
+        return (Integer) value;
     }
 }

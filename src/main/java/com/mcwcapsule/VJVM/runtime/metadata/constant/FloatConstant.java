@@ -7,6 +7,6 @@ public class FloatConstant extends ValueConstant {
 
     @Override
     public Float getValue() {
-        return (Float) super.getValue();
+        return (Float) value;
     }
 }

@@ -16,6 +16,6 @@ public class StringConstant extends ValueConstant implements ResolvableConstant 
 
     @Override
     public String getValue() {
-        return (String) super.getValue();
+        return (String) value;
     }
 }

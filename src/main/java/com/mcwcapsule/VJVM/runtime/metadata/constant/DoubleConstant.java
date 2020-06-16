@@ -7,6 +7,6 @@ public class DoubleConstant extends ValueConstant {
 
     @Override
     public Double getValue() {
-        return (Double) super.getValue();
+        return (Double) value;
     }
 }
