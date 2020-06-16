@@ -20,7 +20,7 @@ public class MethodRef extends Constant implements ResolvableConstant {
     @Getter
     private FieldInfo info;
 
-    public MethodRef(final int classIndex, final int nameAndTypeIndex) {
+    public MethodRef(int classIndex, int nameAndTypeIndex) {
         this.classIndex = classIndex;
         this.nameAndTypeIndex = nameAndTypeIndex;
     }

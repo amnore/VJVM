@@ -21,8 +21,8 @@ public class RuntimeConstantPool {
     public RuntimeConstantPool(DataInput dataInput) {
         try {
             this.count = dataInput.readUnsignedShort();
-            constants = new Constant[count + 1];
-            for (int i = 1; i <= count; ++i)
+            constants = new Constant[count];
+            for (int i = 1; i < count; ++i)
                 constants[i] = Constant.construntFromData(dataInput);
         } catch (IOException e) {
             throw new ClassFormatError();
@@ -35,7 +35,7 @@ public class RuntimeConstantPool {
      * @return the constant in the pool
      */
     public Constant getConstant(int index) {
-        assert index > 0 && index <= count;
+        assert index > 0 && index < count;
         return constants[index];
     }
 

@@ -37,6 +37,7 @@ public class Attribute {
                     for (int i = 0; i < attributesCount; ++i)
                         attributes[i] = constructFromData(input, constantPool);
                     ret = new Code(maxStack, maxLocals, code, attributes);
+                    break;
                 default:
                     // return fake attribute
                     assert input.skipBytes((int) attrLength) == attrLength;
