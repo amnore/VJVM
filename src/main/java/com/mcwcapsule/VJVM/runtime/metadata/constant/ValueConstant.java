@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-public abstract class ValueConstant {
+public abstract class ValueConstant extends Constant {
     @Setter(value = AccessLevel.PROTECTED)
     @Getter
     protected Object value;

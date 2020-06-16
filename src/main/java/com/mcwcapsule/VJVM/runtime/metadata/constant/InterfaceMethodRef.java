@@ -5,7 +5,7 @@ import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 import lombok.Getter;
 
-public class InterfaceMethodRef implements ResolvableConstant {
+public class InterfaceMethodRef extends Constant implements ResolvableConstant {
     private final int classIndex;
     @Getter
     private ClassRef classRef;

@@ -16,6 +16,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.DoubleConstant;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.FieldRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.FloatConstant;
@@ -45,7 +46,8 @@ public class RuntimeConstantPool {
     public RuntimeConstantPool(int count, DataInput dataInput) {
         constants = new Object[count + 1];
         this.count = count;
-        constructFromData(dataInput);
+        for (int i = 1; i <= count; ++i)
+            constants[i] = Constant.construntFromData(dataInput);
     }
 
     /**
@@ -64,51 +66,4 @@ public class RuntimeConstantPool {
         // TODO:resolve constants
     }
 
-    private void constructFromData(DataInput input) {
-        for (int i = 1; i <= count; ++i) {
-            try {
-                val tag = input.readByte();
-                switch (tag) {
-                    case CONSTANT_Class:
-                        constants[i] = new ClassRef(input.readUnsignedShort());
-                        break;
-                    case CONSTANT_Fieldref:
-                    case CONSTANT_Methodref:
-                    case CONSTANT_InterfaceMethodref:
-                        val classIndex = input.readUnsignedShort();
-                        val nameAndTypeIndex = input.readUnsignedShort();
-                        constants[i] = tag == CONSTANT_Fieldref ? new FieldRef(classIndex, nameAndTypeIndex)
-                                : tag == CONSTANT_Methodref ? new MethodRef(classIndex, nameAndTypeIndex)
-                                        : new InterfaceMethodRef(classIndex, nameAndTypeIndex);
-                        break;
-                    case CONSTANT_String:
-                        constants[i] = new StringConstant(input.readUnsignedShort());
-                        break;
-                    case CONSTANT_Integer:
-                        constants[i] = new IntegerConstant(input.readInt());
-                        break;
-                    case CONSTANT_Float:
-                        constants[i] = new FloatConstant(input.readFloat());
-                        break;
-                    case CONSTANT_Long:
-                        constants[i] = new LongConstant(input.readLong());
-                        break;
-                    case CONSTANT_Double:
-                        constants[i] = new DoubleConstant(input.readDouble());
-                    case CONSTANT_NameAndType:
-                        val nameIndex = input.readUnsignedShort();
-                        val descIndex = input.readUnsignedShort();
-                        constants[i] = new NameAndTypeConstant(nameIndex, descIndex);
-                        break;
-                    case CONSTANT_Utf8:
-                        constants[i] = new UTF8Constant(input.readUTF());
-                        break;
-                    default:
-                        throw new ClassFormatError();
-                }
-            } catch (IOException e) {
-                throw new ClassFormatError();
-            }
-        }
-    }
 }

@@ -4,7 +4,7 @@ import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 import lombok.Getter;
 
-public class NameAndTypeConstant implements ResolvableConstant {
+public class NameAndTypeConstant extends Constant implements ResolvableConstant {
     private final int nameIndex;
     @Getter
     private String name;

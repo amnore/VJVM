@@ -5,7 +5,7 @@ import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 import lombok.Getter;
 
-public class ClassRef implements ResolvableConstant {
+public class ClassRef extends Constant implements ResolvableConstant {
     private final int nameIndex;
     @Getter
     String name;
