@@ -39,6 +39,10 @@ public class RuntimeConstantPool {
         return constants[index];
     }
 
+    public int size() {
+        return constants.length;
+    }
+
     public void resolve() {
         if (resolved)
             return;
