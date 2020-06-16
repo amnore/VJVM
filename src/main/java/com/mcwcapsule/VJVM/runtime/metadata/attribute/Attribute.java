@@ -1,16 +1,14 @@
 package com.mcwcapsule.VJVM.runtime.metadata.attribute;
 
+import static com.mcwcapsule.VJVM.runtime.metadata.AttributeTags.ATTR_Code;
+import static com.mcwcapsule.VJVM.runtime.metadata.AttributeTags.ATTR_ConstantValue;
+
 import java.io.DataInput;
 import java.io.IOException;
 
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ValueConstant;
-
-import lombok.var;
-
-import static com.mcwcapsule.VJVM.runtime.metadata.AttributeTags.*;
 
 public class Attribute {
     public static Attribute constructFromData(DataInput input, RuntimeConstantPool constantPool) {
