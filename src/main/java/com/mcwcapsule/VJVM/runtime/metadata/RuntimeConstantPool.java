@@ -32,7 +32,7 @@ import lombok.val;
 
 public class RuntimeConstantPool {
     // runtime constants are stored here
-    private Object[] constants;
+    private Constant[] constants;
     // number of constants
     private int count;
     // whether the constants are resolved
@@ -44,7 +44,7 @@ public class RuntimeConstantPool {
      * @param dataInput stream of data, contents of this constant pool will be read from stream
      */
     public RuntimeConstantPool(int count, DataInput dataInput) {
-        constants = new Object[count + 1];
+        constants = new Constant[count + 1];
         this.count = count;
         for (int i = 1; i <= count; ++i)
             constants[i] = Constant.construntFromData(dataInput);
