@@ -1,6 +1,7 @@
 package com.mcwcapsule.VJVM.runtime.metadata;
 
 import java.io.DataInput;
+import java.io.IOException;
 
 import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
 
@@ -17,11 +18,15 @@ public class RuntimeConstantPool {
      * @param count number of constants
      * @param dataInput stream of data, contents of this constant pool will be read from stream
      */
-    public RuntimeConstantPool(int count, DataInput dataInput) {
-        constants = new Constant[count + 1];
-        this.count = count;
-        for (int i = 1; i <= count; ++i)
-            constants[i] = Constant.construntFromData(dataInput);
+    public RuntimeConstantPool(DataInput dataInput) {
+        try {
+            this.count = dataInput.readUnsignedShort();
+            constants = new Constant[count + 1];
+            for (int i = 1; i <= count; ++i)
+                constants[i] = Constant.construntFromData(dataInput);
+        } catch (IOException e) {
+            throw new ClassFormatError();
+        }
     }
 
     /**
