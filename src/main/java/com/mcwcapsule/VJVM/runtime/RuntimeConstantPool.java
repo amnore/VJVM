@@ -30,9 +30,9 @@ public class RuntimeConstantPool {
     private boolean resolved = false;
 
     /**
-     * Construct a runtime constant pool from binary data
+     * Constructs a runtime constant pool from binary data
      * @param count number of constants
-     * @param dataInput stream of data
+     * @param dataInput stream of data, contents of this constant pool will be read from stream
      */
     public RuntimeConstantPool(int count, DataInput dataInput) {
         constants = new Object[count + 1];
@@ -40,6 +40,11 @@ public class RuntimeConstantPool {
         constructFromData(dataInput);
     }
 
+    /**
+     * Gets a constant at index
+     * @param index the index of the constant
+     * @return the constant in the pool
+     */
     public Object getConstant(int index) {
         assert index > 0 && index <= count;
         return constants[index];
