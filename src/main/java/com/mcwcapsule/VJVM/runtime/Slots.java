@@ -99,44 +99,46 @@ public class Slots {
         setInt(index, value);
     }
 
-    public void pushByte(byte value) {
-        pushInt(value);
+    public int pushByte(byte value) {
+        return pushInt(value);
     }
 
-    public void pushShort(short value) {
-        pushInt(value);
+    public int pushShort(short value) {
+        return pushInt(value);
     }
 
-    public void pushInt(int value) {
+    public int pushInt(int value) {
         if (buf.position() == buf.limit())
             grow();
         buf.putInt(value);
+        return buf.position() / 4 - 1;
     }
 
-    public void pushLong(long value) {
+    public int pushLong(long value) {
         if (buf.position() >= buf.limit() - 1)
             grow();
         buf.putLong(value);
+        return buf.position() / 4 - 2;
     }
 
-    public void pushChar(char value) {
-        pushInt(value);
+    public int pushChar(char value) {
+        return pushInt(value);
     }
 
-    public void pushFloat(float value) {
-        pushInt(Float.floatToRawIntBits(value));
+    public int pushFloat(float value) {
+        return pushInt(Float.floatToRawIntBits(value));
     }
 
-    public void pushDouble(double value) {
-        pushLong(Double.doubleToRawLongBits(value));
+    public int pushDouble(double value) {
+        return pushLong(Double.doubleToRawLongBits(value));
     }
 
-    public void pushBool(boolean value) {
-        pushInt(value ? 1 : 0);
+    public int pushBool(boolean value) {
+        return pushInt(value ? 1 : 0);
     }
 
-    public void pushAddress(int value) {
-        pushInt(value);
+    public int pushAddress(int value) {
+        return pushInt(value);
     }
 
     public byte popByte() {
@@ -177,6 +179,10 @@ public class Slots {
 
     public int popAddress() {
         return popInt();
+    }
+
+    public int size() {
+        return buf.position() / 4;
     }
 
     private void grow() {
