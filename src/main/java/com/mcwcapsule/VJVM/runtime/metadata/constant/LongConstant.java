@@ -1,8 +1,4 @@
-package com.mcwcapsule.VJVM.runtime.constant;
-
-import com.mcwcapsule.VJVM.runtime.RuntimeConstantPool;
-
-import lombok.Getter;
+package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 public class LongConstant extends ValueConstant {
     public LongConstant(Long value) {

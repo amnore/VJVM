@@ -1,6 +1,6 @@
-package com.mcwcapsule.VJVM.runtime.constant;
+package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
-import com.mcwcapsule.VJVM.runtime.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 import lombok.Getter;
 

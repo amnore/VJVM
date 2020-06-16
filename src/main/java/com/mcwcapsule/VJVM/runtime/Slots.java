@@ -3,7 +3,6 @@ package com.mcwcapsule.VJVM.runtime;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
-import lombok.val;
 import lombok.var;
 
 /**

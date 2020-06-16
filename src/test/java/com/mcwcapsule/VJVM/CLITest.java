@@ -1,5 +1,8 @@
 package com.mcwcapsule.VJVM;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,15 +11,10 @@ import java.nio.ByteBuffer;
 
 import com.mcwcapsule.VJVM.cli.CLI;
 
-import org.apache.commons.cli.ParseException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import lombok.*;
+import lombok.var;
 
 /**
  * Unit test for CLI.

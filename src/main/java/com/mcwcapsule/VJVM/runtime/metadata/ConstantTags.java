@@ -1,4 +1,4 @@
-package com.mcwcapsule.VJVM.runtime;
+package com.mcwcapsule.VJVM.runtime.metadata;
 
 public class ConstantTags {
     public static final byte CONSTANT_Class = 7;

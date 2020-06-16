@@ -1,8 +1,7 @@
-package com.mcwcapsule.VJVM.runtime.constant;
+package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 public abstract class ValueConstant {

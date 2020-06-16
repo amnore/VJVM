@@ -1,10 +1,9 @@
-package com.mcwcapsule.VJVM.runtime.constant;
+package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
-import com.mcwcapsule.VJVM.runtime.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 import lombok.Getter;
-import lombok.NonNull;
 
 public class ClassRef implements ResolvableConstant {
     private final int nameIndex;

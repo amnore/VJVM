@@ -1,12 +1,11 @@
-package com.mcwcapsule.VJVM.runtime.constant;
+package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
-import com.mcwcapsule.VJVM.runtime.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
+import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 import lombok.Getter;
-import lombok.NonNull;
 
-public class InterfaceMethodRef implements ResolvableConstant {
+public class MethodRef implements ResolvableConstant {
     private final int classIndex;
     @Getter
     private ClassRef classRef;
@@ -20,7 +19,7 @@ public class InterfaceMethodRef implements ResolvableConstant {
     @Getter
     private FieldInfo info;
 
-    public InterfaceMethodRef(final int classIndex, final int nameAndTypeIndex) {
+    public MethodRef(final int classIndex, final int nameAndTypeIndex) {
         this.classIndex = classIndex;
         this.nameAndTypeIndex = nameAndTypeIndex;
     }
