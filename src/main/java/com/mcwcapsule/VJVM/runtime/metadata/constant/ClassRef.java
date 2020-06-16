@@ -18,7 +18,7 @@ public class ClassRef extends Constant implements ResolvableConstant {
     }
 
     @Override
-    public void resolve(RuntimeConstantPool constantPool) {
+    public void resolve(JClass jClass) {
         // TODO: resolve
     }
 }

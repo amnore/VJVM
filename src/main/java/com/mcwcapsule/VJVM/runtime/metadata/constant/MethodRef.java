@@ -1,5 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
+import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
@@ -25,7 +26,7 @@ public class MethodRef extends Constant implements ResolvableConstant {
     }
 
     @Override
-    public void resolve(final RuntimeConstantPool constantPool) {
+    public void resolve(JClass jClass) {
         // TODO: resolve
     }
 }

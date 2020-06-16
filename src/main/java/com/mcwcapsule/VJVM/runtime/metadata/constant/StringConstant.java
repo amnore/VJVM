@@ -1,5 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
+import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 public class StringConstant extends ValueConstant implements ResolvableConstant {
@@ -10,12 +11,7 @@ public class StringConstant extends ValueConstant implements ResolvableConstant 
     }
 
     @Override
-    public void resolve(RuntimeConstantPool constantPool) {
-        // TODO resolve
-    }
-
-    @Override
-    public String getValue() {
-        return (String) value;
+    public void resolve(JClass jClass) {
+        // TODO: resolve
     }
 }

@@ -1,5 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
+import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class NameAndTypeConstant extends Constant implements ResolvableConstant 
     }
 
     @Override
-    public void resolve(RuntimeConstantPool constantPool) {
-        // TODO resolve 
+    public void resolve(JClass jClass) {
+        // TODO: resolve
     }
 }

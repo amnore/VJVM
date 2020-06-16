@@ -34,7 +34,7 @@ public class RuntimeConstantPool {
      * @param index the index of the constant
      * @return the constant in the pool
      */
-    public Object getConstant(int index) {
+    public Constant getConstant(int index) {
         assert index > 0 && index <= count;
         return constants[index];
     }
