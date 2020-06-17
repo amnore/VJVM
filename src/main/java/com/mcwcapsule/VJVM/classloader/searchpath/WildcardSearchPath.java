@@ -3,12 +3,8 @@ package com.mcwcapsule.VJVM.classloader.searchpath;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.jar.JarFile;
-import java.util.jar.Attributes.Name;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import lombok.val;
@@ -35,7 +31,7 @@ public class WildcardSearchPath extends ClassSearchPath {
     public InputStream findClass(String name) {
         try {
             for (val jarFile : jars) {
-                val entry = jarFile.getEntry(name);
+                val entry = jarFile.getEntry(name + ".class");
                 if (entry != null)
                     return jarFile.getInputStream(entry);
             }

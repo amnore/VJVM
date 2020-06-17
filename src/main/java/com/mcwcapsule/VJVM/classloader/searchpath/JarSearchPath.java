@@ -21,7 +21,7 @@ public class JarSearchPath extends ClassSearchPath {
         if (file == null)
             return null;
         try {
-            return file.getInputStream(file.getEntry(name));
+            return file.getInputStream(file.getEntry(name + ".class"));
         } catch (IOException e) {
             return null;
         }

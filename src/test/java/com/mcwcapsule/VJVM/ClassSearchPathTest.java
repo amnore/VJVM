@@ -51,7 +51,7 @@ public class ClassSearchPathTest {
         val _0 = new DirSearchPath(base.toString());
         assertNotEquals(null, _0.findClass("searchpath0/SearchTest0"));
         assertNotEquals(null, _0.findClass("searchpath1/SearchTest1"));
-        val _1 = new DirSearchPath(base.toString() + "searchpath0");
+        val _1 = new DirSearchPath(base.resolve("searchpath0").toString());
         assertNotEquals(null, _1.findClass("SearchTest0"));
         assertEquals(null, _1.findClass("SearchTest1"));
     }
@@ -65,7 +65,7 @@ public class ClassSearchPathTest {
 
     @Test
     public void testWild() {
-        val _0 = new WildcardSearchPath(base.toString());
+        val _0 = new WildcardSearchPath(base.toString() + "/*");
         assertNotEquals(null, _0.findClass("searchpath0/SearchTest0"));
         assertNotEquals(null, _0.findClass("searchpath1/SearchTest1"));
     }

@@ -16,7 +16,7 @@ public class DirSearchPath extends ClassSearchPath {
     @Override
     public InputStream findClass(String name) {
         try {
-            return new FileInputStream(searchPath.resolve(name).toFile());
+            return new FileInputStream(searchPath.resolve(name + ".class").toFile());
         } catch (FileNotFoundException e) {
             return null;
         }
