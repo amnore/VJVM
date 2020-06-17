@@ -1,10 +1,11 @@
 package com.mcwcapsule.VJVM.classloader.searchpath;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarFile;
 
-public class JarSearchPath extends ClassSearchPath {
+public class JarSearchPath extends ClassSearchPath implements Closeable {
     // might be null if the file doesn't extsts.
     private JarFile file;
 
@@ -26,4 +27,10 @@ public class JarSearchPath extends ClassSearchPath {
             return null;
         }
     }
+
+    @Override
+    public void close() throws IOException {
+        file.close();
+    }
+
 }
