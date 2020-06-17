@@ -1,4 +1,4 @@
-package com.mcwcapsule.VJVM;
+package com.mcwcapsule.VJVM.utils;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
