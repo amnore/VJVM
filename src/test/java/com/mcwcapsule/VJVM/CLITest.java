@@ -10,6 +10,8 @@ import java.io.PrintStream;
 import java.nio.ByteBuffer;
 
 import com.mcwcapsule.VJVM.cli.CLI;
+import com.mcwcapsule.VJVM.utils.ByteBufferInputStream;
+import com.mcwcapsule.VJVM.utils.ByteBufferOutputStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
