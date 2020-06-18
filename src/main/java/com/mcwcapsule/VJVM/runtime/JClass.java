@@ -3,6 +3,7 @@ package com.mcwcapsule.VJVM.runtime;
 import java.io.DataInput;
 import java.io.IOException;
 
+import com.mcwcapsule.VJVM.classloader.ClassLoader;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
 import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
@@ -29,18 +30,26 @@ public class JClass {
     private MethodInfo[] methods;
     private Attribute[] attributes;
 
-    public JClass(DataInput dataInput) {
+    @Getter
+    private ClassLoader loader;
+
+    public JClass(DataInput dataInput, ClassLoader initLoader) {
         try {
+            this.loader = initLoader;
             // check magic number
             assert dataInput.readInt() == 0xCAFEBABE;
+            // parse data
+            // skip class version check
             minorVersion = dataInput.readShort();
             majorVersion = dataInput.readShort();
+
             constantPool = new RuntimeConstantPool(dataInput);
             accessFlags = dataInput.readShort();
             int thisIndex = dataInput.readUnsignedShort();
             thisClass = (ClassRef) constantPool.getConstant(thisIndex);
             int superIndex = dataInput.readUnsignedShort();
-            superClass = (ClassRef) constantPool.getConstant(superIndex);
+            if (superIndex != 0)
+                superClass = (ClassRef) constantPool.getConstant(superIndex);
             int interfacesCount = dataInput.readUnsignedShort();
             interfaces = new ClassRef[interfacesCount];
             for (int i = 0; i < interfacesCount; ++i) {
@@ -62,5 +71,13 @@ public class JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
+    }
+
+    public ClassRef getSuperInterface(int index) {
+        return interfaces[index];
+    }
+
+    public int getSuperInterfacesCount() {
+        return interfaces.length;
     }
 }
