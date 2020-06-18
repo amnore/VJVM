@@ -1,12 +1,10 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
-public class UTF8Constant extends ValueConstant {
-    public UTF8Constant(String value) {
-        super(value);
-    }
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    @Override
-    public String getValue() {
-        return (String) value;
-    }
+@RequiredArgsConstructor
+@Getter
+public class UTF8Constant extends Constant {
+    private final String value;
 }

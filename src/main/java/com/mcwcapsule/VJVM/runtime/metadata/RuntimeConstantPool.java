@@ -4,6 +4,7 @@ import java.io.DataInput;
 import java.io.IOException;
 
 import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.UnevaluatedConstant;
 
 public class RuntimeConstantPool {
     // runtime constants are stored here
@@ -24,6 +25,10 @@ public class RuntimeConstantPool {
             constants = new Constant[count];
             for (int i = 1; i < count; ++i)
                 constants[i] = Constant.construntFromData(dataInput);
+            // eval unevaluated constants
+            for (int i = 1; i < count; ++i)
+                if (constants[i] instanceof UnevaluatedConstant)
+                    constants[i] = ((UnevaluatedConstant) constants[i]).evaluate(this);
         } catch (IOException e) {
             throw new ClassFormatError();
         }
@@ -37,6 +42,10 @@ public class RuntimeConstantPool {
     public Constant getConstant(int index) {
         assert index > 0 && index < count;
         return constants[index];
+    }
+
+    public void setConstant(int index, Constant constant) {
+        constants[index] = constant;
     }
 
     public int size() {

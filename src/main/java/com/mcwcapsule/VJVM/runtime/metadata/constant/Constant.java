@@ -1,11 +1,21 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Class;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Double;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Fieldref;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Float;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Integer;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_InterfaceMethodref;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Long;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Methodref;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_NameAndType;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_String;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Utf8;
+
 import java.io.DataInput;
 import java.io.IOException;
 
 import lombok.val;
-
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.*;
 
 public class Constant {
     public static Constant construntFromData(DataInput input) {
@@ -14,19 +24,19 @@ public class Constant {
             val tag = input.readByte();
             switch (tag) {
                 case CONSTANT_Class:
-                    result = new ClassRef(input.readUnsignedShort());
+                    result = new RawClassRef(input.readUnsignedShort());
                     break;
                 case CONSTANT_Fieldref:
                 case CONSTANT_Methodref:
                 case CONSTANT_InterfaceMethodref:
                     val classIndex = input.readUnsignedShort();
                     val nameAndTypeIndex = input.readUnsignedShort();
-                    result = tag == CONSTANT_Fieldref ? new FieldRef(classIndex, nameAndTypeIndex)
-                            : tag == CONSTANT_Methodref ? new MethodRef(classIndex, nameAndTypeIndex)
-                                    : new InterfaceMethodRef(classIndex, nameAndTypeIndex);
+                    result = tag == CONSTANT_Fieldref ? new RawFieldRef(classIndex, nameAndTypeIndex)
+                            : tag == CONSTANT_Methodref ? new RawMethodRef(classIndex, nameAndTypeIndex)
+                                    : new RawInterfaceMethodRef(classIndex, nameAndTypeIndex);
                     break;
                 case CONSTANT_String:
-                    result = new StringConstant(input.readUnsignedShort());
+                    result = new RawStringConstant(input.readUnsignedShort());
                     break;
                 case CONSTANT_Integer:
                     result = new IntegerConstant(input.readInt());
@@ -42,7 +52,7 @@ public class Constant {
                 case CONSTANT_NameAndType:
                     val nameIndex = input.readUnsignedShort();
                     val descIndex = input.readUnsignedShort();
-                    result = new NameAndTypeConstant(nameIndex, descIndex);
+                    result = new RawNameAndTypeConstant(nameIndex, descIndex);
                     break;
                 case CONSTANT_Utf8:
                     result = new UTF8Constant(input.readUTF());

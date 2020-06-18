@@ -13,15 +13,15 @@ import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_String;
 import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Utf8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.NameAndTypeConstant;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.StringConstant;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ValueConstant;
+import com.mcwcapsule.VJVM.utils.FileUtil;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.ConstantCP;
@@ -74,36 +74,31 @@ public class ClassParseTest {
             try {
                 switch (realConstant.getTag()) {
                     case CONSTANT_Class:
-                        var _f0 = ClassRef.class.getDeclaredField("nameIndex");
-                        _f0.setAccessible(true);
-                        assertEquals(((ConstantClass) realConstant).getNameIndex(), _f0.get(myConstant));
+                        assertEquals(((ConstantClass) realConstant).getBytes(realPool),
+                                ((ClassRef) myConstant).getName());
                         break;
                     case CONSTANT_Fieldref:
                     case CONSTANT_Methodref:
                     case CONSTANT_InterfaceMethodref:
                         var _1 = (ConstantCP) realConstant;
                         var _2 = myConstant.getClass();
-                        var _f1 = _2.getDeclaredField("classIndex");
-                        _f1.setAccessible(true);
-                        var _f2 = _2.getDeclaredField("nameAndTypeIndex");
-                        _f2.setAccessible(true);
-                        assertEquals(_1.getClassIndex(), _f1.get(myConstant));
-                        assertEquals(_1.getNameAndTypeIndex(), _f2.get(myConstant));
+                        var _f1 = _2.getDeclaredMethod("getClassRef");
+                        var _f2 = _2.getDeclaredMethod("getName");
+                        var _f3 = _2.getDeclaredMethod("getDescriptor");
+                        assertEquals(_1.getClass(realPool).replace('.', '/'),
+                                ((ClassRef) _f1.invoke(myConstant)).getName());
+                        var _n = (ConstantNameAndType) realPool.getConstant(_1.getNameAndTypeIndex());
+                        assertEquals(_n.getName(realPool).replace('.', '/'), _f2.invoke(myConstant));
+                        assertEquals(_n.getSignature(realPool).replace('.', '/'), _f3.invoke(myConstant));
                         break;
                     case CONSTANT_String:
-                        var _f3 = StringConstant.class.getDeclaredField("stringIndex");
-                        _f3.setAccessible(true);
-                        assertEquals(((ConstantString) realConstant).getStringIndex(), _f3.get(myConstant));
+                        assertEquals(((ConstantString) realConstant).getBytes(realPool),
+                                ((StringConstant) myConstant).getValue());
                         break;
                     case CONSTANT_NameAndType:
                         var _3 = (ConstantNameAndType) realConstant;
-                        _2 = myConstant.getClass();
-                        _f1 = _2.getDeclaredField("nameIndex");
-                        _f1.setAccessible(true);
-                        _f2 = _2.getDeclaredField("descriptorIndex");
-                        _f2.setAccessible(true);
-                        assertEquals(_3.getNameIndex(), _f1.get(myConstant));
-                        assertEquals(_3.getSignatureIndex(), _f2.get(myConstant));
+                        assertEquals(_3.getName(realPool), ((NameAndTypeConstant) myConstant).getName());
+                        assertEquals(_3.getSignature(realPool), ((NameAndTypeConstant) myConstant).getDescriptor());
                         break;
                     case CONSTANT_Integer:
                     case CONSTANT_Float:
@@ -111,11 +106,11 @@ public class ClassParseTest {
                     case CONSTANT_Double:
                     case CONSTANT_Utf8:
                         assertEquals(realConstant.getClass().getMethod("getBytes").invoke(realConstant),
-                                ((ValueConstant) myConstant).getValue());
+                                myConstant.getClass().getMethod("getValue").invoke(myConstant));
                         break;
                 }
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new Error(e);
             }
         }
     }
@@ -127,10 +122,6 @@ public class ClassParseTest {
 
     @AfterAll
     public static void cleanUp() {
-        try {
-            Files.deleteIfExists(classPath);
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
+        FileUtil.DeleteRecursive(classPath.toFile());
     }
 }
