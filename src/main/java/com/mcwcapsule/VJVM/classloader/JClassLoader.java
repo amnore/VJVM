@@ -79,6 +79,10 @@ public class JClassLoader implements Closeable {
         throw new ClassNotFoundException();
     }
 
+    public JClass getDefinedClass(String name) {
+        return definedClass.get(name);
+    }
+
     @Override
     public void close() throws IOException {
         for (val s : searchPaths)
