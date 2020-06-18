@@ -96,38 +96,38 @@ public class JClass {
     }
 
     public boolean isPublic() {
-        return accessFlags == ACC_PUBLIC;
+        return (accessFlags & ACC_PUBLIC) != 0;
     }
 
     public boolean isFinal() {
-        return accessFlags == ACC_FINAL;
+        return (accessFlags & ACC_FINAL) != 0;
     }
 
     public boolean isSuper() {
-        return accessFlags == ACC_SUPER;
+        return (accessFlags & ACC_SUPER) != 0;
     }
 
     public boolean isInterface() {
-        return accessFlags == ACC_INTERFACE;
+        return (accessFlags & ACC_INTERFACE) != 0;
     }
 
     public boolean isAbstract() {
-        return accessFlags == ACC_ABSTRACT;
+        return (accessFlags & ACC_ABSTRACT) != 0;
     }
 
     public boolean isSynthetic() {
-        return accessFlags == ACC_SYNTHETIC;
+        return (accessFlags & ACC_SYNTHETIC) != 0;
     }
 
     public boolean isAnnotation() {
-        return accessFlags == ACC_ANNOTATION;
+        return (accessFlags & ACC_ANNOTATION) != 0;
     }
 
     public boolean isEnum() {
-        return accessFlags == ACC_ENUM;
+        return (accessFlags & ACC_ENUM) != 0;
     }
 
     public boolean isModule() {
-        return accessFlags == ACC_MODULE;
+        return (accessFlags & ACC_MODULE) != 0;
     }
 }

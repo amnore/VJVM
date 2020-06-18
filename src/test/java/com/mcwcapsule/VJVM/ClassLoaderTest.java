@@ -43,16 +43,18 @@ public class ClassLoaderTest {
     @Test
     void testRecursive() throws Exception {
         val jClass = loader.loadClass("testsource/Test4");
-        assertEquals(parent.getDefinedClass("testsource/Test2"), jClass.getSuperClass().getJClass());
-        assertEquals(loader.getDefinedClass("testsource/Test3"), jClass.getSuperInterface(0));
+        assertEquals(parent.getDefinedClass("java/lang/Object"),
+                jClass.getSuperClass().getJClass().getSuperClass().getJClass());
+        assertEquals(loader.getDefinedClass("testsource/Test2"), jClass.getSuperClass().getJClass());
+        assertEquals(loader.getDefinedClass("testsource/Test3"), jClass.getSuperInterface(0).getJClass());
     }
 
     @AfterAll
     public static void cleanup() {
-        FileUtil.DeleteRecursive(classPath.toFile());
         try {
             parent.close();
             loader.close();
+            FileUtil.DeleteRecursive(classPath.toFile());
         } catch (IOException e) {
             throw new Error(e);
         }

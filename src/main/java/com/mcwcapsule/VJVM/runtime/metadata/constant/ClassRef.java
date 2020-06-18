@@ -27,7 +27,8 @@ public class ClassRef extends Constant implements ResolvableConstant {
         if (name.equals(thisClass.getThisClass().name))
             jClass = thisClass;
         // if not, load the Class using the defining class loader of this class
-        jClass = thisClass.getClassLoader().loadClass(name);
+        else
+            jClass = thisClass.getClassLoader().loadClass(name);
         // check accessibility
         if (!jClass.isAccessibleTo(thisClass))
             throw new IllegalAccessError();

@@ -16,7 +16,7 @@ public class JClassLoader implements Closeable {
     // The parent of bootstrap class loader is null
     private JClassLoader parent;
     private ClassSearchPath[] searchPaths;
-    private HashMap<String, JClass> definedClass;
+    private HashMap<String, JClass> definedClass = new HashMap<>();
 
     public JClassLoader(JClassLoader parent, String path) {
         this.parent = parent;
@@ -59,9 +59,10 @@ public class JClassLoader implements Closeable {
         JClass ret = null;
         // find in parent first
         try {
-            if (parent != null)
+            if (parent != null) {
                 ret = parent.loadClass(name);
-            return ret;
+                return ret;
+            }
         } catch (ClassNotFoundException e) {
             // the parent didn't find the class
         }
