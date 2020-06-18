@@ -1,6 +1,5 @@
 package com.mcwcapsule.VJVM.classloader.searchpath;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +9,7 @@ import java.util.stream.Collectors;
 
 import lombok.val;
 
-public class WildcardSearchPath extends ClassSearchPath implements Closeable {
+public class WildcardSearchPath extends ClassSearchPath {
     private JarFile[] jars;
 
     public WildcardSearchPath(String path) {

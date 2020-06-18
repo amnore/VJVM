@@ -22,4 +22,9 @@ public class DirSearchPath extends ClassSearchPath {
         }
     }
 
+    @Override
+    public void close() {
+        // there is nothing to close
+    }
+
 }

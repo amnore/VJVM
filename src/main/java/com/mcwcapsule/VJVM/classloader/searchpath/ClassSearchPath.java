@@ -1,15 +1,16 @@
 package com.mcwcapsule.VJVM.classloader.searchpath;
 
+import java.io.Closeable;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import lombok.val;
-
 /**
  * Represents a path to search class files in.
+ * A search path may hold resources, such as jar files, so it must implement the Closeable imterface.
+ * If a subclass doesn't hold any resources, then just do nothing.
  */
-public abstract class ClassSearchPath {
+public abstract class ClassSearchPath implements Closeable {
     /**
      * Finds a class with specified name. 
      * @param name name of the class to find.
