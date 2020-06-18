@@ -1,5 +1,15 @@
 package com.mcwcapsule.VJVM.runtime;
 
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_ABSTRACT;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_ANNOTATION;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_ENUM;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_FINAL;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_INTERFACE;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_MODULE;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_PUBLIC;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_SUPER;
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_SYNTHETIC;
+
 import java.io.DataInput;
 import java.io.IOException;
 
@@ -79,5 +89,41 @@ public class JClass {
 
     public int getSuperInterfacesCount() {
         return interfaces.length;
+    }
+
+    public boolean isPublic() {
+        return accessFlags == ACC_PUBLIC;
+    }
+
+    public boolean isFinal() {
+        return accessFlags == ACC_FINAL;
+    }
+
+    public boolean isSuper() {
+        return accessFlags == ACC_SUPER;
+    }
+
+    public boolean isInterface() {
+        return accessFlags == ACC_INTERFACE;
+    }
+
+    public boolean isAbstract() {
+        return accessFlags == ACC_ABSTRACT;
+    }
+
+    public boolean isSynthetic() {
+        return accessFlags == ACC_SYNTHETIC;
+    }
+
+    public boolean isAnnotation() {
+        return accessFlags == ACC_ANNOTATION;
+    }
+
+    public boolean isEnum() {
+        return accessFlags == ACC_ENUM;
+    }
+
+    public boolean isModule() {
+        return accessFlags == ACC_MODULE;
     }
 }
