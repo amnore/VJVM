@@ -1,23 +1,34 @@
 package com.mcwcapsule.VJVM;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Class;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Double;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Fieldref;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Float;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Integer;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_InterfaceMethodref;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Long;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Methodref;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_NameAndType;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_String;
+import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Utf8;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.*;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.jar.Attributes.Name;
-
-import javax.management.RuntimeErrorException;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.*;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.StringConstant;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.ValueConstant;
 
-import org.apache.bcel.classfile.*;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.ConstantCP;
+import org.apache.bcel.classfile.ConstantClass;
+import org.apache.bcel.classfile.ConstantNameAndType;
+import org.apache.bcel.classfile.ConstantString;
+import org.apache.bcel.classfile.JavaClass;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,7 +52,7 @@ public class ClassParseTest {
             realClass = new ClassParser(classPath.toString()).parse();
             @Cleanup
             var raFile = new RandomAccessFile(classPath.toFile(), "r");
-            myClass = new JClass(raFile);
+            myClass = new JClass(raFile, null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
