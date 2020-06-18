@@ -28,8 +28,9 @@ public class ClassLoader implements Closeable {
      * @param name name of the class
      * @param data data of the class
      * @return the defined class
+     * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
-    public JClass defineClass(String name, InputStream data) {
+    public JClass defineClass(String name, InputStream data) throws ClassNotFoundException {
         val ret = new JClass(new DataInputStream(data), this);
         // check the name of created class matches what we expect, see spec 5.3.5.2
         // resolve ClassRef first

@@ -41,11 +41,11 @@ public class JClass {
     private Attribute[] attributes;
 
     @Getter
-    private ClassLoader loader;
+    private ClassLoader classLoader;
 
     public JClass(DataInput dataInput, ClassLoader initLoader) {
         try {
-            this.loader = initLoader;
+            this.classLoader = initLoader;
             // check magic number
             assert dataInput.readInt() == 0xCAFEBABE;
             // parse data
@@ -89,6 +89,10 @@ public class JClass {
 
     public int getSuperInterfacesCount() {
         return interfaces.length;
+    }
+
+    public boolean isAccessibleTo(JClass other) {
+        return isPublic() || classLoader.equals(other.classLoader);
     }
 
     public boolean isPublic() {
