@@ -12,13 +12,13 @@ import com.mcwcapsule.VJVM.runtime.JClass;
 import lombok.val;
 import lombok.var;
 
-public class ClassLoader implements Closeable {
+public class JClassLoader implements Closeable {
     // The parent of bootstrap class loader is null
-    private ClassLoader parent;
+    private JClassLoader parent;
     private ClassSearchPath[] searchPaths;
     private HashMap<String, JClass> definedClass;
 
-    public ClassLoader(ClassLoader parent, String path) {
+    public JClassLoader(JClassLoader parent, String path) {
         this.parent = parent;
         searchPaths = ClassSearchPath.constructSearchPath(path);
     }

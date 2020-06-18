@@ -13,7 +13,7 @@ import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_SYNTHETI
 import java.io.DataInput;
 import java.io.IOException;
 
-import com.mcwcapsule.VJVM.classloader.ClassLoader;
+import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
 import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
@@ -41,9 +41,9 @@ public class JClass {
     private Attribute[] attributes;
 
     @Getter
-    private ClassLoader classLoader;
+    private JClassLoader classLoader;
 
-    public JClass(DataInput dataInput, ClassLoader initLoader) {
+    public JClass(DataInput dataInput, JClassLoader initLoader) {
         try {
             this.classLoader = initLoader;
             // check magic number
