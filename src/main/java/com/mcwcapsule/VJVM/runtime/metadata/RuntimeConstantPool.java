@@ -6,6 +6,8 @@ import java.io.IOException;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UnevaluatedConstant;
 
+import lombok.val;
+
 public class RuntimeConstantPool {
     // runtime constants are stored here
     private Constant[] constants;
@@ -23,8 +25,11 @@ public class RuntimeConstantPool {
         try {
             this.count = dataInput.readUnsignedShort();
             constants = new Constant[count];
-            for (int i = 1; i < count; ++i)
-                constants[i] = Constant.construntFromData(dataInput);
+            for (int i = 1; i < count;) {
+                val r = Constant.construntFromData(dataInput);
+                constants[i] = r.getLeft();
+                i += r.getRight();
+            }
             // eval unevaluated constants
             for (int i = 1; i < count; ++i)
                 if (constants[i] instanceof UnevaluatedConstant)

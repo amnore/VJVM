@@ -50,6 +50,7 @@ public class JClass {
     @Getter
     private JClassLoader classLoader;
 
+    @Getter
     private Slots staticFields;
 
     public JClass(DataInput dataInput, JClassLoader initLoader) {
