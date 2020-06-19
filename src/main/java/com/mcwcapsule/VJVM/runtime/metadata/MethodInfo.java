@@ -5,21 +5,27 @@ import static com.mcwcapsule.VJVM.runtime.metadata.MethodAccessFlags.*;
 import java.io.DataInput;
 import java.io.IOException;
 
+import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.MethodRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
 
 import lombok.Getter;
+import lombok.val;
 
 public class MethodInfo {
-    private short accessFlags;
+    private final short accessFlags;
     @Getter
-    private String name;
+    private final String name;
     @Getter
-    private String descriptor;
-    private Attribute[] attributes;
+    private final String descriptor;
+    private final Attribute[] attributes;
+    private final JClass jClass;
 
-    public MethodInfo(DataInput dataInput, RuntimeConstantPool constantPool) {
+    public MethodInfo(DataInput dataInput, JClass jClass) {
         try {
+            this.jClass = jClass;
+            val constantPool = jClass.getConstantPool();
             accessFlags = dataInput.readShort();
             int nameIndex = dataInput.readUnsignedShort();
             name = ((UTF8Constant) constantPool.getConstant(nameIndex)).getValue();
@@ -32,6 +38,24 @@ public class MethodInfo {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
+    }
+
+    public boolean isAccessibleTo(JClass other, JClass referencedJClass) {
+        if (isPublic())
+            return true;
+        if (isProtected() && (other == jClass || other.isSubclassOf(jClass))) {
+            if (isStatic())
+                return true;
+            if (referencedJClass == other || referencedJClass.isSubclassOf(other)
+                    || other.isSubclassOf(referencedJClass))
+                return true;
+        }
+        if (isProtected() || (!isPublic() && !isPrivate())) {
+            // TODO: check runtime package
+        }
+        if (isPrivate() && other == jClass)
+            return true;
+        return false;
     }
 
     public boolean isPublic() {

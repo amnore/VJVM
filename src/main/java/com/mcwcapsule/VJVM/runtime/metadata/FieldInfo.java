@@ -1,14 +1,25 @@
 package com.mcwcapsule.VJVM.runtime.metadata;
 
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_ENUM;
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_FINAL;
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_PRIVATE;
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_PROTECTED;
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_PUBLIC;
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_STATIC;
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_SYNTHETIC;
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_TRANSIENT;
+
 import java.io.DataInput;
 import java.io.IOException;
 
+import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.FieldRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
 
 import lombok.Getter;
-
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.*;
+import lombok.Setter;
+import lombok.val;
 
 public class FieldInfo {
     private final short accessFlags;
@@ -17,9 +28,17 @@ public class FieldInfo {
     @Getter
     private final String descriptor;
     private final Attribute[] attributes;
+    private final JClass jClass;
 
-    public FieldInfo(DataInput dataInput, RuntimeConstantPool constantPool) {
+    // Offset of this field in slots
+    @Getter
+    @Setter
+    private int offset;
+
+    public FieldInfo(DataInput dataInput, JClass jClass) {
         try {
+            this.jClass = jClass;
+            val constantPool = jClass.getConstantPool();
             accessFlags = dataInput.readShort();
             int nameIndex = dataInput.readUnsignedShort();
             name = ((UTF8Constant) constantPool.getConstant(nameIndex)).getValue();
@@ -32,6 +51,38 @@ public class FieldInfo {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
+    }
+
+    /**
+     * Check whether this field is accessible to another class. See spec. 5.4.4
+     * @param other the referencing class
+     * @param referencedJClass the referenced class in FieldRef
+     * @return whether this field is accessible to other
+     */
+    public boolean isAccessibleTo(JClass other, JClass referencedJClass) {
+        if (isPublic())
+            return true;
+        if (isProtected() && (other == jClass || other.isSubclassOf(jClass))) {
+            if (isStatic())
+                return true;
+            if (referencedJClass == other || referencedJClass.isSubclassOf(other)
+                    || other.isSubclassOf(referencedJClass))
+                return true;
+        }
+        if (isProtected() || (!isPublic() && !isPrivate())) {
+            // TODO: check runtime package
+        }
+        if (isPrivate() && other == jClass)
+            return true;
+        return false;
+    }
+
+    public int getAttributeCount() {
+        return attributes.length;
+    }
+
+    public Attribute getAttribute(int index) {
+        return attributes[index];
     }
 
     public boolean isPublic() {
