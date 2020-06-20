@@ -1,19 +1,16 @@
 package com.mcwcapsule.VJVM.runtime;
 
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 /**
  * Slots represents an growable array of JVM slots as defined in the specification.
  * It supports getting and putting primitive data types, including address.
- * the data are stored in native endian.
  */
 public class Slots {
     private ByteBuffer buf;
 
     public Slots(int slotSize) {
         buf = ByteBuffer.allocate(slotSize * 4);
-        buf.order(ByteOrder.nativeOrder());
     }
 
     public int getInt(int index) {

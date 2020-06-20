@@ -18,4 +18,10 @@ For usage, see [Usage](Usage.md).
 
 As defined in the JVM spec, a class loader finds the binary representation of a class or interface type with a particular name and creates a class or interface from that binary representation[^1].
 
+## Bytecode Interpreter
+
+The design of interpreter and related classes is shown below.
+
+![Interpreter UML](interpreter.png)
+
 [^1]: The Java® Virtual Machine Specification (Java SE 8 Edition) <https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-5.html>
