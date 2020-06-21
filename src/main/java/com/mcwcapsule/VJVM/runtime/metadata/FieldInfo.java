@@ -85,6 +85,10 @@ public class FieldInfo {
         return attributes[index];
     }
 
+    public int getSize() {
+        return FieldDescriptors.getSize(descriptor);
+    }
+
     public boolean isPublic() {
         return (accessFlags & ACC_PUBLIC) != 0;
     }

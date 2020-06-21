@@ -102,13 +102,13 @@ public class JClass {
      */
     public void prepare() {
         // create static fields
-        int slotSize = 0;
+        int staticSize = 0;
         val staticFieldInfos = Arrays.stream(fields).filter(s -> s.isStatic()).collect(Collectors.toList());
         for (val field : staticFieldInfos) {
-            field.setOffset(slotSize);
-            slotSize += FieldDescriptors.getSize(field.getDescriptor());
+            field.setOffset(staticSize);
+            staticSize += FieldDescriptors.getSize(field.getDescriptor());
         }
-        staticFields = new Slots(slotSize);
+        staticFields = new Slots(staticSize);
         // load ConstantValue
         for (val field : staticFieldInfos) {
             if (!field.isFinal())
@@ -139,7 +139,16 @@ public class JClass {
                     break;
                 }
         }
-        // TODO: also prepare instance fields
+
+        // init instance fields
+        // reserve one slot for class index
+        int instanceSize = 1;
+        for (val field : fields) {
+            if (field.isStatic())
+                continue;
+            field.setOffset(instanceSize);
+            instanceSize += field.getSize();
+        }
     }
 
     /**
