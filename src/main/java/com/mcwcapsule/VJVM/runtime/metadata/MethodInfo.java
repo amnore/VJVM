@@ -4,9 +4,11 @@ import static com.mcwcapsule.VJVM.runtime.metadata.MethodAccessFlags.*;
 
 import java.io.DataInput;
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
+import com.mcwcapsule.VJVM.runtime.metadata.attribute.Code;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.MethodRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
 
@@ -22,6 +24,10 @@ public class MethodInfo {
     private final Attribute[] attributes;
     private final JClass jClass;
 
+    // if this method doesn't hava code attribute, then code is null.
+    @Getter
+    private Code code;
+
     public MethodInfo(DataInput dataInput, JClass jClass) {
         try {
             this.jClass = jClass;
@@ -33,11 +39,17 @@ public class MethodInfo {
             descriptor = ((UTF8Constant) constantPool.getConstant(descriptorIndex)).getValue();
             int attrCount = dataInput.readUnsignedShort();
             attributes = new Attribute[attrCount];
-            for (int i = 0; i < attrCount; ++i)
+            for (int i = 0; i < attrCount; ++i) {
                 attributes[i] = Attribute.constructFromData(dataInput, constantPool);
+            }
         } catch (IOException e) {
             throw new ClassFormatError();
         }
+        for (val i : attributes)
+            if (i instanceof Code) {
+                code = (Code) i;
+                break;
+            }
     }
 
     public boolean isAccessibleTo(JClass other, JClass referencedJClass) {

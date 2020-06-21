@@ -23,6 +23,7 @@ import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.vm.VJVM;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -166,9 +167,19 @@ public class JClass {
         initState = InitState.PREPARED;
     }
 
-    public void initialize() {
+    public void initialize(JThread thread) {
         initState = InitState.INITIALIZING;
-        // TODO: init
+        // find <clinit>
+        MethodInfo clinit = null;
+        for (val i : methods)
+            if (i.getName().equals("<clinit>") && i.getDescriptor().equals("V()")) {
+                clinit = i;
+                break;
+            }
+        if (clinit != null) {
+            val code = clinit.getCode();
+            thread.pushFrame(new JFrame(code.getMaxLocals(), code.getMaxStack(), constantPool, code.getCode()));
+        }
         initState = InitState.INITIALIZED;
     }
 
