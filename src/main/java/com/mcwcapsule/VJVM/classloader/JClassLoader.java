@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import com.mcwcapsule.VJVM.classloader.searchpath.ClassSearchPath;
 import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.runtime.NonArrayClass;
 import com.mcwcapsule.VJVM.vm.VJVM;
 
 import lombok.val;
@@ -25,14 +26,14 @@ public class JClassLoader implements Closeable {
     }
 
     /**
-     * Defines a class given its binary representation, see spec 5.3.5
+     * Defines a nonarray class, see spec 5.3.5
      * @param name name of the class
      * @param data data of the class
      * @return the defined class
      * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
-    public JClass defineClass(String name, InputStream data) throws ClassNotFoundException {
-        val ret = new JClass(new DataInputStream(data), this);
+    public JClass defineNonarrayClass(String name, InputStream data) throws ClassNotFoundException {
+        val ret = new NonArrayClass(new DataInputStream(data), this);
         // check the name of created class matches what we expect, see spec 5.3.5.2
         // resolve ClassRef first
         ret.getThisClass().resolve(ret);
@@ -76,7 +77,7 @@ public class JClassLoader implements Closeable {
             var iStream = p.findClass(name);
             // if the class was found
             if (iStream != null)
-                return defineClass(name, iStream);
+                return defineNonarrayClass(name, iStream);
         }
         throw new ClassNotFoundException();
     }

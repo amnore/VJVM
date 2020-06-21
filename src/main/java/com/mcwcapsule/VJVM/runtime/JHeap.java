@@ -2,12 +2,15 @@ package com.mcwcapsule.VJVM.runtime;
 
 import java.util.ArrayList;
 
+import lombok.Getter;
+
 public class JHeap {
     private ArrayList<JClass> methodArea;
+    @Getter
     private Slots slots;
     private int current = 0;
 
-    private static final int extraSize = 1;
+    private static final int extraSize = 2;
 
     public JHeap(int heapSize) {
         methodArea = new ArrayList<>();
@@ -23,6 +26,9 @@ public class JHeap {
         return methodArea.get(index);
     }
 
+    /**
+     * Allocates a piece of memory of specified size, and fill it with zero.
+     */
     public int allocate(int size) {
         int ret = current + extraSize;
         current += extraSize + size;

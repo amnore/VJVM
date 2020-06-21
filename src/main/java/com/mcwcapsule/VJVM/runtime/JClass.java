@@ -23,6 +23,7 @@ import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.utils.CallUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -54,11 +55,14 @@ public class JClass {
     @Getter
     private JClassLoader classLoader;
     @Getter
-    private volatile InitState initState;
+    private volatile int initState;
     @Getter
     private Slots staticFields;
+    // size of instance object
+    protected int instanceSize;
+    protected int methodAreaIndex;
 
-    public JClass(DataInput dataInput, JClassLoader initLoader) {
+    protected JClass(DataInput dataInput, JClassLoader initLoader) {
         try {
             this.classLoader = initLoader;
             // check magic number
@@ -96,14 +100,10 @@ public class JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
-        try {
-            thisClass.resolve(this);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
         String name = thisClass.getName();
         packageName = name.substring(0, name.lastIndexOf('/'));
         initState = InitState.LOADED;
+        methodAreaIndex = VJVM.getHeap().addJClass(this);
     }
 
     public void verify() {
@@ -115,6 +115,12 @@ public class JClass {
      * Prepares this class for use. See spec. 5.4.2
      */
     public void prepare() {
+        if (initState >= InitState.PREPARED)
+            return;
+        // prepare super classes and super interfaces
+        superClass.getJClass().prepare();
+        for (val i : interfaces)
+            i.getJClass().prepare();
         initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
@@ -156,8 +162,7 @@ public class JClass {
         }
 
         // init instance fields
-        // reserve one slot for class index
-        int instanceSize = 1;
+        instanceSize = superClass == null ? 0 : superClass.getJClass().instanceSize;
         for (val field : fields) {
             if (field.isStatic())
                 continue;
@@ -176,10 +181,8 @@ public class JClass {
                 clinit = i;
                 break;
             }
-        if (clinit != null) {
-            val code = clinit.getCode();
-            thread.pushFrame(new JFrame(code.getMaxLocals(), code.getMaxStack(), constantPool, code.getCode()));
-        }
+        if (clinit != null)
+            CallUtil.callMethod(clinit, 0, thread);
         initState = InitState.INITIALIZED;
     }
 
@@ -287,7 +290,13 @@ public class JClass {
         return (accessFlags & ACC_MODULE) != 0;
     }
 
-    public static enum InitState {
-        LOADED, VERIFYING, VERIFIED, PREPARING, PREPARED, INITIALIZING, INITIALIZED
+    public static class InitState {
+        public static final int LOADED = 0;
+        public static final int VERIFYING = 1;
+        public static final int VERIFIED = 2;
+        public static final int PREPARING = 3;
+        public static final int PREPARED = 4;
+        public static final int INITIALIZING = 5;
+        public static final int INITIALIZED = 6;
     }
 }
