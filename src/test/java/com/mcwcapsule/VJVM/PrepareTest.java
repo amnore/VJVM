@@ -80,6 +80,18 @@ public class PrepareTest {
         assertEquals(0l, getField("d", "J"));
     }
 
+    @Test
+    void testInstanceFields() {
+        assertEquals(1, jClass.findField("e", "I").getSize());
+        assertEquals(1, jClass.findField("e", "I").getOffset());
+        assertEquals(1, jClass.findField("f", "F").getSize());
+        assertEquals(2, jClass.findField("f", "F").getOffset());
+        assertEquals(2, jClass.findField("g", "J").getSize());
+        assertEquals(3, jClass.findField("g", "J").getOffset());
+        assertEquals(2, jClass.findField("h", "D").getSize());
+        assertEquals(5, jClass.findField("h", "D").getOffset());
+    }
+
     @AfterAll
     static void cleanup() {
         try {
