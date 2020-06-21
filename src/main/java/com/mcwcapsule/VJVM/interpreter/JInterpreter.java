@@ -4,7 +4,6 @@ import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 
 public class JInterpreter {
-    private static JInterpreter instance = new JInterpreter();
     private Instruction[] dispatchTable;
 
     private JInterpreter() {
@@ -13,9 +12,5 @@ public class JInterpreter {
 
     public void run(JThread thread) {
         // TODO: run
-    }
-
-    public static JInterpreter getInstance() {
-        return instance;
     }
 }
