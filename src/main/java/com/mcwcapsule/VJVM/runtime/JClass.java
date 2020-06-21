@@ -24,6 +24,8 @@ import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import lombok.Getter;
 import lombok.val;
 
@@ -47,6 +49,8 @@ public class JClass {
     private MethodInfo[] methods;
     private Attribute[] attributes;
     @Getter
+    private String packageName;
+    @Getter
     private JClassLoader classLoader;
     @Getter
     private volatile InitState initState;
@@ -63,7 +67,7 @@ public class JClass {
             minorVersion = dataInput.readShort();
             majorVersion = dataInput.readShort();
 
-            constantPool = new RuntimeConstantPool(dataInput);
+            constantPool = new RuntimeConstantPool(dataInput, this);
             accessFlags = dataInput.readShort();
             int thisIndex = dataInput.readUnsignedShort();
             thisClass = (ClassRef) constantPool.getConstant(thisIndex);
@@ -91,6 +95,13 @@ public class JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
+        try {
+            thisClass.resolve(this);
+        } catch (ClassNotFoundException e) {
+            throw new Error(e);
+        }
+        String name = thisClass.getName();
+        packageName = name.substring(0, name.lastIndexOf('/'));
         initState = InitState.LOADED;
     }
 
@@ -211,6 +222,10 @@ public class JClass {
         return interfaces.length;
     }
 
+    public Pair<String, JClassLoader> getRuntimePackage() {
+        return Pair.of(packageName, classLoader);
+    }
+
     /**
      * Checks whether this class is a subclass of another class. Super interfaces are not taken into account.
      * @param other the class to check against.
@@ -222,8 +237,7 @@ public class JClass {
     }
 
     public boolean isAccessibleTo(JClass other) {
-        // FIXME: check runtime package
-        return isPublic() || classLoader.equals(other.classLoader);
+        return isPublic() || getRuntimePackage().equals(other.getRuntimePackage());
     }
 
     public boolean isPublic() {

@@ -3,9 +3,12 @@ package com.mcwcapsule.VJVM.runtime.metadata;
 import java.io.DataInput;
 import java.io.IOException;
 
+import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.ResolvableConstant;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UnevaluatedConstant;
 
+import lombok.Getter;
 import lombok.val;
 
 public class RuntimeConstantPool {
@@ -15,13 +18,16 @@ public class RuntimeConstantPool {
     private int count;
     // whether the constants are resolved
     private boolean resolved = false;
+    @Getter
+    private final JClass jClass;
 
     /**
      * Constructs a runtime constant pool from binary data
      * @param count number of constants
      * @param dataInput stream of data, contents of this constant pool will be read from stream
      */
-    public RuntimeConstantPool(DataInput dataInput) {
+    public RuntimeConstantPool(DataInput dataInput, JClass jClass) {
+        this.jClass = jClass;
         try {
             this.count = dataInput.readUnsignedShort();
             constants = new Constant[count];
@@ -60,7 +66,16 @@ public class RuntimeConstantPool {
     public void resolve() {
         if (resolved)
             return;
-        // TODO:resolve constants
+        try {
+            for (val constant : constants)
+                if (constant instanceof ResolvableConstant)
+                    ((ResolvableConstant) constant).resolve(jClass);
+        } catch (ClassNotFoundException e) {
+            // spec. 5.3
+            val err = new NoClassDefFoundError();
+            err.initCause(e);
+            throw err;
+        }
     }
 
 }

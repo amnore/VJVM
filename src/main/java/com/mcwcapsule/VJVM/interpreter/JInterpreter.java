@@ -88,6 +88,11 @@ public class JInterpreter {
     }
 
     public void run(JThread thread) {
-        // TODO: run
+        while (true) {
+            if (thread.isEmpty())
+                break;
+            byte opcode = thread.getPC().getByte();
+            dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);
+        }
     }
 }

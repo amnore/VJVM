@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import com.mcwcapsule.VJVM.classloader.searchpath.ClassSearchPath;
 import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.vm.VJVM;
 
 import lombok.val;
 import lombok.var;
@@ -44,7 +45,7 @@ public class JClassLoader implements Closeable {
             ret.getSuperInterface(i).resolve(ret);
         // add to loaded class
         definedClass.put(name, ret);
-        // TODO: assign the class an index in method area
+        VJVM.getHeap().addJClass(ret);
         return ret;
     }
 

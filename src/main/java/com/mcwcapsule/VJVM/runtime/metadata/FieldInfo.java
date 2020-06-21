@@ -70,7 +70,7 @@ public class FieldInfo {
                 return true;
         }
         if (isProtected() || (!isPublic() && !isPrivate())) {
-            // TODO: check runtime package
+            return jClass.getRuntimePackage().equals(other.getRuntimePackage());
         }
         if (isPrivate() && other == jClass)
             return true;
