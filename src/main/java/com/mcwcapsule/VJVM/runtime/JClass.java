@@ -46,10 +46,10 @@ public class JClass {
     private FieldInfo[] fields;
     private MethodInfo[] methods;
     private Attribute[] attributes;
-
     @Getter
     private JClassLoader classLoader;
-
+    @Getter
+    private volatile InitState initState;
     @Getter
     private Slots staticFields;
 
@@ -91,16 +91,19 @@ public class JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
+        initState = InitState.LOADED;
     }
 
     public void verify() {
         // not verifying
+        initState = InitState.VERIFIED;
     }
 
     /**
      * Prepares this class for use. See spec. 5.4.2
      */
     public void prepare() {
+        initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
         val staticFieldInfos = Arrays.stream(fields).filter(s -> s.isStatic()).collect(Collectors.toList());
@@ -149,6 +152,13 @@ public class JClass {
             field.setOffset(instanceSize);
             instanceSize += field.getSize();
         }
+        initState = InitState.PREPARED;
+    }
+
+    public void initialize() {
+        initState = InitState.INITIALIZING;
+        // TODO: init
+        initState = InitState.INITIALIZED;
     }
 
     /**
@@ -250,5 +260,9 @@ public class JClass {
 
     public boolean isModule() {
         return (accessFlags & ACC_MODULE) != 0;
+    }
+
+    public static enum InitState {
+        LOADED, VERIFYING, VERIFIED, PREPARING, PREPARED, INITIALIZING, INITIALIZED
     }
 }
