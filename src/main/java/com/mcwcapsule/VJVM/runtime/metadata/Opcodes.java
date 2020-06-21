@@ -1,5 +1,8 @@
 package com.mcwcapsule.VJVM.runtime.metadata;
 
+/**
+ * Opcodes in JVM. See spec. 7
+ */
 public class Opcodes {
     // constants
     public static final byte OPC_nop = 0x00;

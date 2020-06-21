@@ -139,6 +139,7 @@ public class JClass {
                     break;
                 }
         }
+        // TODO: also prepare instance fields
     }
 
     /**

@@ -1,0 +1,13 @@
+package com.mcwcapsule.VJVM.interpreter.instruction.stack;
+
+import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
+import com.mcwcapsule.VJVM.runtime.JThread;
+
+public class SWAP extends Instruction {
+
+    @Override
+    public void fetchAndRun(JThread thread) {
+        // TODO: fetch and run
+    }
+
+}
