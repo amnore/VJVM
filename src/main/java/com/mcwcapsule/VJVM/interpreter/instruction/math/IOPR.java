@@ -1,9 +1,15 @@
 package com.mcwcapsule.VJVM.interpreter.instruction.math;
 
+import java.util.function.IntBinaryOperator;
+
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 
-public class ISHR extends Instruction {
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public class IOPR extends Instruction {
+    private final IntBinaryOperator opr;
 
     @Override
     public void fetchAndRun(JThread thread) {
