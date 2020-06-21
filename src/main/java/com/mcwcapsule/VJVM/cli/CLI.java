@@ -1,5 +1,10 @@
 package com.mcwcapsule.VJVM.cli;
 
+import java.util.Arrays;
+
+import com.mcwcapsule.VJVM.vm.VJVM;
+import com.mcwcapsule.VJVM.vm.VMOptions;
+
 import org.apache.commons.cli.*;
 import org.apache.commons.cli.ParseException;
 
@@ -13,7 +18,7 @@ public final class CLI {
 
     static {
         options = new Options();
-        options.addOption(Option.builder("cp").longOpt("classpath").hasArg().argName("path")
+        options.addOption(Option.builder("cp").longOpt("classpath").hasArg().argName("path").numberOfArgs(1)
                 .desc(String.format("specify the class path to search, multiple paths should be separated by '%s'",
                         System.getProperty("path.separator")))
                 .build());
@@ -38,7 +43,8 @@ public final class CLI {
             }
             if (cmd.getArgs().length == 0)
                 throw new ParseException("Main class required.");
-            // TODO: call class loader and interpreter
+            VJVM.init(VMOptions.builder().userClassPath(cmd.getOptionValue("cp")).entryClass(cmd.getArgs()[0])
+                    .args(Arrays.copyOfRange(cmd.getArgs(), 1, cmd.getArgs().length)).build());
         } catch (ParseException e) {
             System.err.println(e.getMessage());
             return;

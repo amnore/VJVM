@@ -16,7 +16,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.stores.*;
 public class JInterpreter {
     private final Instruction[] dispatchTable;
 
-    private JInterpreter() {
+    public JInterpreter() {
         // @formatter:off
         dispatchTable = new Instruction[] { 
 /* 0x00 */  new NOP(), new ACONST_NULL(), new ICONST_X(-1), new ICONST_X(0),
