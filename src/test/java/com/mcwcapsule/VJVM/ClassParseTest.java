@@ -18,10 +18,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.runtime.JHeap;
+import com.mcwcapsule.VJVM.runtime.NonArrayClass;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.NameAndTypeConstant;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.StringConstant;
 import com.mcwcapsule.VJVM.utils.FileUtil;
+import com.mcwcapsule.VJVM.vm.VJVM;
 
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.ConstantCP;
@@ -34,6 +37,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import lombok.Cleanup;
+import lombok.val;
 import lombok.var;
 
 public class ClassParseTest {
@@ -45,6 +49,10 @@ public class ClassParseTest {
     public static void loadTestClass() {
         var runtime = Runtime.getRuntime();
         try {
+            // hack heap
+            val heap = VJVM.class.getDeclaredField("heap");
+            heap.setAccessible(true);
+            heap.set(null, new JHeap(0));
             classPath = Files.createTempDirectory("testtemp");
             var cmp = runtime.exec(String.format("javac -d %s src/test/java/testsource/Test1.java", classPath));
             cmp.waitFor();
@@ -52,7 +60,7 @@ public class ClassParseTest {
             realClass = new ClassParser(classPath.toString()).parse();
             @Cleanup
             var raFile = new RandomAccessFile(classPath.toFile(), "r");
-            myClass = new JClass(raFile, null);
+            myClass = new NonArrayClass(raFile, null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

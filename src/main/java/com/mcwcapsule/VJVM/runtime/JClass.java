@@ -118,7 +118,8 @@ public class JClass {
         if (initState >= InitState.PREPARED)
             return;
         // prepare super classes and super interfaces
-        superClass.getJClass().prepare();
+        if (superClass != null)
+            superClass.getJClass().prepare();
         for (val i : interfaces)
             i.getJClass().prepare();
         initState = InitState.PREPARING;

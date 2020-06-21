@@ -46,7 +46,6 @@ public class JClassLoader implements Closeable {
             ret.getSuperInterface(i).resolve(ret);
         // add to loaded class
         definedClass.put(name, ret);
-        VJVM.getHeap().addJClass(ret);
         return ret;
     }
 

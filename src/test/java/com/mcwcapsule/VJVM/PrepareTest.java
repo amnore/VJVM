@@ -5,8 +5,10 @@ import java.nio.file.Path;
 
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors;
 import com.mcwcapsule.VJVM.utils.FileUtil;
+import com.mcwcapsule.VJVM.vm.VJVM;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,6 +30,10 @@ public class PrepareTest {
     static void compileTest() {
         var runtime = Runtime.getRuntime();
         try {
+            // hack heap
+            val heap = VJVM.class.getDeclaredField("heap");
+            heap.setAccessible(true);
+            heap.set(null, new JHeap(0));
             path = Files.createTempDirectory(null);
             assert runtime.exec(String.format("javac -d %s src/test/java/testsource/Test2.java", path.toString()))
                     .waitFor() == 0;
@@ -83,13 +89,13 @@ public class PrepareTest {
     @Test
     void testInstanceFields() {
         assertEquals(1, jClass.findField("e", "I").getSize());
-        assertEquals(1, jClass.findField("e", "I").getOffset());
+        assertEquals(0, jClass.findField("e", "I").getOffset());
         assertEquals(1, jClass.findField("f", "F").getSize());
-        assertEquals(2, jClass.findField("f", "F").getOffset());
+        assertEquals(1, jClass.findField("f", "F").getOffset());
         assertEquals(2, jClass.findField("g", "J").getSize());
-        assertEquals(3, jClass.findField("g", "J").getOffset());
+        assertEquals(2, jClass.findField("g", "J").getOffset());
         assertEquals(2, jClass.findField("h", "D").getSize());
-        assertEquals(5, jClass.findField("h", "D").getOffset());
+        assertEquals(4, jClass.findField("h", "D").getOffset());
     }
 
     @AfterAll

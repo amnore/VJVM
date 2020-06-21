@@ -7,7 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
+import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.utils.FileUtil;
+import com.mcwcapsule.VJVM.vm.VJVM;
+import com.mcwcapsule.VJVM.vm.VMOptions;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,6 +28,10 @@ public class ClassLoaderTest {
     public static void loadTestClass() {
         var runtime = Runtime.getRuntime();
         try {
+            // hack heap
+            val heap = VJVM.class.getDeclaredField("heap");
+            heap.setAccessible(true);
+            heap.set(null, new JHeap(0));
             classPath = Files.createTempDirectory(null);
             runtime.exec(String.format("javac -d %s %2$s/Test2.java %2$s/Test3.java %2$s/Test4.java", classPath,
                     "src/test/java/testsource")).waitFor();
