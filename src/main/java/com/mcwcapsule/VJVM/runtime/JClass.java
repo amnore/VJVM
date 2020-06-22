@@ -61,6 +61,7 @@ public class JClass {
     @Getter
     protected Slots staticFields;
     // size of instance object
+    @Getter
     protected int instanceSize;
     protected int methodAreaIndex;
 
@@ -70,7 +71,6 @@ public class JClass {
 
     protected JClass() {
     }
-
 
     public void verify() {
         // not verifying
