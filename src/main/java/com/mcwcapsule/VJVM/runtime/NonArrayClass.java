@@ -62,6 +62,7 @@ public class NonArrayClass extends JClass {
         assert getInitState() == InitState.INITIALIZED;
         val heap = VJVM.getHeap();
         int addr = heap.allocate(instanceSize);
+
         // set class index
         heap.getSlots().setInt(addr - 1, methodAreaIndex);
         return addr;

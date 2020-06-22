@@ -12,11 +12,13 @@ import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
 import com.mcwcapsule.VJVM.vm.VJVM;
 
+import lombok.Getter;
 import lombok.val;
 
 public class ArrayClass extends JClass {
     private String elementType;
     private ClassRef elementClass;
+    @Getter
     private int elementSize;
     private FieldInfo lengthField;
 
@@ -68,7 +70,10 @@ public class ArrayClass extends JClass {
         assert initState == InitState.INITIALIZED;
         val heap = VJVM.getHeap();
         val ret = heap.allocate(instanceSize + length * elementSize);
+        val slots = heap.getSlots();
 
+        // set class index
+        slots.setInt(ret - 1, methodAreaIndex);
         // set array length
         heap.getSlots().setInt(ret + lengthField.getOffset(), length);
         return ret;

@@ -10,9 +10,19 @@ When allocating objects, the return value is the address of classIndex. Extra sl
 
 The fields of super class are positioned before those of this class.
 
-| class  |       position       |
-| :----: | :------------------: |
-| Object | 1...1+sizeof(Object) |
-|  ...   |         ...          |
-| Parent | n-sizeof(Parent)...n |
-|  This  |  n...n+sizeof(This)  |
+| class  |  position (inclusive)  |
+| :----: | :--------------------: |
+| Object |  0...sizeof(Object)-1  |
+|  ...   |          ...           |
+| Parent | n-sizeof(Parent)...n-1 |
+|  This  |   n...n+sizeof(This)   |
+
+The length field of an array are put before its elements.
+
+|    name    |    position (in slots)    |                 descriptrion                 |
+| :--------: | :-----------------------: | :------------------------------------------: |
+|    size    |            -2             |             size of object data              |
+| classIndex |            -1             | index of corresponding JClass in method area |
+|   Object   |   0...sizeof(Object)-1    |               fields of Object               |
+|   length   |      sizeof(Object)       |                 array length                 |
+|  elements  | sizeof(Object)+1...size-1 |                                              |
