@@ -6,11 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Code extends Attribute {
     @Getter
-    private int maxStack;
+    private final int maxStack;
     @Getter
-    private int maxLocals;
+    private final int maxLocals;
     @Getter
-    private byte[] code;
+    private final byte[] code;
     @Getter
-    private Attribute[] attributes;
+    private final Attribute[] attributes;
 }

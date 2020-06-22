@@ -3,7 +3,6 @@ package com.mcwcapsule.VJVM.interpreter.instruction.comparisons;
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.utils.BiIntPredicate;
-
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

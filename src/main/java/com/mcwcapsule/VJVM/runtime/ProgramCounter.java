@@ -3,7 +3,7 @@ package com.mcwcapsule.VJVM.runtime;
 import java.nio.ByteBuffer;
 
 public class ProgramCounter {
-    private ByteBuffer buf;
+    private final ByteBuffer buf;
 
     public ProgramCounter(byte[] code) {
         buf = ByteBuffer.wrap(code);

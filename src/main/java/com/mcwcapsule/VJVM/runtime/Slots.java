@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
  * It supports getting and putting primitive data types, including address.
  */
 public class Slots {
-    private ByteBuffer buf;
+    private final ByteBuffer buf;
 
     public Slots(int slotSize) {
         buf = ByteBuffer.allocate(slotSize * 4);

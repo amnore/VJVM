@@ -4,7 +4,6 @@ import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.vm.VJVM;
-
 import lombok.val;
 
 public class ALOAD1S extends Instruction {

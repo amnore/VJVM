@@ -1,33 +1,27 @@
 package com.mcwcapsule.VJVM.runtime;
 
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
-import com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags;
-import com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags;
-import com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors;
-import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
-import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
-import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.metadata.*;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
 import com.mcwcapsule.VJVM.vm.VJVM;
-
 import lombok.Getter;
 import lombok.val;
 
 public class ArrayClass extends JClass {
-    private String elementType;
-    private ClassRef elementClass;
+    private final String elementType;
     @Getter
-    private int elementSize;
-    private FieldInfo lengthField;
+    private final int elementSize;
+    private final FieldInfo lengthField;
+    private ClassRef elementClass;
 
     public ArrayClass(String arrayType, JClassLoader classLoader) {
         minorVersion = 0;
         majorVersion = 0;
         thisClass = new ClassRef(arrayType);
         superClass = new ClassRef("java/lang/Object");
-        elementType = arrayType.substring(1, arrayType.length());
+        elementType = arrayType.substring(1);
         elementSize = FieldDescriptors.getSize(elementType);
         this.classLoader = classLoader;
 
@@ -39,22 +33,22 @@ public class ArrayClass extends JClass {
             } catch (Exception e) {
                 throw new Error(e);
             }
-            constantPool = new RuntimeConstantPool(new Constant[] { thisClass, superClass, elementClass }, this);
+            constantPool = new RuntimeConstantPool(new Constant[]{thisClass, superClass, elementClass}, this);
         } else {
-            constantPool = new RuntimeConstantPool(new Constant[] { thisClass, superClass }, this);
+            constantPool = new RuntimeConstantPool(new Constant[]{thisClass, superClass}, this);
         }
 
         // for reference types, the accessibility of array class is the same as element type, see spec. 5.3.3.2
         accessFlags = (short) (ClassAccessFlags.ACC_FINAL | (FieldDescriptors.isReference(elementType)
-                ? (elementClass.getJClass().getAccessFlags() & (ClassAccessFlags.ACC_PUBLIC))
-                : ClassAccessFlags.ACC_PUBLIC) | ClassAccessFlags.ACC_SYNTHETIC);
+            ? (elementClass.getJClass().getAccessFlags() & (ClassAccessFlags.ACC_PUBLIC))
+            : ClassAccessFlags.ACC_PUBLIC) | ClassAccessFlags.ACC_SYNTHETIC);
 
         interfaces = new ClassRef[0];
 
         // length field
-        fields = new FieldInfo[] { new FieldInfo(
-                (short) (FieldAccessFlags.ACC_FINAL | FieldAccessFlags.ACC_PUBLIC | FieldAccessFlags.ACC_SYNTHETIC),
-                "length", "I", new Attribute[0], this) };
+        fields = new FieldInfo[]{new FieldInfo(
+            (short) (FieldAccessFlags.ACC_FINAL | FieldAccessFlags.ACC_PUBLIC | FieldAccessFlags.ACC_SYNTHETIC),
+            "length", "I", new Attribute[0], this)};
         lengthField = fields[0];
 
         // there should be a clone() method, but I don't know how to generate it

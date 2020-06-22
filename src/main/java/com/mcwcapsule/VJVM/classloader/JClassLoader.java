@@ -1,25 +1,23 @@
 package com.mcwcapsule.VJVM.classloader;
 
+import com.mcwcapsule.VJVM.classloader.searchpath.ClassSearchPath;
+import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.runtime.JClass.InitState;
+import com.mcwcapsule.VJVM.runtime.NonArrayClass;
+import lombok.val;
+import lombok.var;
+
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-import com.mcwcapsule.VJVM.classloader.searchpath.ClassSearchPath;
-import com.mcwcapsule.VJVM.runtime.JClass;
-import com.mcwcapsule.VJVM.runtime.NonArrayClass;
-import com.mcwcapsule.VJVM.runtime.JClass.InitState;
-import com.mcwcapsule.VJVM.vm.VJVM;
-
-import lombok.val;
-import lombok.var;
-
 public class JClassLoader implements Closeable {
     // The parent of bootstrap class loader is null
-    private JClassLoader parent;
-    private ClassSearchPath[] searchPaths;
-    private HashMap<String, JClass> definedClass = new HashMap<>();
+    private final JClassLoader parent;
+    private final ClassSearchPath[] searchPaths;
+    private final HashMap<String, JClass> definedClass = new HashMap<>();
 
     public JClassLoader(JClassLoader parent, String path) {
         this.parent = parent;
@@ -28,6 +26,7 @@ public class JClassLoader implements Closeable {
 
     /**
      * Defines a nonarray class, see spec 5.3.5
+     *
      * @param name name of the class
      * @param data data of the class
      * @return the defined class
@@ -53,13 +52,14 @@ public class JClassLoader implements Closeable {
 
     /**
      * Load a class of given name, or return it if the class was already loaded.
+     *
      * @param name name of the class to load
      * @return the loaded class
      * @throws ClassNotFoundException if the class was not found
-     * I will not care about initiating loader because I am not verifying loading constraints.
+     *                                I will not care about initiating loader because I am not verifying loading constraints.
      */
     public JClass loadClass(String name) throws ClassNotFoundException {
-        JClass ret = null;
+        JClass ret;
         // find in parent first
         try {
             if (parent != null) {

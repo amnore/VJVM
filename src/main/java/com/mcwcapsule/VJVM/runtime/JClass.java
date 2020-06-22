@@ -1,20 +1,5 @@
 package com.mcwcapsule.VJVM.runtime;
 
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_ABSTRACT;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_ANNOTATION;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_ENUM;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_FINAL;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_INTERFACE;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_MODULE;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_PUBLIC;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_SUPER;
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.ACC_SYNTHETIC;
-
-import java.io.DataInput;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
@@ -24,14 +9,15 @@ import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 import com.mcwcapsule.VJVM.utils.CallUtil;
-import com.mcwcapsule.VJVM.vm.VJVM;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.*;
 import static com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors.*;
 
 public class JClass {
@@ -91,7 +77,7 @@ public class JClass {
         initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
-        val staticFieldInfos = Arrays.stream(fields).filter(s -> s.isStatic()).collect(Collectors.toList());
+        val staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::isStatic).collect(Collectors.toList());
         for (val field : staticFieldInfos) {
             field.setOffset(staticSize);
             staticSize += FieldDescriptors.getSize(field.getDescriptor());
@@ -155,7 +141,8 @@ public class JClass {
 
     /**
      * Finds a field recursively. This is used to resolve field references. See spec. 5.4.3.2
-     * @param name name of the field to find
+     *
+     * @param name       name of the field to find
      * @param descriptor descriptor of the field to find
      * @return the found field, or null if not found
      */
@@ -209,12 +196,12 @@ public class JClass {
 
     /**
      * Checks whether this class is a subclass of another class. Super interfaces are not taken into account.
+     *
      * @param other the class to check against.
      * @return Whether this class is a subclass of other. Returns false if this == other.
      */
     public boolean isSubclassOf(JClass other) {
-        return superClass.getJClass() == other ? true
-                : superClass == null ? false : superClass.getJClass().isSubclassOf(other);
+        return superClass.getJClass() == other || (superClass != null && superClass.getJClass().isSubclassOf(other));
     }
 
     public boolean isAccessibleTo(JClass other) {

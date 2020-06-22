@@ -1,27 +1,26 @@
 package com.mcwcapsule.VJVM.vm;
 
-import java.util.ArrayList;
-
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.interpreter.JInterpreter;
 import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.runtime.JThread;
-
 import lombok.Getter;
 import lombok.val;
 
+import java.util.ArrayList;
+
 public class VJVM {
-    @Getter
-    private static JHeap heap;
-    @Getter
-    private static JInterpreter interpreter;
-    private static ArrayList<JThread> threads = new ArrayList<>();
-    @Getter
-    private static VMOptions options;
+    private static final ArrayList<JThread> threads = new ArrayList<>();
     @Getter
     static JClassLoader bootstrapLoader;
     @Getter
     static JClassLoader userLoader;
+    @Getter
+    private static JHeap heap;
+    @Getter
+    private static JInterpreter interpreter;
+    @Getter
+    private static VMOptions options;
 
     public static void addThread(JThread thread) {
         threads.add(thread);

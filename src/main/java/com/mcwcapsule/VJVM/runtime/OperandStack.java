@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class OperandStack {
-    private Slots slots;
+    private final Slots slots;
     private int top;
 
     public OperandStack(int stackSize) {

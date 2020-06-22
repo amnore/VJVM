@@ -2,7 +2,6 @@ package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

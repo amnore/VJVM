@@ -1,5 +1,7 @@
 package com.mcwcapsule.VJVM.classloader.searchpath;
 
+import lombok.val;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,10 +9,8 @@ import java.util.Arrays;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
-import lombok.val;
-
 public class WildcardSearchPath extends ClassSearchPath {
-    private JarFile[] jars;
+    private final JarFile[] jars;
 
     public WildcardSearchPath(String path) {
         assert path.endsWith("*");
@@ -24,7 +24,7 @@ public class WildcardSearchPath extends ClassSearchPath {
             } catch (IOException e) {
                 throw new Error(e);
             }
-        }).collect(Collectors.toList()).toArray(new JarFile[0]);
+        }).toArray(JarFile[]::new);
     }
 
     @Override

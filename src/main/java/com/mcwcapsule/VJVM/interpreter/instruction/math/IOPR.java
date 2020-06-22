@@ -1,11 +1,10 @@
 package com.mcwcapsule.VJVM.interpreter.instruction.math;
 
-import java.util.function.IntBinaryOperator;
-
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-
 import lombok.AllArgsConstructor;
+
+import java.util.function.IntBinaryOperator;
 
 @AllArgsConstructor
 public class IOPR extends Instruction {

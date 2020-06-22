@@ -8,6 +8,7 @@ public class ByteBufferOutputStream extends OutputStream {
 
     /**
      * Wrap and clear a given buffer.
+     *
      * @param buffer the buffer to wrap
      */
     public ByteBufferOutputStream(ByteBuffer buffer) {

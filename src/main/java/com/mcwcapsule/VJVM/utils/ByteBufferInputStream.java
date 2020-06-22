@@ -9,6 +9,7 @@ public class ByteBufferInputStream extends InputStream {
 
     /**
      * Wrap a given buffer. Read from beginning to its current position.
+     *
      * @param buffer the buffer to wrap
      */
     public ByteBufferInputStream(ByteBuffer buffer) {

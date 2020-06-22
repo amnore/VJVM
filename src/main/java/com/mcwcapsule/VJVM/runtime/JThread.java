@@ -1,11 +1,11 @@
 package com.mcwcapsule.VJVM.runtime;
 
-import java.util.Stack;
-
 import lombok.Getter;
 
+import java.util.Stack;
+
 public class JThread {
-    private Stack<JFrame> frames = new Stack<>();
+    private final Stack<JFrame> frames = new Stack<>();
     @Getter
     private ProgramCounter PC;
 

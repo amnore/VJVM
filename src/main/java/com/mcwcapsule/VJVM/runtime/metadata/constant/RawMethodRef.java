@@ -1,7 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
-
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 
@@ -23,6 +22,6 @@ public class RawMethodRef extends UnevaluatedConstant {
             constantPool.setConstant(nameAndTypeIndex, nt);
         }
         return new MethodRef((ClassRef) cr, ((NameAndTypeConstant) nt).getName(),
-                ((NameAndTypeConstant) nt).getDescriptor());
+            ((NameAndTypeConstant) nt).getDescriptor());
     }
 }

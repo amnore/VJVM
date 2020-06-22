@@ -1,15 +1,14 @@
 package com.mcwcapsule.VJVM.runtime;
 
 import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
-
 import lombok.Getter;
 
 @Getter
 public class JFrame {
-    private Slots localVars;
-    private OperandStack opStack;
-    private RuntimeConstantPool dynLink;
-    private ProgramCounter PC;
+    private final Slots localVars;
+    private final OperandStack opStack;
+    private final RuntimeConstantPool dynLink;
+    private final ProgramCounter PC;
 
     public JFrame(int maxLocals, int maxStack, RuntimeConstantPool dynLink, byte[] code) {
         localVars = new Slots(maxLocals);

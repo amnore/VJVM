@@ -10,5 +10,5 @@ public class NEWARRAY extends Instruction {
         // TODO Auto-generated method stub
 
     }
-    
+
 }

@@ -3,7 +3,6 @@ package com.mcwcapsule.VJVM.interpreter.instruction.math;
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.utils.FloatBinaryOperator;
-
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

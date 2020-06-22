@@ -2,9 +2,7 @@ package com.mcwcapsule.VJVM.interpreter.instruction.constants;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 public class FCONST_X extends Instruction {

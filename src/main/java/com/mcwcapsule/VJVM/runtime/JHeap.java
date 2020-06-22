@@ -1,16 +1,15 @@
 package com.mcwcapsule.VJVM.runtime;
 
-import java.util.ArrayList;
-
 import lombok.Getter;
 
-public class JHeap {
-    private ArrayList<JClass> methodArea;
-    @Getter
-    private Slots slots;
-    private int current = 0;
+import java.util.ArrayList;
 
+public class JHeap {
     private static final int extraSize = 2;
+    private final ArrayList<JClass> methodArea;
+    @Getter
+    private final Slots slots;
+    private int current = 0;
 
     public JHeap(int heapSize) {
         methodArea = new ArrayList<>();

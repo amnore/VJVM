@@ -1,26 +1,17 @@
 package com.mcwcapsule.VJVM.runtime.metadata;
 
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_ENUM;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_FINAL;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_PRIVATE;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_PROTECTED;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_PUBLIC;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_STATIC;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_SYNTHETIC;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.ACC_TRANSIENT;
-
-import java.io.DataInput;
-import java.io.IOException;
-
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.FieldRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
+
+import java.io.DataInput;
+import java.io.IOException;
+
+import static com.mcwcapsule.VJVM.runtime.metadata.FieldAccessFlags.*;
 
 @RequiredArgsConstructor
 public class FieldInfo {
@@ -57,7 +48,8 @@ public class FieldInfo {
 
     /**
      * Check whether this field is accessible to another class. See spec. 5.4.4
-     * @param other the referencing class
+     *
+     * @param other            the referencing class
      * @param referencedJClass the referenced class in FieldRef
      * @return whether this field is accessible to other
      */
@@ -68,15 +60,13 @@ public class FieldInfo {
             if (isStatic())
                 return true;
             if (referencedJClass == other || referencedJClass.isSubclassOf(other)
-                    || other.isSubclassOf(referencedJClass))
+                || other.isSubclassOf(referencedJClass))
                 return true;
         }
         if (isProtected() || (!isPublic() && !isPrivate())) {
             return jClass.getRuntimePackage().equals(other.getRuntimePackage());
         }
-        if (isPrivate() && other == jClass)
-            return true;
-        return false;
+        return isPrivate() && other == jClass;
     }
 
     public int getAttributeCount() {

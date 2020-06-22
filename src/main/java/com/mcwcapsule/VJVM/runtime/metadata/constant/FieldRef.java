@@ -2,7 +2,6 @@ package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -16,6 +15,7 @@ public class FieldRef extends Constant implements ResolvableConstant {
 
     /**
      * Resolves field reference. See spec. 5.4.3.2
+     *
      * @param thisClass the class holding this reference
      */
     @Override

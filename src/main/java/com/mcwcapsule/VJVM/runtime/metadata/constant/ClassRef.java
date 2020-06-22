@@ -1,7 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +18,7 @@ public class ClassRef extends Constant implements ResolvableConstant {
         // check whether the reference points to this class
         if (name.equals(thisClass.getThisClass().name))
             jClass = thisClass;
-        // if not, load the Class using the defining class loader of this class
+            // if not, load the Class using the defining class loader of this class
         else
             jClass = thisClass.getClassLoader().loadClass(name);
         // check accessibility

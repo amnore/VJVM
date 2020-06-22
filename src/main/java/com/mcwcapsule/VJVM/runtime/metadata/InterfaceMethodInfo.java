@@ -1,22 +1,21 @@
 package com.mcwcapsule.VJVM.runtime.metadata;
 
+import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
+import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
+import lombok.Getter;
+
 import java.io.DataInput;
 import java.io.IOException;
 
-import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
-
 import static com.mcwcapsule.VJVM.runtime.metadata.MethodAccessFlags.*;
 
-import lombok.Getter;
-
 public class InterfaceMethodInfo {
-    private short accessFlags;
+    private final short accessFlags;
     @Getter
-    private String name;
+    private final String name;
     @Getter
-    private String descriptor;
-    private Attribute[] attributes;
+    private final String descriptor;
+    private final Attribute[] attributes;
 
     public InterfaceMethodInfo(DataInput dataInput, RuntimeConstantPool constantPool) {
         try {

@@ -1,36 +1,39 @@
 package com.mcwcapsule.VJVM.interpreter;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
-import com.mcwcapsule.VJVM.runtime.JThread;
-
 import com.mcwcapsule.VJVM.interpreter.instruction.comparisons.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.constants.*;
-import com.mcwcapsule.VJVM.interpreter.instruction.control.*;
+import com.mcwcapsule.VJVM.interpreter.instruction.control.GOTO;
+import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN;
+import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN1S;
+import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN2S;
 import com.mcwcapsule.VJVM.interpreter.instruction.conversions.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.loads.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.math.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.references.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stack.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stores.*;
+import com.mcwcapsule.VJVM.runtime.JThread;
 
 public class JInterpreter {
     private final Instruction[] dispatchTable;
 
     public JInterpreter() {
         // @formatter:off
-        dispatchTable = new Instruction[] { 
+        dispatchTable = new Instruction[]{
 /* 0x00 */  new NOP(), new ACONST_NULL(), new ICONST_X(-1), new ICONST_X(0),
-/* 0x04 */  new ICONST_X(1), new ICONST_X(2), new ICONST_X(3), new ICONST_X(4), 
-/* 0x08 */  new ICONST_X(5), new LCONST_X(0), new LCONST_X(1), new FCONST_X(0), 
-/* 0x0c */  new FCONST_X(1), new FCONST_X(2), new DCONST_X(0), new DCONST_X(1), 
+/* 0x04 */  new ICONST_X(1), new ICONST_X(2), new ICONST_X(3), new ICONST_X(4),
+/* 0x08 */  new ICONST_X(5), new LCONST_X(0), new LCONST_X(1), new FCONST_X(0),
+/* 0x0c */  new FCONST_X(1), new FCONST_X(2), new DCONST_X(0), new DCONST_X(1),
 /* 0x10 */  new BIPUSH(), new SIPUSH(), new LDC(), new LDC_W(),
-/* 0x14 */  new LDC2_W(), new LOAD1S(), new LOAD2S(),new LOAD1S(),
+/* 0x14 */  new LDC2_W(), new LOAD1S(), new LOAD2S(), new LOAD1S(),
 /* 0x18 */  new LOAD2S(), new LOAD1S(), new LOAD1S_X(0), new LOAD1S_X(1),
 /* 0x1c */  new LOAD1S_X(2), new LOAD1S_X(3), new LOAD2S_X(0), new LOAD2S_X(1),
 /* 0x20 */  new LOAD2S_X(2), new LOAD2S_X(3), new LOAD1S_X(0), new LOAD1S_X(1),
 /* 0x24 */  new LOAD1S_X(2), new LOAD1S_X(3), new LOAD2S_X(0), new LOAD2S_X(1),
-/* 0x28 */  new LOAD2S_X(2), new LOAD2S_X(3), new ALOAD1S(), new ALOAD2S(),
-/* 0x30 */  new ALOAD1S(), new ALOAD2S(), new ALOAD1S(), new ALOAD1S(), 
+/* 0x28 */  new LOAD2S_X(2), new LOAD2S_X(3), new LOAD1S_X(0), new LOAD1S_X(1),
+/* 0x2c */  new LOAD1S_X(2), new LOAD1S_X(3), new ALOAD1S(), new ALOAD2S(),
+/* 0x30 */  new ALOAD1S(), new ALOAD2S(), new ALOAD1S(), new ALOAD1S(),
 /* 0x34 */  new ALOAD1S(), new ALOAD1S(), new STORE1S(), new STORE2S(),
 /* 0x38 */  new STORE1S(), new STORE2S(), new STORE1S(), new STORE1S_X(0),
 /* 0x3c */  new STORE1S_X(1), new STORE1S_X(2), new STORE1S_X(3), new STORE2S_X(0),
@@ -83,14 +86,12 @@ public class JInterpreter {
 /* 0xf8 */  null, null, null, null,
 /* 0xfc */  null, null, null, null,
         };
-    // @formatter:on
+        // @formatter:on
         assert dispatchTable.length == 256;
     }
 
     public void run(JThread thread) {
-        while (true) {
-            if (thread.isEmpty())
-                break;
+        while (!thread.isEmpty()) {
             byte opcode = thread.getPC().getByte();
             dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);
         }

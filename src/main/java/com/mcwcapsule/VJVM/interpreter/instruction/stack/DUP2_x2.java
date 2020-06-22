@@ -3,8 +3,6 @@ package com.mcwcapsule.VJVM.interpreter.instruction.stack;
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 
-import lombok.RequiredArgsConstructor;
-
 public class DUP2_x2 extends Instruction {
 
     @Override

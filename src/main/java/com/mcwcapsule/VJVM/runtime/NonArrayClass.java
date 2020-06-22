@@ -1,8 +1,5 @@
 package com.mcwcapsule.VJVM.runtime;
 
-import java.io.DataInput;
-import java.io.IOException;
-
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
 import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
@@ -10,8 +7,10 @@ import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 import com.mcwcapsule.VJVM.vm.VJVM;
-
 import lombok.val;
+
+import java.io.DataInput;
+import java.io.IOException;
 
 public class NonArrayClass extends JClass {
     // construct from data

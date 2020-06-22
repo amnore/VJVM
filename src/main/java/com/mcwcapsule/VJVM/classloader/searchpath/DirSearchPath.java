@@ -7,7 +7,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 public class DirSearchPath extends ClassSearchPath {
-    private Path searchPath;
+    private final Path searchPath;
 
     public DirSearchPath(String path) {
         searchPath = FileSystems.getDefault().getPath(path);

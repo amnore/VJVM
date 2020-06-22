@@ -1,19 +1,16 @@
 package com.mcwcapsule.VJVM.runtime.metadata;
 
-import static com.mcwcapsule.VJVM.runtime.metadata.MethodAccessFlags.*;
-
-import java.io.DataInput;
-import java.io.IOException;
-import java.util.Arrays;
-
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.Code;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.MethodRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
-
 import lombok.Getter;
 import lombok.val;
+
+import java.io.DataInput;
+import java.io.IOException;
+
+import static com.mcwcapsule.VJVM.runtime.metadata.MethodAccessFlags.*;
 
 public class MethodInfo {
     private final short accessFlags;
@@ -59,15 +56,13 @@ public class MethodInfo {
             if (isStatic())
                 return true;
             if (referencedJClass == other || referencedJClass.isSubclassOf(other)
-                    || other.isSubclassOf(referencedJClass))
+                || other.isSubclassOf(referencedJClass))
                 return true;
         }
         if (isProtected() || (!isPublic() && !isPrivate())) {
             return jClass.getRuntimePackage().equals(other.getRuntimePackage());
         }
-        if (isPrivate() && other == jClass)
-            return true;
-        return false;
+        return isPrivate() && other == jClass;
     }
 
     public boolean isPublic() {

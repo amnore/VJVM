@@ -1,11 +1,10 @@
 package com.mcwcapsule.VJVM.interpreter.instruction.math;
 
-import java.util.function.LongBinaryOperator;
-
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-
 import lombok.AllArgsConstructor;
+
+import java.util.function.LongBinaryOperator;
 
 @AllArgsConstructor
 public class LOPR extends Instruction {
