@@ -9,7 +9,8 @@ public class ACONST_NULL extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        // TODO: fetch and run
+        val opStack = thread.getCurrentFrame().getOpStack();
+        opStack.pushAddress(0);
     }
 
 }
