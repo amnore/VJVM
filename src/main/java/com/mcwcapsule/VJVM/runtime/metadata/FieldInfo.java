@@ -18,9 +18,11 @@ import com.mcwcapsule.VJVM.runtime.metadata.constant.FieldRef;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.UTF8Constant;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 
+@RequiredArgsConstructor
 public class FieldInfo {
     private final short accessFlags;
     @Getter

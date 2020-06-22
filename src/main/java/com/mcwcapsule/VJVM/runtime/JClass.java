@@ -29,82 +29,48 @@ import com.mcwcapsule.VJVM.vm.VJVM;
 import org.apache.commons.lang3.tuple.Pair;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 import static com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors.*;
 
 public class JClass {
+    // inititlized with constructor
     @Getter
-    private short minorVersion;
+    protected short minorVersion;
     @Getter
-    private short majorVersion;
+    protected short majorVersion;
     @Getter
-    private RuntimeConstantPool constantPool;
+    protected RuntimeConstantPool constantPool;
     @Getter
-    private short accessFlags;
+    protected short accessFlags;
     @Getter
-    private ClassRef thisClass;
+    protected ClassRef thisClass;
     @Getter
-    private ClassRef superClass;
-    private ClassRef[] interfaces;
-    private FieldInfo[] fields;
-    private MethodInfo[] methods;
-    private Attribute[] attributes;
+    protected ClassRef superClass;
+    protected ClassRef[] interfaces;
+    protected FieldInfo[] fields;
+    protected MethodInfo[] methods;
+    protected Attribute[] attributes;
     @Getter
-    private String packageName;
+    protected JClassLoader classLoader;
     @Getter
-    private JClassLoader classLoader;
+    protected String packageName;
+
+    // initialized with prepare()
     @Getter
-    private volatile int initState;
-    @Getter
-    private Slots staticFields;
+    protected Slots staticFields;
     // size of instance object
     protected int instanceSize;
     protected int methodAreaIndex;
 
-    protected JClass(DataInput dataInput, JClassLoader initLoader) {
-        try {
-            this.classLoader = initLoader;
-            // check magic number
-            assert dataInput.readInt() == 0xCAFEBABE;
-            // parse data
-            // skip class version check
-            minorVersion = dataInput.readShort();
-            majorVersion = dataInput.readShort();
+    @Getter
+    @Setter
+    protected volatile int initState;
 
-            constantPool = new RuntimeConstantPool(dataInput, this);
-            accessFlags = dataInput.readShort();
-            int thisIndex = dataInput.readUnsignedShort();
-            thisClass = (ClassRef) constantPool.getConstant(thisIndex);
-            int superIndex = dataInput.readUnsignedShort();
-            if (superIndex != 0)
-                superClass = (ClassRef) constantPool.getConstant(superIndex);
-            int interfacesCount = dataInput.readUnsignedShort();
-            interfaces = new ClassRef[interfacesCount];
-            for (int i = 0; i < interfacesCount; ++i) {
-                int interfaceIndex = dataInput.readUnsignedShort();
-                interfaces[i] = (ClassRef) constantPool.getConstant(interfaceIndex);
-            }
-            int fieldsCount = dataInput.readUnsignedShort();
-            fields = new FieldInfo[fieldsCount];
-            for (int i = 0; i < fieldsCount; ++i)
-                fields[i] = new FieldInfo(dataInput, this);
-            int methodsCount = dataInput.readUnsignedShort();
-            methods = new MethodInfo[methodsCount];
-            for (int i = 0; i < methodsCount; ++i)
-                methods[i] = new MethodInfo(dataInput, this);
-            int attributesCount = dataInput.readUnsignedShort();
-            attributes = new Attribute[attributesCount];
-            for (int i = 0; i < attributesCount; ++i)
-                attributes[i] = Attribute.constructFromData(dataInput, constantPool);
-        } catch (IOException e) {
-            throw new ClassFormatError();
-        }
-        String name = thisClass.getName();
-        packageName = name.substring(0, name.lastIndexOf('/'));
-        initState = InitState.LOADED;
-        methodAreaIndex = VJVM.getHeap().addJClass(this);
+    protected JClass() {
     }
+
 
     public void verify() {
         // not verifying

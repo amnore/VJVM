@@ -16,8 +16,6 @@ public class RuntimeConstantPool {
     private Constant[] constants;
     // number of constants
     private int count;
-    // whether the constants are resolved
-    private boolean resolved = false;
     @Getter
     private final JClass jClass;
 
@@ -45,6 +43,12 @@ public class RuntimeConstantPool {
         }
     }
 
+    public RuntimeConstantPool(Constant[] constants, JClass jClass) {
+        this.count = constants.length;
+        this.jClass = jClass;
+        this.constants = constants;
+    }
+
     /**
      * Gets a constant at index
      * @param index the index of the constant
@@ -61,21 +65,6 @@ public class RuntimeConstantPool {
 
     public int size() {
         return constants.length;
-    }
-
-    public void resolve() {
-        if (resolved)
-            return;
-        try {
-            for (val constant : constants)
-                if (constant instanceof ResolvableConstant)
-                    ((ResolvableConstant) constant).resolve(jClass);
-        } catch (ClassNotFoundException e) {
-            // spec. 5.3
-            val err = new NoClassDefFoundError();
-            err.initCause(e);
-            throw err;
-        }
     }
 
 }

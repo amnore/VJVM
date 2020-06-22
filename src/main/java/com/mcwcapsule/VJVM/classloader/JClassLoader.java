@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.mcwcapsule.VJVM.classloader.searchpath.ClassSearchPath;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.NonArrayClass;
+import com.mcwcapsule.VJVM.runtime.JClass.InitState;
 import com.mcwcapsule.VJVM.vm.VJVM;
 
 import lombok.val;
@@ -46,6 +47,7 @@ public class JClassLoader implements Closeable {
             ret.getSuperInterface(i).resolve(ret);
         // add to loaded class
         definedClass.put(name, ret);
+        ret.setInitState(InitState.LOADED);
         return ret;
     }
 

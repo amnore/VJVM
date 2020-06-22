@@ -19,4 +19,9 @@ public class FieldDescriptors {
         char f = descriptor.charAt(0);
         return (f == DESC_double || f == DESC_long) ? 2 : 1;
     }
+
+    public static boolean isReference(String descriptor) {
+        char f = descriptor.charAt(0);
+        return f == DESC_reference || f == DESC_array;
+    }
 }
