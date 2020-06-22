@@ -45,6 +45,14 @@ public class Slots {
         buf.putDouble(index * 4, value);
     }
 
+    public int getAddress(int index) {
+        return getInt(index);
+    }
+
+    public void setAddress(int index, int value) {
+        setInt(index, value);
+    }
+
     public int size() {
         return buf.position() / 4;
     }

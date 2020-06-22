@@ -47,4 +47,12 @@ public class OperandStack {
         top -= 2;
         return slots.getDouble(top);
     }
+
+    public void pushAddress(int value) {
+        pushInt(value);
+    }
+
+    public int popAddress() {
+        return popInt();
+    }
 }
