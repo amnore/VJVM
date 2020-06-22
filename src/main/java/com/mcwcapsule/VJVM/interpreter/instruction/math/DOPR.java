@@ -3,6 +3,7 @@ package com.mcwcapsule.VJVM.interpreter.instruction.math;
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import lombok.AllArgsConstructor;
+import lombok.val;
 
 import java.util.function.DoubleBinaryOperator;
 
@@ -12,7 +13,10 @@ public class DOPR extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        // TODO: fetch and run
+        val stack = thread.getCurrentFrame().getOpStack();
+        val right = stack.popDouble();
+        val left = stack.popDouble();
+        stack.pushDouble(opr.applyAsDouble(left, right));
     }
 
 }

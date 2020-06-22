@@ -4,6 +4,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.utils.FloatBinaryOperator;
 import lombok.AllArgsConstructor;
+import lombok.val;
 
 @AllArgsConstructor
 public class FOPR extends Instruction {
@@ -11,7 +12,10 @@ public class FOPR extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        // TODO: fetch and run
+        val stack = thread.getCurrentFrame().getOpStack();
+        val right = stack.popFloat();
+        val left = stack.popFloat();
+        stack.pushDouble(opr.applyAsFloat(left, right));
     }
 
 }
