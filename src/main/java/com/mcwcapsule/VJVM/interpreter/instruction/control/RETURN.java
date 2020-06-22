@@ -7,7 +7,7 @@ public class RETURN extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        // TODO: fetch and run
+        thread.popFrame();
     }
 
 }
