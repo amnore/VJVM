@@ -40,9 +40,9 @@ public class VJVM {
         addThread(initThread);
         try {
             val initClass = userLoader.loadClass(_options.getEntryClass());
-            initClass.verify();
-            initClass.prepare();
-            initClass.initialize(initThread);
+            initClass.tryVerify();
+            initClass.tryPrepare();
+            initClass.tryInitialize(initThread);
             // TODO: call main
         } catch (Exception e) {
             throw new Error(e);

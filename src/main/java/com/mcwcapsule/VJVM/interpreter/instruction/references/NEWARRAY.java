@@ -23,7 +23,7 @@ public class NEWARRAY extends Instruction {
         }
         if (jClass.getInitState() != JClass.InitState.INITIALIZED) {
             thread.getPC().move(-2);
-            jClass.initialize(thread);
+            jClass.tryInitialize(thread);
         }
         val stack =thread.getCurrentFrame().getOpStack();
         val ref = jClass.createInstance(stack.popInt());

@@ -20,11 +20,8 @@ public class PUTSTATIC extends Instruction {
             throw new Error(e);
         }
         val jClass = fieldRef.getJClass();
-        if (jClass.getInitState() != JClass.InitState.INITIALIZED) {
-            thread.getPC().move(-3);
-            jClass.initialize(thread);
-            return;
-        }
+        if (jClass.getInitState() != JClass.InitState.INITIALIZED)
+            jClass.tryInitialize(thread);
         val slots = jClass.getStaticFields();
         val field = fieldRef.getInfo();
         val stack = frame.getOpStack();

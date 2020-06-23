@@ -23,11 +23,8 @@ public class GETSTATIC extends Instruction {
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        if (jClass.getInitState() != JClass.InitState.INITIALIZED) {
-            thread.getPC().move(-3);
-            jClass.initialize(thread);
-            return;
-        }
+        if (jClass.getInitState() != JClass.InitState.INITIALIZED)
+            jClass.tryInitialize(thread);
         if (field.getSize() == 2)
             stack.pushLong(jClass.getStaticFields().getLong(field.getOffset()));
         else

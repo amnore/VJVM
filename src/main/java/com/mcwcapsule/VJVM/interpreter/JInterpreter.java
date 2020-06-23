@@ -90,7 +90,11 @@ public class JInterpreter {
     }
 
     public void run(JThread thread) {
-        while (!thread.isEmpty()) {
+        // since this method may be invoked when JVM stack isn't empty,
+        // for example, by the initialize() method of JClass, we need to exit at the right time.
+        int count = thread.getFrameCount();
+
+        while (thread.getFrameCount() >= count) {
             byte opcode = thread.getPC().getByte();
             dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);
         }

@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JHeap;
-import com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors;
 import com.mcwcapsule.VJVM.utils.FileUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 
@@ -40,7 +39,7 @@ public class PrepareTest {
             parent = new JClassLoader(null, "lib");
             loader = new JClassLoader(parent, path.toString());
             jClass = loader.loadClass("testsource/Test2");
-            jClass.prepare();
+            jClass.tryPrepare();
         } catch (Exception e) {
             throw new Error(e);
         }
@@ -55,13 +54,13 @@ public class PrepareTest {
             case DESC_char:
             case DESC_short:
             case DESC_int:
-                return (Integer) slots.getInt(field.getOffset());
+                return slots.getInt(field.getOffset());
             case DESC_float:
-                return (Float) slots.getFloat(field.getOffset());
+                return slots.getFloat(field.getOffset());
             case DESC_long:
-                return (Long) slots.getLong(field.getOffset());
+                return slots.getLong(field.getOffset());
             case DESC_double:
-                return (Double) slots.getDouble(field.getOffset());
+                return slots.getDouble(field.getOffset());
         }
         return null;
     }
@@ -83,7 +82,7 @@ public class PrepareTest {
 
     @Test
     void testLong() {
-        assertEquals(0l, getField("d", "J"));
+        assertEquals(0L, getField("d", "J"));
     }
 
     @Test

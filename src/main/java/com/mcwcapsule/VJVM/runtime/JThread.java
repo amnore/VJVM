@@ -23,6 +23,10 @@ public class JThread {
         PC = frame.getPC();
     }
 
+    public int getFrameCount() {
+        return frames.size();
+    }
+
     public boolean isEmpty() {
         return frames.empty();
     }

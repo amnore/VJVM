@@ -9,6 +9,7 @@ import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.metadata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
 import com.mcwcapsule.VJVM.utils.CallUtil;
+import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.val;
@@ -58,22 +59,25 @@ public class JClass {
     protected JClass() {
     }
 
-    public void verify() {
+    public void tryVerify() {
         // not verifying
         initState = InitState.VERIFIED;
     }
 
     /**
      * Prepares this class for use. See spec. 5.4.2
+     * Invoking this method when the class has been prepared has no effect.
      */
-    public void prepare() {
+    public void tryPrepare() {
         if (initState >= InitState.PREPARED)
             return;
+        // first verify
+        tryVerify();
         // prepare super classes and super interfaces
         if (superClass != null)
-            superClass.getJClass().prepare();
+            superClass.getJClass().tryPrepare();
         for (val i : interfaces)
-            i.getJClass().prepare();
+            i.getJClass().tryPrepare();
         initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
@@ -125,8 +129,25 @@ public class JClass {
         initState = InitState.PREPARED;
     }
 
-    public void initialize(JThread thread) {
+    /**
+     * Initialize the class, see spec. 5.5.
+     * Invoking this method when the class has been initialized has no effect.
+     * @param thread the thread at which to execute initialization method
+     */
+    public void tryInitialize(JThread thread) {
+        if (initState == InitState.INITIALIZED) return;
+
+        // multi-threading not supported
+        if (initState == InitState.INITIALIZING)
+            throw new Error();
+
+        // prepare first
+        tryPrepare();
         initState = InitState.INITIALIZING;
+        // init super classes and super interfaces
+        superClass.getJClass().tryInitialize(thread);
+        for (val i : interfaces)
+            i.getJClass().tryInitialize(thread);
         // find <clinit>
         MethodInfo clinit = null;
         for (val i : methods)
@@ -134,8 +155,10 @@ public class JClass {
                 clinit = i;
                 break;
             }
-        if (clinit != null)
+        if (clinit != null) {
             CallUtil.callMethod(this, clinit, thread);
+            VJVM.getInterpreter().run(thread);
+        }
         initState = InitState.INITIALIZED;
     }
 

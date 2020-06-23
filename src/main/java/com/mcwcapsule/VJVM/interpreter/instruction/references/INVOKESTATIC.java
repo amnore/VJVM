@@ -18,11 +18,8 @@ public class INVOKESTATIC extends Instruction {
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        if (methodRef.getJClass().getInitState() != JClass.InitState.INITIALIZED) {
-            thread.getPC().move(-3);
-            methodRef.getJClass().initialize(thread);
-            return;
-        }
+        if (methodRef.getJClass().getInitState() != JClass.InitState.INITIALIZED)
+            methodRef.getJClass().tryInitialize(thread);
         CallUtil.callMethod(methodRef.getJClass(), methodRef.getInfo(), thread);
     }
 

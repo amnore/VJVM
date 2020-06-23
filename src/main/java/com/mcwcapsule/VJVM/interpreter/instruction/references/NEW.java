@@ -19,11 +19,8 @@ public class NEW extends Instruction {
             throw new Error(e);
         }
         val jClass = (NonArrayClass) classRef.getJClass();
-        if (jClass.getInitState() != JClass.InitState.INITIALIZED) {
-            thread.getPC().move(-3);
-            jClass.initialize(thread);
-            return;
-        }
+        if (jClass.getInitState() != JClass.InitState.INITIALIZED)
+            jClass.tryInitialize(thread);
         frame.getOpStack().pushAddress(jClass.createInstance());
     }
 
