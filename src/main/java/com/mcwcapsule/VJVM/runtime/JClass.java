@@ -1,13 +1,13 @@
 package com.mcwcapsule.VJVM.runtime;
 
+import com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors;
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
-import com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors;
-import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
-import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
-import com.mcwcapsule.VJVM.runtime.metadata.RuntimeConstantPool;
-import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
-import com.mcwcapsule.VJVM.runtime.metadata.attribute.ConstantValue;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.classdata.FieldInfo;
+import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
+import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.classdata.attribute.Attribute;
+import com.mcwcapsule.VJVM.runtime.classdata.attribute.ConstantValue;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import com.mcwcapsule.VJVM.utils.CallUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.Getter;
@@ -18,8 +18,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static com.mcwcapsule.VJVM.runtime.metadata.ClassAccessFlags.*;
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors.*;
+import static com.mcwcapsule.VJVM.classfiledefs.ClassAccessFlags.*;
+import static com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors.*;
 
 public class JClass {
     // inititlized with constructor

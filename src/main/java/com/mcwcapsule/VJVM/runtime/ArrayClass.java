@@ -1,10 +1,15 @@
 package com.mcwcapsule.VJVM.runtime;
 
+import com.mcwcapsule.VJVM.classfiledefs.ClassAccessFlags;
+import com.mcwcapsule.VJVM.classfiledefs.FieldAccessFlags;
+import com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors;
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
-import com.mcwcapsule.VJVM.runtime.metadata.*;
-import com.mcwcapsule.VJVM.runtime.metadata.attribute.Attribute;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.Constant;
+import com.mcwcapsule.VJVM.runtime.classdata.FieldInfo;
+import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
+import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.classdata.attribute.Attribute;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.Constant;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.Getter;
 import lombok.val;

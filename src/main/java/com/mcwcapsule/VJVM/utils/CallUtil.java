@@ -3,7 +3,7 @@ package com.mcwcapsule.VJVM.utils;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JFrame;
 import com.mcwcapsule.VJVM.runtime.JThread;
-import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
+import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
 import lombok.val;
 import lombok.var;
 

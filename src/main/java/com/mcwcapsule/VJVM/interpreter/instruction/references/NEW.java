@@ -4,7 +4,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.NonArrayClass;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import lombok.val;
 
 public class NEW extends Instruction {

@@ -2,7 +2,7 @@ package com.mcwcapsule.VJVM.interpreter.instruction.references;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 

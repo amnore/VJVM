@@ -5,7 +5,7 @@ import com.mcwcapsule.VJVM.runtime.JThread;
 import lombok.val;
 import lombok.var;
 
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors.*;
+import static com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors.*;
 
 public class RETURN1S extends Instruction {
 

@@ -1,23 +1,21 @@
 package com.mcwcapsule.VJVM;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.utils.FileUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
-
+import lombok.val;
+import lombok.var;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static com.mcwcapsule.VJVM.runtime.metadata.FieldDescriptors.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import lombok.val;
-import lombok.var;
+import static com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PrepareTest {
     static JClass jClass;

@@ -2,8 +2,8 @@ package com.mcwcapsule.VJVM.interpreter.instruction.references;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-import com.mcwcapsule.VJVM.runtime.metadata.FieldInfo;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.FieldRef;
+import com.mcwcapsule.VJVM.runtime.classdata.FieldInfo;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.FieldRef;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 

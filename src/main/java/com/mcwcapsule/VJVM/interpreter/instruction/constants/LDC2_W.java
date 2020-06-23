@@ -2,7 +2,7 @@ package com.mcwcapsule.VJVM.interpreter.instruction.constants;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ValueConstant;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.ValueConstant;
 import lombok.val;
 
 public class LDC2_W extends Instruction {

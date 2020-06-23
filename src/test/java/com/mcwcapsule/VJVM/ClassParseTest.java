@@ -1,44 +1,27 @@
 package com.mcwcapsule.VJVM;
 
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Class;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Double;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Fieldref;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Float;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Integer;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_InterfaceMethodref;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Long;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Methodref;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_NameAndType;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_String;
-import static com.mcwcapsule.VJVM.runtime.metadata.ConstantTags.CONSTANT_Utf8;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.runtime.JHeap;
+import com.mcwcapsule.VJVM.runtime.NonArrayClass;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.NameAndTypeConstant;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.StringConstant;
+import com.mcwcapsule.VJVM.utils.FileUtil;
+import com.mcwcapsule.VJVM.vm.VJVM;
+import lombok.Cleanup;
+import lombok.val;
+import lombok.var;
+import org.apache.bcel.classfile.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import com.mcwcapsule.VJVM.runtime.JClass;
-import com.mcwcapsule.VJVM.runtime.JHeap;
-import com.mcwcapsule.VJVM.runtime.NonArrayClass;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.ClassRef;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.NameAndTypeConstant;
-import com.mcwcapsule.VJVM.runtime.metadata.constant.StringConstant;
-import com.mcwcapsule.VJVM.utils.FileUtil;
-import com.mcwcapsule.VJVM.vm.VJVM;
-
-import org.apache.bcel.classfile.ClassParser;
-import org.apache.bcel.classfile.ConstantCP;
-import org.apache.bcel.classfile.ConstantClass;
-import org.apache.bcel.classfile.ConstantNameAndType;
-import org.apache.bcel.classfile.ConstantString;
-import org.apache.bcel.classfile.JavaClass;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import lombok.Cleanup;
-import lombok.val;
-import lombok.var;
+import static com.mcwcapsule.VJVM.classfiledefs.ConstantTags.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClassParseTest {
     static Path classPath;
