@@ -60,4 +60,12 @@ public class OperandStack {
         assert top >= count;
         top -= count;
     }
+
+    @Override
+    public String toString() {
+        String sb = "OperandStack{" + "slots=" + slots +
+            ", top=" + top +
+            '}';
+        return sb;
+    }
 }

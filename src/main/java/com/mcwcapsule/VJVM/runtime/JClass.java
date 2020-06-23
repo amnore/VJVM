@@ -8,7 +8,6 @@ import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
-import com.mcwcapsule.VJVM.utils.CallUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,7 +53,9 @@ public class JClass {
 
     @Getter
     @Setter
-    protected volatile int initState;
+    protected int initState;
+    // the thread calling the initialize method
+    private JThread initThread;
 
     protected JClass() {
     }
@@ -132,34 +133,58 @@ public class JClass {
     /**
      * Initialize the class, see spec. 5.5.
      * Invoking this method when the class has been initialized has no effect.
+     * The steps correspond to that specified in spec. 5.5.
+     *
      * @param thread the thread at which to execute initialization method
      */
     public void tryInitialize(JThread thread) {
-        if (initState == InitState.INITIALIZED) return;
-
-        // multi-threading not supported
-        if (initState == InitState.INITIALIZING)
-            throw new Error();
-
         // prepare first
         tryPrepare();
+
+        // step1: there is no LC
+
+        // step2: instead of blocking, just fail
+        if (initState == InitState.INITIALIZING && initThread != thread)
+            throw new Error();
+
+        // step3
+        if (initThread == thread)
+            return;
+
+        // step4
+        if (initState == InitState.INITIALIZED) return;
+
+        // step5: not checking
+
+        // step6
         initState = InitState.INITIALIZING;
-        // init super classes and super interfaces
-        superClass.getJClass().tryInitialize(thread);
+        initThread = thread;
+
+        // step7
+        if (superClass != null)
+            superClass.getJClass().tryInitialize(thread);
         for (val i : interfaces)
             i.getJClass().tryInitialize(thread);
+
+        // step8: not doing
+
+        // step9
         // find <clinit>
         MethodInfo clinit = null;
         for (val i : methods)
-            if (i.getName().equals("<clinit>") && i.getDescriptor().equals("V()")) {
+            if (i.getName().equals("<clinit>") && i.getDescriptor().equals("()V")) {
                 clinit = i;
                 break;
             }
         if (clinit != null) {
-            CallUtil.callMethod(clinit, thread);
+            thread.pushFrame(new JFrame(clinit));
             VJVM.getInterpreter().run(thread);
         }
+
+        // step10
         initState = InitState.INITIALIZED;
+
+        // step11,12: not doing
     }
 
     /**

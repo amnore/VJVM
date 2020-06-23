@@ -16,7 +16,7 @@ public class IOPR extends Instruction {
         val stack = thread.getCurrentFrame().getOpStack();
         val right = stack.popInt();
         val left = stack.popInt();
-        stack.pushDouble(opr.applyAsInt(left, right));
+        stack.pushInt(opr.applyAsInt(left, right));
     }
 
 }

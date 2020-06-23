@@ -16,7 +16,7 @@ public class LOPR extends Instruction {
         val stack = thread.getCurrentFrame().getOpStack();
         val right = stack.popLong();
         val left = stack.popLong();
-        stack.pushDouble(opr.applyAsLong(left, right));
+        stack.pushLong(opr.applyAsLong(left, right));
     }
 
 }

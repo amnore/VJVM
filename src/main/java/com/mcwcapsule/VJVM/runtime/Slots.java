@@ -1,6 +1,7 @@
 package com.mcwcapsule.VJVM.runtime;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  * Slots represents an growable array of JVM slots as defined in the specification.
@@ -65,5 +66,10 @@ public class Slots {
             for (int i = 0; i < length; ++i) {
                 dest.setInt(destBegin + i, getInt(begin + i));
             }
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.toString(buf.array());
     }
 }

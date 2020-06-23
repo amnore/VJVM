@@ -14,6 +14,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.references.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stack.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stores.*;
 import com.mcwcapsule.VJVM.runtime.JThread;
+import lombok.SneakyThrows;
 
 public class JInterpreter {
     private final Instruction[] dispatchTable;
@@ -89,6 +90,7 @@ public class JInterpreter {
         // @formatter:on
     }
 
+    @SneakyThrows
     public void run(JThread thread) {
         // since this method may be invoked when JVM stack isn't empty,
         // for example, by the initialize() method of JClass, we need to exit at the right time.
@@ -97,6 +99,12 @@ public class JInterpreter {
         while (thread.getFrameCount() >= count) {
             byte opcode = thread.getPC().getByte();
             dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);
+
+            // print debug info
+            if (thread.isEmpty()) continue;
+            System.out.println("opcode: " + dispatchTable[Byte.toUnsignedInt(opcode)].getClass().getSimpleName());
+            System.out.println("local: " + thread.getCurrentFrame().getLocalVars().toString());
+            System.out.println("stack: " + thread.getCurrentFrame().getOpStack().toString());
         }
     }
 }

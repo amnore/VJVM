@@ -15,7 +15,7 @@ public class FOPR extends Instruction {
         val stack = thread.getCurrentFrame().getOpStack();
         val right = stack.popFloat();
         val left = stack.popFloat();
-        stack.pushDouble(opr.applyAsFloat(left, right));
+        stack.pushFloat(opr.applyAsFloat(left, right));
     }
 
 }
