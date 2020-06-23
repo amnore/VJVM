@@ -1,31 +1,40 @@
 package com.mcwcapsule.VJVM.runtime.metadata.constant;
 
 import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.runtime.metadata.MethodDescriptors;
 import com.mcwcapsule.VJVM.runtime.metadata.MethodInfo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class MethodRef extends Constant implements ResolvableConstant {
+public class MethodRef extends ResolvableConstant {
     private final ClassRef classRef;
     private final String name;
     private final String descriptor;
+    private final boolean isInterfaceMethod;
+
     private MethodInfo info;
+    private JClass jClass;
 
     /**
-     * Resolve the referenced method. See spec. 5.4.3.3
+     * Resolve the referenced method. See spec. 5.4.3.3, 5.4.3.4.
      */
     @Override
     public void resolve(JClass thisClass) throws ClassNotFoundException {
         classRef.resolve(thisClass);
-        if (classRef.getJClass().isInterface())
+        jClass = classRef.getJClass();
+        if (jClass.isInterface() ^ isInterfaceMethod)
             throw new IncompatibleClassChangeError();
         // ignore signature polymorphic methods
-        info = classRef.getJClass().findMethod(name, descriptor);
+        info = jClass.findMethod(name, descriptor);
         if (info == null)
             throw new NoSuchMethodError();
-        if (!info.isAccessibleTo(thisClass, classRef.getJClass()))
+        if (!info.isAccessibleTo(thisClass, jClass))
             throw new IllegalAccessError();
+    }
+
+    public int getArgc() {
+        return MethodDescriptors.getArgc(descriptor);
     }
 }

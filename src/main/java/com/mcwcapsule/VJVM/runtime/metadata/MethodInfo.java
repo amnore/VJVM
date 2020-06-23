@@ -49,6 +49,10 @@ public class MethodInfo {
             }
     }
 
+    public int getArgc() {
+        return MethodDescriptors.getArgc(descriptor);
+    }
+
     public boolean isAccessibleTo(JClass other, JClass referencedJClass) {
         if (isPublic())
             return true;

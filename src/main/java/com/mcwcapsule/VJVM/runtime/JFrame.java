@@ -11,14 +11,16 @@ public class JFrame {
     private final OperandStack opStack;
     private final RuntimeConstantPool dynLink;
     private final MethodInfo methodInfo;
+    private final JClass jClass;
     private final ProgramCounter PC;
 
-    public JFrame(RuntimeConstantPool dynLink, MethodInfo method) {
+    public JFrame(JClass jClass, MethodInfo method) {
         val code = method.getCode();
         localVars = new Slots(code.getMaxLocals());
         opStack = new OperandStack(code.getMaxStack());
-        this.dynLink = dynLink;
+        dynLink = jClass.getConstantPool();
         methodInfo = method;
+        this.jClass = jClass;
         PC = new ProgramCounter(code.getCode());
     }
 }

@@ -56,4 +56,14 @@ public class Slots {
     public int size() {
         return buf.position() / 4;
     }
+
+    public void copyTo(int begin, int length, Slots dest, int destBegin) {
+        if (dest == this && destBegin > begin)
+            for (int i = length - 1; i >= 0; --i)
+                dest.setInt(destBegin + i, getInt(begin + i));
+        else
+            for (int i = 0; i < length; ++i) {
+                dest.setInt(destBegin + i, getInt(begin + i));
+            }
+    }
 }

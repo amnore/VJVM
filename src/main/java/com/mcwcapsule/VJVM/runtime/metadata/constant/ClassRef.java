@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
-public class ClassRef extends Constant implements ResolvableConstant {
+public class ClassRef extends ResolvableConstant {
     private final String name;
     private JClass jClass;
 

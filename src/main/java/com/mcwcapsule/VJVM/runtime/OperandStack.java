@@ -55,4 +55,9 @@ public class OperandStack {
     public int popAddress() {
         return popInt();
     }
+
+    public void popSlots(int count) {
+        assert top >= count;
+        top -= count;
+    }
 }

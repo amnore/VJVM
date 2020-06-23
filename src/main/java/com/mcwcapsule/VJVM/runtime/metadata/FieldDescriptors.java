@@ -16,8 +16,11 @@ public class FieldDescriptors {
      * Get the size (in slots) of a type.
      */
     public static int getSize(String descriptor) {
-        char f = descriptor.charAt(0);
-        return (f == DESC_double || f == DESC_long) ? 2 : 1;
+        return getSize(descriptor.charAt(0));
+    }
+
+    public static int getSize(char c) {
+        return (c == DESC_double || c == DESC_long) ? 2 : 1;
     }
 
     public static boolean isReference(String descriptor) {

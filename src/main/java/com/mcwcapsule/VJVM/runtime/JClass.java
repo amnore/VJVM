@@ -135,7 +135,7 @@ public class JClass {
                 break;
             }
         if (clinit != null)
-            CallUtil.callMethod(clinit, 0, thread);
+            CallUtil.callMethod(this, clinit, thread);
         initState = InitState.INITIALIZED;
     }
 

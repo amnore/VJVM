@@ -43,6 +43,7 @@ public class ArrayClass extends JClass {
             ? (elementClass.getJClass().getAccessFlags() & (ClassAccessFlags.ACC_PUBLIC))
             : ClassAccessFlags.ACC_PUBLIC) | ClassAccessFlags.ACC_SYNTHETIC);
 
+        // Arrays do implement some interfaces, see JLS 4.10.3, but it's not considered here.
         interfaces = new ClassRef[0];
 
         // length field
