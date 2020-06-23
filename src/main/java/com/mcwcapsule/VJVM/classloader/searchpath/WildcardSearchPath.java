@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.jar.JarFile;
-import java.util.stream.Collectors;
 
 public class WildcardSearchPath extends ClassSearchPath {
     private final JarFile[] jars;

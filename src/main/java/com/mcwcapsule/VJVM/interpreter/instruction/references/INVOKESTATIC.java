@@ -20,7 +20,7 @@ public class INVOKESTATIC extends Instruction {
         }
         if (methodRef.getJClass().getInitState() != JClass.InitState.INITIALIZED)
             methodRef.getJClass().tryInitialize(thread);
-        CallUtil.callMethod(methodRef.getJClass(), methodRef.getInfo(), thread);
+        CallUtil.callMethod(methodRef.getInfo(), thread);
     }
 
 }

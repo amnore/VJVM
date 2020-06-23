@@ -22,7 +22,7 @@ public class INVOKEVIRTUAL extends Instruction {
         val stack = frame.getOpStack();
         val objClass = heap.getJClass(heap.getSlots().getInt(stack.getSlots().getInt(stack.getTop() - methodRef.getArgc() - 1)));
         val method = objClass.findMethod(methodRef.getName(), methodRef.getDescriptor());
-        CallUtil.callMethod(objClass, method, thread);
+        CallUtil.callMethod(method, thread);
     }
 
 }

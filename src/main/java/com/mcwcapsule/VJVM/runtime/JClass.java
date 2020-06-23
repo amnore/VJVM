@@ -156,7 +156,7 @@ public class JClass {
                 break;
             }
         if (clinit != null) {
-            CallUtil.callMethod(this, clinit, thread);
+            CallUtil.callMethod(clinit, thread);
             VJVM.getInterpreter().run(thread);
         }
         initState = InitState.INITIALIZED;

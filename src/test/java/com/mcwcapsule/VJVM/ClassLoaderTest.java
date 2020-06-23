@@ -1,23 +1,20 @@
 package com.mcwcapsule.VJVM;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import com.mcwcapsule.VJVM.classloader.JClassLoader;
+import com.mcwcapsule.VJVM.runtime.JHeap;
+import com.mcwcapsule.VJVM.utils.FileUtil;
+import com.mcwcapsule.VJVM.vm.VJVM;
+import lombok.val;
+import lombok.var;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import com.mcwcapsule.VJVM.classloader.JClassLoader;
-import com.mcwcapsule.VJVM.runtime.JHeap;
-import com.mcwcapsule.VJVM.utils.FileUtil;
-import com.mcwcapsule.VJVM.vm.VJVM;
-import com.mcwcapsule.VJVM.vm.VMOptions;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import lombok.val;
-import lombok.var;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClassLoaderTest {
     static Path classPath;

@@ -2,6 +2,7 @@ package com.mcwcapsule.VJVM.vm;
 
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.interpreter.JInterpreter;
+import com.mcwcapsule.VJVM.runtime.JFrame;
 import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import lombok.Getter;
@@ -43,7 +44,11 @@ public class VJVM {
             initClass.tryVerify();
             initClass.tryPrepare();
             initClass.tryInitialize(initThread);
-            // TODO: call main
+            val method = initClass.findMethod("main", "([Ljava/lang/String;)V");
+            assert method.getJClass() == initClass;
+            val initFrame = new JFrame(method);
+            initThread.pushFrame(initFrame);
+            interpreter.run(initThread);
         } catch (Exception e) {
             throw new Error(e);
         }

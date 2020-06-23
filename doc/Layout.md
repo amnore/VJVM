@@ -2,7 +2,7 @@
 
 When allocating objects, the return value is the address of classIndex. Extra slots are allocated before object data, and are used to store metadata such as the size of the object and the index of JClass in method area.
 
-|    name    | position (in slots) |                 descriptrion                 |
+|    name    | position (in slots) |                 description                  |
 | :--------: | :-----------------: | :------------------------------------------: |
 |    size    |         -2          |             size of object data              |
 | classIndex |         -1          | index of corresponding JClass in method area |

@@ -15,10 +15,12 @@ import lombok.Getter;
 import lombok.val;
 
 public class ArrayClass extends JClass {
+    @Getter
     private final String elementType;
     @Getter
     private final int elementSize;
     private final FieldInfo lengthField;
+    @Getter
     private ClassRef elementClass;
 
     public ArrayClass(String arrayType, JClassLoader classLoader) {

@@ -1,21 +1,19 @@
 package com.mcwcapsule.VJVM;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import com.mcwcapsule.VJVM.classloader.searchpath.DirSearchPath;
 import com.mcwcapsule.VJVM.classloader.searchpath.JarSearchPath;
 import com.mcwcapsule.VJVM.classloader.searchpath.WildcardSearchPath;
 import com.mcwcapsule.VJVM.utils.FileUtil;
-
+import lombok.val;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import lombok.val;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ClassSearchPathTest {
     static Path base;
@@ -53,7 +51,7 @@ public class ClassSearchPathTest {
         assertNotEquals(null, _0.findClass("searchpath1/SearchTest1"));
         val _1 = new DirSearchPath(base.resolve("searchpath0").toString());
         assertNotEquals(null, _1.findClass("SearchTest0"));
-        assertEquals(null, _1.findClass("SearchTest1"));
+        assertNull(_1.findClass("SearchTest1"));
     }
 
     @Test

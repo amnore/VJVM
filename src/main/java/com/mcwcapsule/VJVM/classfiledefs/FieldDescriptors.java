@@ -24,7 +24,10 @@ public class FieldDescriptors {
     }
 
     public static boolean isReference(String descriptor) {
-        char f = descriptor.charAt(0);
-        return f == DESC_reference || f == DESC_array;
+        return isReference(descriptor.charAt(0));
+    }
+
+    public static boolean isReference(char c) {
+        return c == DESC_reference || c == DESC_array;
     }
 }

@@ -27,7 +27,7 @@ public class INVOKEINTERFACE extends Instruction {
         val obj = stack.getSlots().getAddress(stack.getTop() - argc - 1);
         val jClass = heap.getJClass(heap.getSlots().getInt(obj - 1));
         val method = jClass.findMethod(ref.getName(), ref.getDescriptor());
-        CallUtil.callMethod(jClass, method, thread);
+        CallUtil.callMethod(method, thread);
     }
 
 }

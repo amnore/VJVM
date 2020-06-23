@@ -1,9 +1,12 @@
 package com.mcwcapsule.VJVM.classloader;
 
+import com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors;
 import com.mcwcapsule.VJVM.classloader.searchpath.ClassSearchPath;
+import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JClass.InitState;
 import com.mcwcapsule.VJVM.runtime.NonArrayClass;
+import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
 
@@ -32,7 +35,7 @@ public class JClassLoader implements Closeable {
      * @return the defined class
      * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
-    public JClass defineNonarrayClass(String name, InputStream data) throws ClassNotFoundException {
+    private JClass defineNonarrayClass(String name, InputStream data) throws ClassNotFoundException {
         val ret = new NonArrayClass(new DataInputStream(data), this);
         // check the name of created class matches what we expect, see spec 5.3.5.2
         // resolve ClassRef first
@@ -45,6 +48,21 @@ public class JClassLoader implements Closeable {
         for (int i = 0; i < ret.getSuperInterfacesCount(); ++i)
             ret.getSuperInterface(i).resolve(ret);
         // add to loaded class
+        definedClass.put(name, ret);
+        ret.setInitState(InitState.LOADED);
+        return ret;
+    }
+
+    private JClass defineArrayClass(String name) {
+        val ret = new ArrayClass(name, this);
+        try {
+            ret.getThisClass().resolve(ret);
+            ret.getSuperClass().resolve(ret);
+            for (int i = 0; i < ret.getSuperInterfacesCount(); ++i)
+                ret.getSuperInterface(i).resolve(ret);
+        } catch (ClassNotFoundException e) {
+            throw new Error(e);
+        }
         definedClass.put(name, ret);
         ret.setInitState(InitState.LOADED);
         return ret;
@@ -74,7 +92,13 @@ public class JClassLoader implements Closeable {
         if (ret != null)
             return ret;
         // not loaded
-        for (var p : searchPaths) {
+        // if the class is an array class
+        if (name.charAt(0) == FieldDescriptors.DESC_array) {
+            if (FieldDescriptors.isReference(name.charAt(1))) {
+                val elemClass = loadClass(name.substring(1));
+                return elemClass.getClassLoader().defineArrayClass(name);
+            } else return VJVM.getBootstrapLoader().defineArrayClass(name);
+        } else for (var p : searchPaths) {
             var iStream = p.findClass(name);
             // if the class was found
             if (iStream != null)

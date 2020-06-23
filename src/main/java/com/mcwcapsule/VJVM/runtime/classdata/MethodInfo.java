@@ -20,6 +20,7 @@ public class MethodInfo {
     @Getter
     private final String descriptor;
     private final Attribute[] attributes;
+    @Getter
     private final JClass jClass;
 
     // if this method doesn't hava code attribute, then code is null.

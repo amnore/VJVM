@@ -3,7 +3,6 @@ package com.mcwcapsule.VJVM.classloader.searchpath;
 import java.io.Closeable;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * Represents a path to search class files in.

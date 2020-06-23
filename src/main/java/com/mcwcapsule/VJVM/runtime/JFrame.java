@@ -14,13 +14,13 @@ public class JFrame {
     private final JClass jClass;
     private final ProgramCounter PC;
 
-    public JFrame(JClass jClass, MethodInfo method) {
+    public JFrame(MethodInfo method) {
         val code = method.getCode();
+        jClass = method.getJClass();
         localVars = new Slots(code.getMaxLocals());
         opStack = new OperandStack(code.getMaxStack());
         dynLink = jClass.getConstantPool();
         methodInfo = method;
-        this.jClass = jClass;
         PC = new ProgramCounter(code.getCode());
     }
 }
