@@ -2,9 +2,10 @@ package com.mcwcapsule.VJVM.vm;
 
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.interpreter.JInterpreter;
-import com.mcwcapsule.VJVM.runtime.JFrame;
 import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.runtime.JThread;
+import com.mcwcapsule.VJVM.runtime.Slots;
+import com.mcwcapsule.VJVM.utils.CallUtil;
 import lombok.Getter;
 import lombok.val;
 
@@ -44,10 +45,10 @@ public class VJVM {
             initClass.tryVerify();
             initClass.tryPrepare();
             initClass.tryInitialize(initThread);
-            val method = initClass.findMethod("main", "([Ljava/lang/String;)V");
-            assert method.getJClass() == initClass;
-            val initFrame = new JFrame(method);
-            initThread.pushFrame(initFrame);
+            val mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
+            assert mainMethod.getJClass() == initClass;
+            // FIXME: call main with arguments
+            CallUtil.callMethodWithArgs(mainMethod, initThread, new Slots(1));
             interpreter.run(initThread);
         } catch (Exception e) {
             throw new Error(e);
