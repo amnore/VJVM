@@ -1,2 +1,2 @@
 # VJVM
-VJVM: Virtual Java Virtual Machine
+VJVM: Virtual Java Virtual Machine (toy)
