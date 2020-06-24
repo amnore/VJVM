@@ -21,11 +21,9 @@ public class NEWARRAY extends Instruction {
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        if (jClass.getInitState() != JClass.InitState.INITIALIZED) {
-            thread.getPC().move(-2);
+        if (jClass.getInitState() != JClass.InitState.INITIALIZED)
             jClass.tryInitialize(thread);
-        }
-        val stack =thread.getCurrentFrame().getOpStack();
+        val stack = thread.getCurrentFrame().getOpStack();
         val ref = jClass.createInstance(stack.popInt());
         stack.pushAddress(ref);
     }

@@ -30,10 +30,9 @@ public class JHeap {
      */
     public int allocate(int size) {
         int ret = current + extraSize;
-
-        current += extraSize + size;
         // set object size
-        slots.setInt(current - 2, size);
+        slots.setInt(current, size);
+        current += extraSize + size;
         return ret;
     }
 }

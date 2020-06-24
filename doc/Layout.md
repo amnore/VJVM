@@ -26,3 +26,17 @@ The length field of an array are put before its elements.
 |   Object   |   0...sizeof(Object)-1    |               fields of Object               |
 |   length   |      sizeof(Object)       |                 array length                 |
 |  elements  | sizeof(Object)+1...size-1 |                                              |
+
+The size of certain types of elements in arrays are smaller than a slot.
+The size of elements in total is ```ceil(count / elemPerSlot)```.
+
+|  type   | elements per slot |
+| :-----: | :---------------: |
+|  byte   |         4         |
+|  char   |         2         |
+| double  |        1/2        |
+|  float  |         1         |
+|   int   |         1         |
+|  long   |        1/2        |
+|  short  |         2         |
+| boolean |         4         |

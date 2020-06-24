@@ -14,11 +14,11 @@ import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.Getter;
 import lombok.val;
 
+import static com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors.*;
+
 public class ArrayClass extends JClass {
     @Getter
     private final String elementType;
-    @Getter
-    private final int elementSize;
     private final FieldInfo lengthField;
     @Getter
     private ClassRef elementClass;
@@ -29,7 +29,6 @@ public class ArrayClass extends JClass {
         thisClass = new ClassRef(arrayType);
         superClass = new ClassRef("java/lang/Object");
         elementType = arrayType.substring(1);
-        elementSize = FieldDescriptors.getSize(elementType);
         this.classLoader = classLoader;
 
         // if element type is reference type, resolve it
@@ -64,14 +63,18 @@ public class ArrayClass extends JClass {
 
         attributes = new Attribute[0];
         String name = thisClass.getName();
-        packageName = name.substring(0, name.lastIndexOf('/'));
+
+        // array types doesn't have a package
+        packageName = null;
+
         methodAreaIndex = VJVM.getHeap().addJClass(this);
     }
 
     public int createInstance(int length) {
         assert initState == InitState.INITIALIZED;
         val heap = VJVM.getHeap();
-        val ret = heap.allocate(instanceSize + length * elementSize);
+        val arrSize = getArraySize(length);
+        val ret = heap.allocate(instanceSize + getArraySize(length));
         val slots = heap.getSlots();
 
         // set class index
@@ -79,5 +82,23 @@ public class ArrayClass extends JClass {
         // set array length
         heap.getSlots().setInt(ret + lengthField.getOffset(), length);
         return ret;
+    }
+
+    private int getArraySize(int length) {
+        switch (elementType.charAt(0)) {
+            case DESC_boolean:
+            case DESC_byte:
+                length += (-length & 0b11);
+                return length / 4;
+            case DESC_char:
+            case DESC_short:
+                length += length & 1;
+                return length / 2;
+            case DESC_double:
+            case DESC_long:
+                return length * 2;
+            default:
+                return length;
+        }
     }
 }

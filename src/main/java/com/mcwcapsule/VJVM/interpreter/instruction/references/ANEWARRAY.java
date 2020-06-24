@@ -2,6 +2,7 @@ package com.mcwcapsule.VJVM.interpreter.instruction.references;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.ArrayClass;
+import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import lombok.val;
@@ -21,6 +22,8 @@ public class ANEWARRAY extends Instruction {
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
+        if (arrayClass.getInstanceSize() != JClass.InitState.INITIALIZED)
+            arrayClass.tryInitialize(thread);
         val arr = arrayClass.createInstance(count);
         stack.pushAddress(arr);
     }

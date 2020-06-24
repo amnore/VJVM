@@ -14,10 +14,10 @@ public class Test7 {
         byte[] _8 = new byte[]{-21, -22, -23, -24};
         assertEquals(_1[0] << _1[1], _1[3]);
         assertEquals(_2[3] - _2[0], _1[2]);
-        assertEquals(_4[1] * _3[3], _2[2] * _2[3] * _1[3]);
+        assertEquals(_4[1] * _3[3], _2[2] * _2[1] * _1[3]);
         assertEquals(_4[0] - _2[3] - _2[0] == 0, _5[0]);
         assertEquals(~_6[1], _7[0]);
         assertEquals(_6[3] - 1, _8[0]);
-        assertEquals(_8[2] * _8[3], 40);
+        assertEquals((byte) (_8[2] * _8[3]), 40);
     }
 }
