@@ -10,6 +10,7 @@ public class MethodDescriptors {
         var isParsingClass = false;
         var argc = 0;
         for (int i = 1; i < descriptor.length(); ) {
+            if (descriptor.charAt(i) == ')') break;
             argc += FieldDescriptors.getSize(descriptor.charAt(i));
             if (descriptor.charAt(i) == DESC_reference)
                 i = descriptor.indexOf(';', i) + 1;

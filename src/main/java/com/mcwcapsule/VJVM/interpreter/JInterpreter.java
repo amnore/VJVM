@@ -97,14 +97,16 @@ public class JInterpreter {
         int count = thread.getFrameCount();
 
         while (thread.getFrameCount() >= count) {
-            byte opcode = thread.getPC().getByte();
-            dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);
-
             // print debug info
-            if (thread.isEmpty()) continue;
-            System.out.println("opcode: " + dispatchTable[Byte.toUnsignedInt(opcode)].getClass().getSimpleName());
+            System.out.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName());
+            System.out.println("opcode: " + dispatchTable[Byte.toUnsignedInt(thread.getPC().getByte())].getClass().getSimpleName());
+            thread.getPC().move(-1);
             System.out.println("local: " + thread.getCurrentFrame().getLocalVars().toString());
             System.out.println("stack: " + thread.getCurrentFrame().getOpStack().toString());
+            System.out.println();
+
+            byte opcode = thread.getPC().getByte();
+            dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);
         }
     }
 }
