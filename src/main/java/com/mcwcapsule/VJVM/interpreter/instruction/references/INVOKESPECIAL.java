@@ -17,14 +17,16 @@ public class INVOKESPECIAL extends Instruction {
         val heap = VJVM.getHeap();
         val opSlots = frame.getOpStack().getSlots();
         val argc = methodRef.getArgc();
-        val currentClass = heap.getJClass(opSlots.getInt(frame.getOpStack().getTop() - argc - 1));
+        val currentClass = frame.getJClass();
         try {
             methodRef.resolve(frame.getJClass());
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
         JClass targetClass;
-        if (!methodRef.getName().equals("<init>") && !methodRef.getJClass().isInterface() && methodRef.getJClass().isSuper())
+        JClass refClass = methodRef.getJClass();
+        if (!methodRef.getName().equals("<init>") && !refClass.isInterface()
+            && currentClass.isSubclassOf(refClass) && refClass.isSuper())
             targetClass = currentClass.getSuperClass().getJClass();
         else targetClass = methodRef.getJClass();
         val method = targetClass.findMethod(methodRef.getName(), methodRef.getDescriptor());

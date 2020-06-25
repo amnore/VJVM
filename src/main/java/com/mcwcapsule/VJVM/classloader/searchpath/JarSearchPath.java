@@ -1,5 +1,7 @@
 package com.mcwcapsule.VJVM.classloader.searchpath;
 
+import lombok.val;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarFile;
@@ -21,7 +23,8 @@ public class JarSearchPath extends ClassSearchPath {
         if (file == null)
             return null;
         try {
-            return file.getInputStream(file.getEntry(name + ".class"));
+            val entry = file.getEntry(name + ".class");
+            return entry == null ? null : file.getInputStream(entry);
         } catch (IOException e) {
             return null;
         }
