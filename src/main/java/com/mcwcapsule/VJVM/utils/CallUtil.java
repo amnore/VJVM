@@ -5,6 +5,7 @@ import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.OperandStack;
 import com.mcwcapsule.VJVM.runtime.Slots;
 import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
+import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
 import org.apache.commons.lang3.tuple.Triple;
@@ -31,6 +32,12 @@ public class CallUtil {
         nativeHacks.put(Triple.of(tu, mn, "(ZZ)V"), s -> {
             assert s.popInt() == s.popInt();
         });
+        nativeHacks.put(Triple.of(tu, mn, "(DDD)V"), s -> {
+            val delta = s.popDouble();
+            assert Math.abs(s.popDouble() - s.popDouble()) < delta;
+        });
+        nativeHacks.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
+            s -> s.pushAddress(VJVM.getHeap().getInternString(s.popAddress())));
     }
 
     public static void callMethod(MethodInfo method, JThread thread) {
