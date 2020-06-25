@@ -15,6 +15,7 @@ import lombok.Setter;
 import lombok.val;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,7 @@ public class JClass {
     // initialized with prepare()
     @Getter
     protected Slots staticFields;
+    protected ArrayList<MethodInfo> vtable;
     // size of instance object
     @Getter
     protected int instanceSize;
@@ -128,6 +130,38 @@ public class JClass {
             field.setOffset(instanceSize);
             instanceSize += field.getSize();
         }
+
+        // init vtable
+        // copy super's vtable
+        if (superClass != null)
+            vtable = new ArrayList<>(superClass.getJClass().vtable);
+        else vtable = new ArrayList<>();
+        // insert or override for each method, see spec. 5.4.5
+        // transitive overriding is not considered
+        // interface methods are not considered, unless they are implemented in super class
+        // for other instance methods, they are all added to vtable
+        int superlen = vtable.size();
+        outer:
+        for (val mc : methods) {
+            if (mc.isStatic()) continue;
+            for (int j = 0; j < superlen; ++j) {
+                val ma = vtable.get(j);
+                if (!mc.getName().equals(ma.getName()) || !mc.getDescriptor().equals(ma.getDescriptor()))
+                    continue;
+                if (mc.isPrivate())
+                    continue;
+                if (ma.isPublic() || ma.isProtected()
+                    || (!ma.isPrivate() && ma.getJClass().getPackageName().equals(packageName))) {
+                    vtable.set(j, mc);
+                    mc.setVtableIndex(j);
+                    continue outer;
+                }
+            }
+            // if there is not override found
+            vtable.add(mc);
+            mc.setVtableIndex(vtable.size() - 1);
+        }
+
         initState = InitState.PREPARED;
     }
 
@@ -241,6 +275,10 @@ public class JClass {
 
     public Pair<String, JClassLoader> getRuntimePackage() {
         return Pair.of(packageName, classLoader);
+    }
+
+    public MethodInfo getVtableMethod(int index) {
+        return vtable.get(index);
     }
 
     /**

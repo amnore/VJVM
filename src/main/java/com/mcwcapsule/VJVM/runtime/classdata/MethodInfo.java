@@ -6,6 +6,7 @@ import com.mcwcapsule.VJVM.runtime.classdata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.Code;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.UTF8Constant;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 import java.io.DataInput;
@@ -26,6 +27,10 @@ public class MethodInfo {
     // if this method doesn't hava code attribute, then code is null.
     @Getter
     private Code code;
+
+    @Getter
+    @Setter
+    private int vtableIndex = -1;
 
     public MethodInfo(DataInput dataInput, JClass jClass) {
         try {

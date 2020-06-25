@@ -29,7 +29,8 @@ public class INVOKESPECIAL extends Instruction {
             && currentClass.isSubclassOf(refClass) && refClass.isSuper())
             targetClass = currentClass.getSuperClass().getJClass();
         else targetClass = methodRef.getJClass();
-        val method = targetClass.findMethod(methodRef.getName(), methodRef.getDescriptor());
+//        val method = targetClass.findMethod(methodRef.getName(), methodRef.getDescriptor());
+        val method = targetClass.getVtableMethod(methodRef.getInfo().getVtableIndex());
         CallUtil.callMethod(method, thread);
     }
 
