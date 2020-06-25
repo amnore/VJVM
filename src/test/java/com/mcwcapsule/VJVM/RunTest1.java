@@ -11,7 +11,7 @@ public class RunTest1 {
     @Test
     void test() {
         Path path = CompileUtil.compile("Test5.java", "TestUtil.java");
-        VJVM.init(VMOptions.builder().entryClass("testsource/Test5").userClassPath(path.toString()).bootstrapClassPath("lib").build());
+        VJVM.init(VMOptions.builder().entryClass("testsource/Test5").userClassPath(path.toString()).build());
         FileUtil.DeleteRecursive(path.toFile());
     }
 }

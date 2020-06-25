@@ -9,7 +9,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -21,24 +20,17 @@ public class ClassSearchPathTest {
     @BeforeAll
     public static void compileAndPackFiles() {
         try {
-            base = Files.createTempDirectory("testtmp");
-            val runtime = Runtime.getRuntime();
-            // compile
-            assert runtime.exec(
-                    String.format("javac -d %s %2$s/searchpath0/SearchTest0.java %2$s/searchpath1/SearchTest1.java",
-                            base.toString(), "src/test/java/testsource"))
-                    .waitFor() == 0;
+            base = CompileUtil.compile("searchpath0/SearchTest0.java", "searchpath1/SearchTest1.java");
             base = base.resolve("testsource");
             // package
+            val runtime = Runtime.getRuntime();
             assert runtime.exec(String.format(
-                    "jar --create --file %1$s/jar.jar -C %1$s searchpath0/SearchTest0.class -C %1$s searchpath1/SearchTest1.class",
-                    base.toString())).waitFor() == 0;
-            /**
-             * At this time, there are three files in base dir.
-             * jar.jar
-             * searchpath0/SearchTest0.class
-             * searchpath1/SearchTest1.class
-             */
+                "jar -c -f %1$s/jar.jar -C %1$s searchpath0/SearchTest0.class -C %1$s searchpath1/SearchTest1.class",
+                base.toString())).waitFor() == 0;
+            // At this time, there are three files in base dir.
+            // jar.jar
+            // searchpath0/SearchTest0.class
+            // searchpath1/SearchTest1.class
         } catch (Exception e) {
             throw new Error(e);
         }

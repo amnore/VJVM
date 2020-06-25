@@ -10,7 +10,7 @@ public class RunTest3 {
     @Test
     void test() {
         val path = CompileUtil.compile("Test7.java", "TestUtil.java");
-        VJVM.init(VMOptions.builder().entryClass("testsource/Test7").bootstrapClassPath("lib").userClassPath(path.toString()).build());
+        VJVM.init(VMOptions.builder().entryClass("testsource/Test7").userClassPath(path.toString()).build());
         FileUtil.DeleteRecursive(path.toFile());
     }
 }
