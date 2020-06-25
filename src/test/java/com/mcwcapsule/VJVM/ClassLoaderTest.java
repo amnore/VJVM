@@ -2,6 +2,7 @@ package com.mcwcapsule.VJVM;
 
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.JHeap;
+import com.mcwcapsule.VJVM.utils.ClassPathUtil;
 import com.mcwcapsule.VJVM.utils.FileUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
@@ -31,8 +32,8 @@ public class ClassLoaderTest {
             heap.set(null, new JHeap(0));
             classPath = Files.createTempDirectory(null);
             runtime.exec(String.format("javac -d %s %2$s/Test2.java %2$s/Test3.java %2$s/Test4.java", classPath,
-                    "src/test/java/testsource")).waitFor();
-            parent = new JClassLoader(null, "lib");
+                "src/test/java/testsource")).waitFor();
+            parent = new JClassLoader(null, ClassPathUtil.findJavaPath());
             loader = new JClassLoader(parent, classPath.toString());
         } catch (Exception e) {
             throw new Error(e);
@@ -48,7 +49,7 @@ public class ClassLoaderTest {
     void testRecursive() throws Exception {
         val jClass = loader.loadClass("testsource/Test4");
         assertEquals(parent.getDefinedClass("java/lang/Object"),
-                jClass.getSuperClass().getJClass().getSuperClass().getJClass());
+            jClass.getSuperClass().getJClass().getSuperClass().getJClass());
         assertEquals(loader.getDefinedClass("testsource/Test2"), jClass.getSuperClass().getJClass());
         assertEquals(loader.getDefinedClass("testsource/Test3"), jClass.getSuperInterface(0).getJClass());
     }

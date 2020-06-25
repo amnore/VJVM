@@ -3,6 +3,7 @@ package com.mcwcapsule.VJVM;
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JHeap;
+import com.mcwcapsule.VJVM.utils.ClassPathUtil;
 import com.mcwcapsule.VJVM.utils.FileUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
@@ -33,8 +34,8 @@ public class PrepareTest {
             heap.set(null, new JHeap(0));
             path = Files.createTempDirectory(null);
             assert runtime.exec(String.format("javac -d %s src/test/java/testsource/Test2.java", path.toString()))
-                    .waitFor() == 0;
-            parent = new JClassLoader(null, "lib");
+                .waitFor() == 0;
+            parent = new JClassLoader(null, ClassPathUtil.findJavaPath());
             loader = new JClassLoader(parent, path.toString());
             jClass = loader.loadClass("testsource/Test2");
             jClass.tryPrepare();
