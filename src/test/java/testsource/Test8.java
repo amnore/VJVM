@@ -7,8 +7,6 @@ public class Test8 {
         String s = "yggtqlyydsddw";
         assertEquals(s.startsWith("ygg"), true);
         assertEquals(s.endsWith("ddw"), true);
-        assertEquals(s.replace("ygg", "wgg").equals("wggtqlyydsddw"), true);
         assertEquals(s.length(), 13);
-        assertEquals(s.lastIndexOf('y'), 7);
     }
 }
