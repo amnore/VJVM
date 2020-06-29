@@ -13,11 +13,12 @@ public class JHeap {
     @Getter
     private final Slots slots;
     private int current = 0;
-    private HashMap<StringWrapper, Integer> internPool;
+    private final HashMap<StringWrapper, Integer> internPool;
 
     public JHeap(int heapSize) {
         methodArea = new ArrayList<>();
         slots = new Slots(heapSize);
+        internPool = new HashMap<>();
     }
 
     public int addJClass(JClass jClass) {

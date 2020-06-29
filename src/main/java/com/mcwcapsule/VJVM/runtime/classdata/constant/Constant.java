@@ -59,6 +59,24 @@ public class Constant {
                     result = new UTF8Constant(input.readUTF());
                     count = 1;
                     break;
+
+                // method handle, method type, dynamic, invoke dynamic are used by CharSequence
+                case CONSTANT_MethodHandle:
+                    result = new Constant();
+                    input.skipBytes(3);
+                    count = 1;
+                    break;
+                case CONSTANT_MethodType:
+                    result = new Constant();
+                    input.skipBytes(2);
+                    count = 1;
+                    break;
+                case CONSTANT_Dynamic:
+                case CONSTANT_InvokeDynamic:
+                    result = new Constant();
+                    input.skipBytes(4);
+                    count = 1;
+                    break;
                 default:
                     throw new ClassFormatError();
             }

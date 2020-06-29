@@ -42,9 +42,12 @@ public class VJVM {
         addThread(initThread);
         try {
             val initClass = userLoader.loadClass(_options.getEntryClass());
-            initClass.tryVerify();
-            initClass.tryPrepare();
             initClass.tryInitialize(initThread);
+
+            // hack: string
+            val strClass = bootstrapLoader.loadClass("java/lang/String");
+            strClass.tryInitialize(initThread);
+
             val mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
             assert mainMethod.getJClass() == initClass;
             // FIXME: call main with arguments

@@ -64,7 +64,10 @@ public class JClassLoader implements Closeable {
             throw new Error(e);
         }
         definedClass.put(name, ret);
-        ret.setInitState(InitState.LOADED);
+
+        // arrays doesn't need init
+        ret.tryPrepare();
+        ret.setInitState(InitState.INITIALIZED);
         return ret;
     }
 
