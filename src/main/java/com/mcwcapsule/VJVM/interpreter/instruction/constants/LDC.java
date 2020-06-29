@@ -14,7 +14,7 @@ public class LDC extends Instruction {
         val index = thread.getPC().getUnsignedByte();
         val value = ((ValueConstant) frame.getDynLink().getConstant(index)).getValue();
 
-        // only int and float are supported
+        // only int, String and float are supported
         if (value instanceof Integer)
             stack.pushInt((Integer) value);
         else if (value instanceof Float)

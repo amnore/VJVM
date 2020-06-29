@@ -18,6 +18,7 @@ public class MethodDescriptors {
             while (descriptor.charAt(i) == DESC_array) ++i;
             if (descriptor.charAt(i) == DESC_reference)
                 i = descriptor.indexOf(';', i) + 1;
+            else ++i;
         }
         return argc;
     }

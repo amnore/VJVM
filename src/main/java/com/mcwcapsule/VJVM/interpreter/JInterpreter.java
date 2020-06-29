@@ -63,7 +63,7 @@ public class JInterpreter {
 /* 0x98 */  new DCMPG(), new IFCOND(x -> x == 0), new IFCOND(x -> x != 0), new IFCOND(x -> x < 0),
 /* 0x9c */  new IFCOND(x -> x >= 0), new IFCOND(x -> x > 0), new IFCOND(x -> x <= 0), new IF_ICMPCOND((x, y) -> x == y),
 /* 0xa0 */  new IF_ICMPCOND((x, y) -> x != y), new IF_ICMPCOND((x, y) -> x < y), new IF_ICMPCOND((x, y) -> x >= y), new IF_ICMPCOND((x, y) -> x > y),
-/* 0xa4 */  new IF_ICMPCOND((x, y) -> x < y), new IF_ACMPCOND((x, y) -> x == y), new IF_ACMPCOND((x, y) -> x != y), new GOTO(),
+/* 0xa4 */  new IF_ICMPCOND((x, y) -> x <= y), new IF_ACMPCOND((x, y) -> x == y), new IF_ACMPCOND((x, y) -> x != y), new GOTO(),
 /* 0xa8 */  null, null, null, null,
 /* 0xac */  new RETURN1S(), new RETURN2S(), new RETURN1S(), new RETURN2S(),
 /* 0xb0 */  new RETURN1S(), new RETURN(), new GETSTATIC(), new PUTSTATIC(),
@@ -98,7 +98,7 @@ public class JInterpreter {
 
         while (thread.getFrameCount() >= count) {
             // print debug info
-            System.out.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName());
+            System.out.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName() + ';' + thread.getCurrentFrame().getMethodInfo().getDescriptor());
             System.out.println("opcode: " + dispatchTable[Byte.toUnsignedInt(thread.getPC().getByte())].getClass().getSimpleName());
             thread.getPC().move(-1);
             System.out.println("local: " + thread.getCurrentFrame().getLocalVars().toString());

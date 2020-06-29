@@ -26,7 +26,7 @@ public class INSTANCEOF extends Instruction {
         // only non-array class are considered
         if (objClass.getThisClass().getName().charAt(0) != '[')
             // interfaces are not considered
-            stack.pushInt(objClass.isSubclassOf(jClass) ? 1 : 0);
+            stack.pushInt(objClass == jClass || objClass.isSubclassOf(jClass) ? 1 : 0);
         else stack.pushInt(0);
     }
 

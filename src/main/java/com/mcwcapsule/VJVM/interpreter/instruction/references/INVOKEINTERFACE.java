@@ -16,7 +16,7 @@ public class INVOKEINTERFACE extends Instruction {
         val pc = thread.getPC();
         val methodRef = (MethodRef) frame.getDynLink().getConstant(pc.getUnsignedShort());
         val argc = methodRef.getArgc();
-        pc.getUnsignedShort();
+        pc.getByte();
         assert pc.getByte() == 0;
         try {
             methodRef.resolve(frame.getJClass());

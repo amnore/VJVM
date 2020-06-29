@@ -16,7 +16,7 @@ public class IFCOND extends Instruction {
         val stack = thread.getCurrentFrame().getOpStack();
         val value = stack.popInt();
         val pc = thread.getPC();
-        val offset = pc.getUnsignedShort();
+        val offset = pc.getShort();
         if (pred.test(value))
             pc.move(offset - 3);
     }

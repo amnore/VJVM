@@ -16,7 +16,7 @@ public class IF_ICMPCOND extends Instruction {
         val right = stack.popInt();
         val left = stack.popInt();
         val pc = thread.getPC();
-        val offset = pc.getUnsignedShort();
+        val offset = pc.getShort();
         if (pred.test(left, right))
             pc.move(offset - 3);
     }

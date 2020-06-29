@@ -9,7 +9,7 @@ public class GOTO extends Instruction {
     @Override
     public void fetchAndRun(JThread thread) {
         val pc = thread.getPC();
-        pc.move(pc.getUnsignedShort() - 3);
+        pc.move(pc.getShort() - 3);
     }
 
 }
