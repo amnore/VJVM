@@ -22,8 +22,10 @@ public class ClassPathUtil {
             assert po.waitFor() == 0;
             val reader = new BufferedReader(new InputStreamReader(po.getInputStream()));
             val pathp = Pattern.compile("((?:\\w|-|/)+jvm(?:\\w|-|/)+)/bin/java");
-            val pathm = pathp.matcher(reader.readLine());
-            assert pathm.find();
+            val l = reader.readLine();
+            val pathm = pathp.matcher(l);
+            if (!pathm.find())
+                throw new Error(l);
             System.err.println(pathm.group(1));
             return pathm.group(1) + "/jre/lib/rt.jar";
         } catch (Exception e) {
