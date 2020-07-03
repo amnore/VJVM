@@ -30,14 +30,14 @@ public class CallUtil {
             val right = s.popInt();
             val left = s.popInt();
             if (left != right)
-                throw new RuntimeException(String.format("%d!=%d", left, right));
+                throw new TestUtilException(String.format("%d!=%d", left, right));
             else s.pushInt(1);
         });
         hackTable.put(Triple.of("cases/TestUtil", "equalFloat", "(FF)Z"), s -> {
             val right = s.popFloat();
             val left = s.popFloat();
             if (left != right)
-                throw new RuntimeException(String.format("%f!=%f", left, right));
+                throw new TestUtilException(String.format("%f!=%f", left, right));
             else s.pushInt(1);
         });
     }

@@ -6,9 +6,14 @@ import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.Slots;
 import com.mcwcapsule.VJVM.utils.CallUtil;
+import com.mcwcapsule.VJVM.utils.TestUtilException;
 import lombok.Getter;
 import lombok.val;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 public class VJVM {
@@ -40,7 +45,12 @@ public class VJVM {
         userLoader = new JClassLoader(bootstrapLoader, _options.getUserClassPath());
         val initThread = new JThread();
         addThread(initThread);
+
+        // set err stream
+        val stream = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(stream));
         try {
+
             val initClass = userLoader.loadClass(_options.getEntryClass().replace('.', '/'));
             initClass.tryInitialize(initThread);
 
@@ -53,9 +63,12 @@ public class VJVM {
             // FIXME: call main with arguments
             CallUtil.callMethodWithArgs(mainMethod, initThread, new Slots(1));
             interpreter.run(initThread);
-        } catch (RuntimeException e) {
+        } catch (TestUtilException e) {
             throw e;
         } catch (Exception e) {
+            // print interpreter trace
+            System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
+            System.err.print(stream.toString());
             throw new Error(e);
         }
     }
