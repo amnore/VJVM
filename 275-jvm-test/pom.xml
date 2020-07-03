@@ -17,9 +17,9 @@
 
     <resources>
       <resource>
-        <directory>src/test/java</directory>
+        <directory>src/test</directory>
         <excludes>
-          <exclude>cases/**</exclude>
+          <exclude>java/cases/**</exclude>
         </excludes>
       </resource>
     </resources>
