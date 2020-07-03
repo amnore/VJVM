@@ -98,12 +98,12 @@ public class JInterpreter {
 
         while (thread.getFrameCount() >= count) {
             // print debug info
-            System.out.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName() + ';' + thread.getCurrentFrame().getMethodInfo().getDescriptor());
-            System.out.println("opcode: " + dispatchTable[Byte.toUnsignedInt(thread.getPC().getByte())].getClass().getSimpleName());
+            System.err.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName() + ';' + thread.getCurrentFrame().getMethodInfo().getDescriptor());
+            System.err.println("opcode: " + dispatchTable[Byte.toUnsignedInt(thread.getPC().getByte())].getClass().getSimpleName());
             thread.getPC().move(-1);
-            System.out.println("local: " + thread.getCurrentFrame().getLocalVars().toString());
-            System.out.println("stack: " + thread.getCurrentFrame().getOpStack().toString());
-            System.out.println();
+            System.err.println("local: " + thread.getCurrentFrame().getLocalVars().toString());
+            System.err.println("stack: " + thread.getCurrentFrame().getOpStack().toString());
+            System.err.println();
 
             byte opcode = thread.getPC().getByte();
             dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);

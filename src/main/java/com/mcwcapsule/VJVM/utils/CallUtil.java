@@ -15,35 +15,38 @@ import java.util.function.Consumer;
 
 public class CallUtil {
     // (ClassName, MethodName, MethodDescriptor) -> HackFunction
-    static HashMap<Triple<String, String, String>, Consumer<OperandStack>> nativeHacks;
+    static HashMap<Triple<String, String, String>, Consumer<OperandStack>> hackTable;
 
     static {
-        nativeHacks = new HashMap<>();
-        nativeHacks.put(Triple.of("java/lang/Object", "registerNatives", "()V"), s -> {
+        hackTable = new HashMap<>();
+        hackTable.put(Triple.of("java/lang/Object", "registerNatives", "()V"), s -> {
         });
-        final String tu = "testsource/TestUtil";
-        final String mn = "assertEquals";
-        nativeHacks.put(Triple.of(tu, mn, "(JJ)V"), s -> {
-            assert s.popLong() == s.popLong();
-        });
-        nativeHacks.put(Triple.of(tu, mn, "(DD)V"), s -> {
-            assert s.popDouble() == s.popDouble();
-        });
-        nativeHacks.put(Triple.of(tu, mn, "(ZZ)V"), s -> {
-            assert s.popInt() == s.popInt();
-        });
-        nativeHacks.put(Triple.of(tu, mn, "(DDD)V"), s -> {
-            val delta = s.popDouble();
-            assert Math.abs(s.popDouble() - s.popDouble()) < delta;
-        });
-        nativeHacks.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
+        hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
             s -> s.pushAddress(VJVM.getHeap().getInternString(s.popAddress())));
+        hackTable.put(Triple.of("cases/TestUtil", "reach", "(I)V"), s -> {
+            System.out.print(s.popInt());
+        });
+        hackTable.put(Triple.of("cases/TestUtil", "equalInt", "(II)Z"), s -> {
+            val right = s.popInt();
+            val left = s.popInt();
+            if (left != right)
+                throw new RuntimeException(String.format("%d!=%d", left, right));
+            else s.pushInt(1);
+        });
+        hackTable.put(Triple.of("cases/TestUtil", "equalFloat", "(FF)Z"), s -> {
+            val right = s.popFloat();
+            val left = s.popFloat();
+            if (left != right)
+                throw new RuntimeException(String.format("%f!=%f", left, right));
+            else s.pushInt(1);
+        });
     }
 
     public static void callMethod(MethodInfo method, JThread thread) {
-        // Hack: TestUtil, Object::<clinit>
-        if (method.isNative()) {
-            nativeHacks.get(Triple.of(method.getJClass().getThisClass().getName(), method.getName(), method.getDescriptor())).accept(thread.getCurrentFrame().getOpStack());
+        // Hack: TestUtil, Object::<clinit>, String::intern
+        val m = hackTable.get(Triple.of(method.getJClass().getThisClass().getName(), method.getName(), method.getDescriptor()));
+        if (m != null) {
+            m.accept(thread.getCurrentFrame().getOpStack());
             return;
         }
 

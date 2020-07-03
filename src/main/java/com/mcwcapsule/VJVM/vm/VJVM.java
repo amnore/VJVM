@@ -41,7 +41,7 @@ public class VJVM {
         val initThread = new JThread();
         addThread(initThread);
         try {
-            val initClass = userLoader.loadClass(_options.getEntryClass());
+            val initClass = userLoader.loadClass(_options.getEntryClass().replace('.', '/'));
             initClass.tryInitialize(initThread);
 
             // hack: string
@@ -53,6 +53,8 @@ public class VJVM {
             // FIXME: call main with arguments
             CallUtil.callMethodWithArgs(mainMethod, initThread, new Slots(1));
             interpreter.run(initThread);
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new Error(e);
         }
