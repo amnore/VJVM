@@ -32,7 +32,7 @@ public class ArrayClass extends JClass {
         this.classLoader = classLoader;
 
         // if element type is reference type, resolve it
-        if (elementType.startsWith("L")) {
+        if (FieldDescriptors.isReference(elementType)) {
             elementClass = new ClassRef(elementType);
             try {
                 elementClass.resolve(this);

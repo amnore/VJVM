@@ -8,13 +8,13 @@ import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN;
 import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN1S;
 import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN2S;
 import com.mcwcapsule.VJVM.interpreter.instruction.conversions.*;
+import com.mcwcapsule.VJVM.interpreter.instruction.extended.MULTINEWARRAY;
 import com.mcwcapsule.VJVM.interpreter.instruction.loads.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.math.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.references.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stack.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stores.*;
 import com.mcwcapsule.VJVM.runtime.JThread;
-import lombok.SneakyThrows;
 
 public class JInterpreter {
     private final Instruction[] dispatchTable;
@@ -71,7 +71,7 @@ public class JInterpreter {
 /* 0xb8 */  new INVOKESTATIC(), new INVOKEINTERFACE(), null, new NEW(),
 /* 0xbc */  new NEWARRAY(), new ANEWARRAY(), new ARRAYLENGTH(), null,
 /* 0xc0 */  null, new INSTANCEOF(), null, null,
-/* 0xc4 */  null, null, null, null,
+/* 0xc4 */  null, new MULTINEWARRAY(), null, null,
 /* 0xc8 */  null, null, null, null,
 /* 0xcc */  null, null, null, null,
 /* 0xd0 */  null, null, null, null,
@@ -90,7 +90,6 @@ public class JInterpreter {
         // @formatter:on
     }
 
-    @SneakyThrows
     public void run(JThread thread) {
         // since this method may be invoked when JVM stack isn't empty,
         // for example, by the initialize() method of JClass, we need to exit at the right time.
