@@ -6,7 +6,6 @@ import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JClass.InitState;
 import com.mcwcapsule.VJVM.runtime.NonArrayClass;
-import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
 
@@ -80,8 +79,17 @@ public class JClassLoader implements Closeable {
      *                                I will not care about initiating loader because I am not verifying loading constraints.
      */
     public JClass loadClass(String name) throws ClassNotFoundException {
-        JClass ret;
+        // if the class is an array class
+        if (name.charAt(0) == FieldDescriptors.DESC_array) {
+            if (name.charAt(1) == FieldDescriptors.DESC_reference) {
+                val elemClass = loadClass(name.substring(2, name.length() - 1));
+                return elemClass.getClassLoader().defineArrayClass(name);
+            } else return defineArrayClass(name);
+        }
+
+        // the class is not an array class
         // find in parent first
+        JClass ret;
         try {
             if (parent != null) {
                 ret = parent.loadClass(name);
@@ -95,13 +103,7 @@ public class JClassLoader implements Closeable {
         if (ret != null)
             return ret;
         // not loaded
-        // if the class is an array class
-        if (name.charAt(0) == FieldDescriptors.DESC_array) {
-            if (FieldDescriptors.isReference(name.charAt(1))) {
-                val elemClass = loadClass(name.substring(1));
-                return elemClass.getClassLoader().defineArrayClass(name);
-            } else return VJVM.getBootstrapLoader().defineArrayClass(name);
-        } else for (var p : searchPaths) {
+        for (var p : searchPaths) {
             var iStream = p.findClass(name);
             // if the class was found
             if (iStream != null)

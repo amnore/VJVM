@@ -28,7 +28,7 @@ public class ArrayClass extends JClass {
         majorVersion = 0;
         thisClass = new ClassRef(arrayType);
         superClass = new ClassRef("java/lang/Object");
-        elementType = arrayType.substring(1);
+        elementType = arrayType.charAt(1) != 'L' ? arrayType.substring(1) : arrayType.substring(2, arrayType.length() - 1);
         this.classLoader = classLoader;
 
         // if element type is reference type, resolve it

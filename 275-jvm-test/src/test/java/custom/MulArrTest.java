@@ -23,4 +23,9 @@ public class MulArrTest {
     public void test1() {
         Starter.runTest("cases.custom.MulArr1", cp);
     }
+
+    @Test
+    public void test2() {
+        Starter.runTest("cases.custom.MulArr2", cp);
+    }
 }
