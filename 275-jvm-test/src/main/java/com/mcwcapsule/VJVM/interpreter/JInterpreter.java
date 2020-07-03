@@ -8,6 +8,8 @@ import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN;
 import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN1S;
 import com.mcwcapsule.VJVM.interpreter.instruction.control.RETURN2S;
 import com.mcwcapsule.VJVM.interpreter.instruction.conversions.*;
+import com.mcwcapsule.VJVM.interpreter.instruction.extended.IFNONNULL;
+import com.mcwcapsule.VJVM.interpreter.instruction.extended.IFNULL;
 import com.mcwcapsule.VJVM.interpreter.instruction.extended.MULTINEWARRAY;
 import com.mcwcapsule.VJVM.interpreter.instruction.loads.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.math.*;
@@ -72,7 +74,7 @@ public class JInterpreter {
 /* 0xb8 */  new INVOKESTATIC(), new INVOKEINTERFACE(), null, new NEW(),
 /* 0xbc */  new NEWARRAY(), new ANEWARRAY(), new ARRAYLENGTH(), null,
 /* 0xc0 */  null, new INSTANCEOF(), null, null,
-/* 0xc4 */  null, new MULTINEWARRAY(), null, null,
+/* 0xc4 */  null, new MULTINEWARRAY(), new IFNULL(), new IFNONNULL(),
 /* 0xc8 */  null, null, null, null,
 /* 0xcc */  null, null, null, null,
 /* 0xd0 */  null, null, null, null,
