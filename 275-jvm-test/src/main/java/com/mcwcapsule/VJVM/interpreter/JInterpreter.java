@@ -15,6 +15,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.references.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stack.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stores.*;
 import com.mcwcapsule.VJVM.runtime.JThread;
+import lombok.val;
 
 public class JInterpreter {
     private final Instruction[] dispatchTable;
@@ -96,16 +97,20 @@ public class JInterpreter {
         int count = thread.getFrameCount();
 
         while (thread.getFrameCount() >= count) {
+            val opcode = Byte.toUnsignedInt(thread.getPC().getByte());
+            thread.getPC().move(-1);
+            if (dispatchTable[opcode] == null)
+                throw new Error(String.format("Unimplemented: %d", opcode));
+
+
             // print debug info
             System.err.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName() + ';' + thread.getCurrentFrame().getMethodInfo().getDescriptor());
-            System.err.println("opcode: " + dispatchTable[Byte.toUnsignedInt(thread.getPC().getByte())].getClass().getSimpleName());
-            thread.getPC().move(-1);
+            System.err.println("opcode: " + dispatchTable[opcode].getClass().getSimpleName());
             System.err.println("local: " + thread.getCurrentFrame().getLocalVars().toString());
             System.err.println("stack: " + thread.getCurrentFrame().getOpStack().toString());
             System.err.println();
 
-            byte opcode = thread.getPC().getByte();
-            dispatchTable[Byte.toUnsignedInt(opcode)].fetchAndRun(thread);
+            dispatchTable[opcode].fetchAndRun(thread);
         }
     }
 }
