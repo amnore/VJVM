@@ -10,7 +10,8 @@ import cases.TestUtil;
  * Created on 07/01/2020
  */
 public class LightEasyStaticTest {
-    private static int a = 7;
+    private static final int a = 7;
+
     static {
         TestUtil.reach(3);
     }

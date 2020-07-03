@@ -10,7 +10,7 @@ import cases.TestUtil;
  * Created on 07/01/2020
  */
 public class LightEasyTestUtilTest {
-    public static void testTestUtil(){
+    public static void testTestUtil() {
         TestUtil.equalInt(3, 3);
         TestUtil.equalInt(3, 3);
         TestUtil.reach(3);

@@ -22,7 +22,7 @@ public class LightEasyBranchTest {
                 if (c) {
                     //goto
                     //return
-                }else {
+                } else {
                     TestUtil.reach(-5);
                 }
             } else {
@@ -73,8 +73,8 @@ public class LightEasyBranchTest {
 
     public static void main(String[] args) {
         TestUtil.reach(-3);
-        testJmp(false,false,true);
-        test(4, 5, 6, 7, 8f, 9, 10,11);
+        testJmp(false, false, true);
+        test(4, 5, 6, 7, 8f, 9, 10, 11);
         TestUtil.reach(-4);
     }
 }
