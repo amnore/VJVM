@@ -107,7 +107,7 @@ public class JClassLoader implements Closeable {
             if (iStream != null)
                 return defineNonarrayClass(name, iStream);
         }
-        throw new ClassNotFoundException();
+        throw new ClassNotFoundException(name);
     }
 
     public JClass getDefinedClass(String name) {
