@@ -84,7 +84,7 @@ public class ClassParseTest {
                         break;
                     case CONSTANT_String:
                         assertEquals(((ConstantString) realConstant).getBytes(realPool),
-                                ((StringConstant) myConstant).getValue());
+                            ((StringConstant) myConstant).getString());
                         break;
                     case CONSTANT_NameAndType:
                         var _3 = (ConstantNameAndType) realConstant;

@@ -12,6 +12,10 @@ public class StringConstant extends ValueConstant {
         super(value);
     }
 
+    public String getString() {
+        return (String) value;
+    }
+
     @Override
     public Integer getValue() {
         return strAddr == 0 ? (strAddr = createInternString()) : strAddr;
