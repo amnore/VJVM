@@ -25,6 +25,8 @@ public class INSTANCEOF extends Instruction {
         }
         val jClass = classRef.getJClass();
         val objClass = VJVM.getHeap().getJClass(VJVM.getHeap().getSlots().getInt(obj - 1));
+        System.err.println(jClass.getThisClass().getName());
+        System.err.println(objClass.getThisClass().getName());
         // only non-array class are considered
         if (objClass.getThisClass().getName().charAt(0) != '[')
             // interfaces are not considered
