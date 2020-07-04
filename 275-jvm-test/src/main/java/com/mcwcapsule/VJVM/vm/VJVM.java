@@ -47,8 +47,11 @@ public class VJVM {
         addThread(initThread);
 
         // set err stream
-        val stream = new ByteArrayOutputStream();
-        System.setErr(new PrintStream(stream));
+        val myErr = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(myErr));
+        val oldOut = System.out;
+        val myOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(myOut));
         try {
 
             val initClass = userLoader.loadClass(_options.getEntryClass().replace('.', '/'));
@@ -67,9 +70,13 @@ public class VJVM {
             throw e;
         } catch (Exception e) {
             // print interpreter trace
-            System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
-            System.err.print(stream.toString());
             throw new Error(e);
+        } finally {
+            System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
+            System.err.println(myErr.toString());
+            System.err.println("Output: ");
+            System.err.println(myOut.toString());
+            oldOut.print(myOut.toString());
         }
     }
 }

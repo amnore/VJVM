@@ -106,7 +106,7 @@ public class JInterpreter {
 
             // print debug info
             System.err.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName() + ';' + thread.getCurrentFrame().getMethodInfo().getDescriptor());
-            System.err.println("opcode: " + dispatchTable[opcode].getClass().getSimpleName());
+            System.err.println(String.format("opcode: %s(%d)", dispatchTable[opcode].getClass().getSimpleName(), opcode));
             System.err.println("local: " + thread.getCurrentFrame().getLocalVars().toString());
             System.err.println("stack: " + thread.getCurrentFrame().getOpStack().toString());
             System.err.println();
