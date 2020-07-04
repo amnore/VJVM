@@ -288,7 +288,7 @@ public class JClass {
      * @return Whether this class is a subclass of other. Returns false if this == other.
      */
     public boolean isSubclassOf(JClass other) {
-        return superClass != null && (superClass.getJClass() == other && superClass.getJClass().isSubclassOf(other));
+        return superClass != null && (superClass.getJClass() == other || superClass.getJClass().isSubclassOf(other));
     }
 
     public boolean isAccessibleTo(JClass other) {
