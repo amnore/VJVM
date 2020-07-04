@@ -14,8 +14,10 @@ public class INSTANCEOF extends Instruction {
         val stack = frame.getOpStack();
         val classRef = (ClassRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
         val obj = stack.popAddress();
-        if (obj == 0)
+        if (obj == 0) {
             stack.pushInt(0);
+            return;
+        }
         try {
             classRef.resolve(frame.getJClass());
         } catch (ClassNotFoundException e) {
