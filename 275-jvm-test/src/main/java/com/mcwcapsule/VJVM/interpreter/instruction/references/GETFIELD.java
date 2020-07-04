@@ -15,6 +15,10 @@ public class GETFIELD extends Instruction {
         val stack = frame.getOpStack();
         val obj = stack.popAddress();
         val ref = (FieldRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
+
+        // log
+        System.err.println(ref.getName());
+
         if (obj == 0)
             throw new NullPointerException();
         FieldInfo field;

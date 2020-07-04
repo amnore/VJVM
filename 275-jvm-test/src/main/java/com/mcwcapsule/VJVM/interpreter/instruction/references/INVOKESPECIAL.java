@@ -14,6 +14,10 @@ public class INVOKESPECIAL extends Instruction {
     public void fetchAndRun(JThread thread) {
         val frame = thread.getCurrentFrame();
         val methodRef = (MethodRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
+
+        // log
+        System.err.println(methodRef.getName());
+
         val heap = VJVM.getHeap();
         val opSlots = frame.getOpStack().getSlots();
         val argc = methodRef.getArgc();

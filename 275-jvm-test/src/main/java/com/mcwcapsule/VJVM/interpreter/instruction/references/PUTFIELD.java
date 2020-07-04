@@ -14,6 +14,10 @@ public class PUTFIELD extends Instruction {
     public void fetchAndRun(JThread thread) {
         val frame = thread.getCurrentFrame();
         val fieldRef = (FieldRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
+
+        // log
+        System.err.println(fieldRef.getName());
+
         try {
             fieldRef.resolve(frame.getJClass());
         } catch (ClassNotFoundException e) {
