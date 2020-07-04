@@ -28,7 +28,7 @@ public class ArrayClass extends JClass {
         majorVersion = 0;
         thisClass = new ClassRef(arrayType);
         superClass = new ClassRef("java/lang/Object");
-        elementType = arrayType.charAt(1) != 'L' ? arrayType.substring(1) : arrayType.substring(2, arrayType.length() - 1);
+        elementType = arrayType.substring(1);
         this.classLoader = classLoader;
 
         // if element type is reference type, resolve it
@@ -49,8 +49,9 @@ public class ArrayClass extends JClass {
             ? (elementClass.getJClass().getAccessFlags() & (ClassAccessFlags.ACC_PUBLIC))
             : ClassAccessFlags.ACC_PUBLIC) | ClassAccessFlags.ACC_SYNTHETIC);
 
-        // Arrays do implement some interfaces, see JLS 4.10.3, but it's not considered here.
-        interfaces = new ClassRef[0];
+        // Arrays implement Cloneable and Serializable, see JLS 4.10.3.
+        interfaces = new ClassRef[]
+            {new ClassRef("java/lang/Cloneable"), new ClassRef("java/io/Serializable")};
 
         // length field
         fields = new FieldInfo[]{new FieldInfo(

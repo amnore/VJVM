@@ -6,8 +6,7 @@ import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 
-public class INSTANCEOF extends Instruction {
-
+public class CHECKCAST extends Instruction {
     @Override
     public void fetchAndRun(JThread thread) {
         val frame = thread.getCurrentFrame();
@@ -15,7 +14,7 @@ public class INSTANCEOF extends Instruction {
         val classRef = (ClassRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
         val obj = stack.popAddress();
         if (obj == 0) {
-            stack.pushInt(0);
+            stack.pushAddress(obj);
             return;
         }
         try {
@@ -27,7 +26,8 @@ public class INSTANCEOF extends Instruction {
         val objClass = VJVM.getHeap().getJClass(VJVM.getHeap().getSlots().getInt(obj - 1));
         System.err.println(jClass.getThisClass().getName());
         System.err.println(objClass.getThisClass().getName());
-        stack.pushInt(objClass.canCastTo(jClass) ? 1 : 0);
+        if (!objClass.canCastTo(jClass))
+            throw new ClassCastException();
+        stack.pushAddress(obj);
     }
-
 }

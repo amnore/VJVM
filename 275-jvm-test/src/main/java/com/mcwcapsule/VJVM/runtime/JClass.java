@@ -282,16 +282,36 @@ public class JClass {
     }
 
     /**
-     * Checks whether this class is a subclass of another class. Super interfaces are not taken into account.
+     * Check whether this class can be cast to another class. See spec. 6.5.instanceof
      *
      * @param other the class to check against.
      * @return Whether this class is a subclass of other. Returns false if this == other.
      */
-    public boolean isSubclassOf(JClass other) {
-        return superClass != null && (superClass.getJClass() == other || superClass.getJClass().isSubclassOf(other));
+    public boolean canCastTo(JClass other) {
+        if (this == other) return true;
+
+        // check for super class and super interfaces
+        if (superClass != null && superClass.getJClass().canCastTo(other))
+            return true;
+        for (val i : interfaces)
+            if (i.getJClass().canCastTo(other))
+                return true;
+
+        // check for array cast
+        if (!(this instanceof ArrayClass) || !(other instanceof ArrayClass))
+            return false;
+        return ((ArrayClass) this).getElementClass().getJClass().canCastTo(
+            ((ArrayClass) other).getElementClass().getJClass());
     }
 
     public boolean isAccessibleTo(JClass other) {
+        // The accessibility of an array class is the same as its component type. See spec. 5.3.3.2
+        if (this instanceof ArrayClass) {
+            val elem = ((ArrayClass) this).getElementClass();
+            // workaround: element is primitive type
+            if (elem == null) return true;
+            return elem.getJClass().isAccessibleTo(other);
+        }
         return isPublic() || getRuntimePackage().equals(other.getRuntimePackage());
     }
 

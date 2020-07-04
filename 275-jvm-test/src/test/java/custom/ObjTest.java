@@ -33,4 +33,11 @@ public class ObjTest {
         String out = outBytes.toString().replaceAll("\\s", "");
         assertEquals(out, "13");
     }
+
+    @Test
+    public void test3() {
+        Starter.runTest("cases/custom/Obj3", cp);
+        String out = outBytes.toString().replaceAll("\\s", "");
+        assertEquals(out, "13579");
+    }
 }

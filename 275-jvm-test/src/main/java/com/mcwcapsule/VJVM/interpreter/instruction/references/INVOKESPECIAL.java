@@ -26,7 +26,7 @@ public class INVOKESPECIAL extends Instruction {
         JClass targetClass;
         JClass refClass = methodRef.getJClass();
         if (!methodRef.getName().equals("<init>") && !refClass.isInterface()
-            && currentClass.isSubclassOf(refClass) && refClass.isSuper())
+            && currentClass.canCastTo(refClass) && refClass.isSuper())
             targetClass = currentClass.getSuperClass().getJClass();
         else targetClass = methodRef.getJClass();
 //        val method = targetClass.findMethod(methodRef.getName(), methodRef.getDescriptor());

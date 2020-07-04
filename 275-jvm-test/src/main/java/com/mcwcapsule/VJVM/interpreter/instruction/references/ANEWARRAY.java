@@ -18,7 +18,7 @@ public class ANEWARRAY extends Instruction {
         ArrayClass arrayClass;
         try {
             ref.resolve(frame.getJClass());
-            arrayClass = (ArrayClass) ref.getJClass().getClassLoader().loadClass('[' + ref.getName());
+            arrayClass = (ArrayClass) ref.getJClass().getClassLoader().loadClass("[L" + ref.getName() + ';');
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }

@@ -6,6 +6,7 @@ import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JClass.InitState;
 import com.mcwcapsule.VJVM.runtime.NonArrayClass;
+import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
 
@@ -79,12 +80,18 @@ public class JClassLoader implements Closeable {
      *                                I will not care about initiating loader because I am not verifying loading constraints.
      */
     public JClass loadClass(String name) throws ClassNotFoundException {
+        // fix for class name in the form of Lclass;
+        if (name.charAt(0) == 'L' && name.charAt(name.length() - 1) == ';')
+            name = name.substring(1, name.length() - 1);
+
         // if the class is an array class
         if (name.charAt(0) == FieldDescriptors.DESC_array) {
-            if (name.charAt(1) == FieldDescriptors.DESC_reference) {
-                val elemClass = loadClass(name.substring(2, name.length() - 1));
+            if (definedClass.get(name) != null)
+                return definedClass.get(name);
+            if (FieldDescriptors.isReference(name.charAt(1))) {
+                val elemClass = loadClass(name.substring(1));
                 return elemClass.getClassLoader().defineArrayClass(name);
-            } else return defineArrayClass(name);
+            } else return VJVM.getBootstrapLoader().defineArrayClass(name);
         }
 
         // the class is not an array class

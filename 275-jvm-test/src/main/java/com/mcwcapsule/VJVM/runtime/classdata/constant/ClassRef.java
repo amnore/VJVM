@@ -1,5 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.classdata.constant;
 
+import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,9 @@ public class ClassRef extends ResolvableConstant {
         else
             jClass = thisClass.getClassLoader().loadClass(name);
         // check accessibility
+        // workaround for arrays
+        if (thisClass instanceof ArrayClass)
+            return;
         if (!jClass.isAccessibleTo(thisClass))
             throw new IllegalAccessError();
     }

@@ -29,9 +29,8 @@ public class MULTINEWARRAY extends Instruction {
             arrClasses[dimensions] = arrClassRef.getJClass();
             for (int i = dimensions - 1; i >= 0; --i) {
                 var name = arrClasses[i + 1].getThisClass().getName().substring(1);
-                if (!FieldDescriptors.isReference(name)) break;
-                if (name.startsWith("L"))
-                    name = name.substring(1, name.length() - 1);
+                if (!FieldDescriptors.isReference(name))
+                    break;
                 arrClasses[i] = frame.getJClass().getClassLoader().loadClass(name);
             }
         } catch (ClassNotFoundException e) {
@@ -45,8 +44,7 @@ public class MULTINEWARRAY extends Instruction {
         val arr = ((ArrayClass) arrClasses[current]).createInstance(dimensionArr[current]);
         if (current != 1)
             for (int i = 0; i < dimensionArr[current]; ++i)
-                slots.setAddress(
-                    arr + arrClasses[current].getInstanceSize() + i,
+                slots.setAddress(arr + arrClasses[current].getInstanceSize() + i,
                     createArrayRecursive(dimensionArr, arrClasses, current - 1));
         return arr;
     }

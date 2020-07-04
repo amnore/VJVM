@@ -73,7 +73,7 @@ public class JInterpreter {
 /* 0xb4 */  new GETFIELD(), new PUTFIELD(), new INVOKEVIRTUAL(), new INVOKESPECIAL(),
 /* 0xb8 */  new INVOKESTATIC(), new INVOKEINTERFACE(), null, new NEW(),
 /* 0xbc */  new NEWARRAY(), new ANEWARRAY(), new ARRAYLENGTH(), null,
-/* 0xc0 */  null, new INSTANCEOF(), null, null,
+/* 0xc0 */  new CHECKCAST(), new INSTANCEOF(), null, null,
 /* 0xc4 */  null, new MULTINEWARRAY(), new IFNULL(), new IFNONNULL(),
 /* 0xc8 */  null, null, null, null,
 /* 0xcc */  null, null, null, null,
