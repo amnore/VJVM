@@ -301,7 +301,7 @@ public class JClass {
      * Check whether this class can be cast to another class. See spec. 6.5.instanceof
      *
      * @param other the class to check against.
-     * @return Whether this class is a subclass of other. Returns false if this == other.
+     * @return Whether this class can be cast to other.
      */
     public boolean canCastTo(JClass other) {
         if (this == other) return true;
@@ -318,6 +318,18 @@ public class JClass {
             return false;
         return ((ArrayClass) this).getElementClass().getJClass().canCastTo(
             ((ArrayClass) other).getElementClass().getJClass());
+    }
+
+    /**
+     * Check whether this class is a subclass of another class.
+     * Interfaces are not taken into account.
+     *
+     * @param other the class to check against
+     * @return Whether this class is a subclass of other. Returns false if this == other.
+     */
+    public boolean isSubClassOf(JClass other) {
+        return superClass != null
+            && (superClass.getJClass() == other || superClass.getJClass().isSubClassOf(other));
     }
 
     public boolean isAccessibleTo(JClass other) {

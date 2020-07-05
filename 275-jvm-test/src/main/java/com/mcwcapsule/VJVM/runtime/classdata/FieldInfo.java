@@ -57,11 +57,11 @@ public class FieldInfo {
     public boolean isAccessibleTo(JClass other, JClass referencedJClass) {
         if (isPublic())
             return true;
-        if (isProtected() && (other == jClass || other.canCastTo(jClass))) {
+        if (isProtected() && (other == jClass || other.isSubClassOf(jClass))) {
             if (isStatic())
                 return true;
-            if (referencedJClass == other || referencedJClass.canCastTo(other)
-                || other.canCastTo(referencedJClass))
+            if (referencedJClass == other || referencedJClass.isSubClassOf(other)
+                || other.isSubClassOf(referencedJClass))
                 return true;
         }
         if (isProtected() || (!isPublic() && !isPrivate())) {
