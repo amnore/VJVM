@@ -220,6 +220,22 @@ public class JClass {
         initState = InitState.INITIALIZED;
 
         // step11,12: not doing
+
+        // debug
+        System.err.println(this);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("JClass{");
+        sb.append("thisClass=").append(thisClass);
+        sb.append(", superClass=").append(superClass);
+        sb.append(", interfaces=").append(Arrays.toString(interfaces));
+        sb.append(", fields=").append(Arrays.toString(fields));
+        sb.append(", methods=").append(Arrays.toString(methods));
+        sb.append(", vtable=").append(vtable);
+        sb.append('}');
+        return sb.toString();
     }
 
     /**

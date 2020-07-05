@@ -35,4 +35,13 @@ public class FieldRef extends ResolvableConstant {
     public int getSize() {
         return FieldDescriptors.getSize(descriptor);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("FieldRef{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", descriptor='").append(descriptor).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

@@ -70,6 +70,16 @@ public class FieldInfo {
         return isPrivate() && other == jClass;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("FieldInfo{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", descriptor='").append(descriptor).append('\'');
+        sb.append(", offset=").append(offset);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public int getAttributeCount() {
         return attributes.length;
     }

@@ -76,6 +76,16 @@ public class MethodInfo {
         return isPrivate() && other == jClass;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("MethodInfo{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", descriptor='").append(descriptor).append('\'');
+        sb.append(", vtableIndex=").append(vtableIndex);
+        sb.append('}');
+        return sb.toString();
+    }
+
     public boolean isPublic() {
         return (accessFlags & ACC_PUBLIC) != 0;
     }

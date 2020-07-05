@@ -29,4 +29,12 @@ public class ClassRef extends ResolvableConstant {
         if (!jClass.isAccessibleTo(thisClass))
             throw new IllegalAccessError();
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ClassRef{");
+        sb.append("name='").append(name).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }
