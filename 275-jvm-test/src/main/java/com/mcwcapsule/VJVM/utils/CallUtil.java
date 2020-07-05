@@ -24,7 +24,7 @@ public class CallUtil {
         hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
             s -> s.pushAddress(VJVM.getHeap().getInternString(s.popAddress())));
         hackTable.put(Triple.of("cases/TestUtil", "reach", "(I)V"), s -> {
-            System.out.print(s.popInt());
+            System.out.println(s.popInt());
         });
         hackTable.put(Triple.of("cases/TestUtil", "equalInt", "(II)Z"), s -> {
             val right = s.popInt();

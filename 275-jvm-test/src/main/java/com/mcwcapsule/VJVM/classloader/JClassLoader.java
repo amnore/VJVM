@@ -10,9 +10,10 @@ import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
 
-import java.io.*;
-import java.util.Arrays;
-import java.util.Base64;
+import java.io.Closeable;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 public class JClassLoader implements Closeable {
@@ -35,20 +36,6 @@ public class JClassLoader implements Closeable {
      * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
     private JClass defineNonarrayClass(String name, InputStream data) throws ClassNotFoundException {
-        // extract cases
-        if (parent != null) {
-            val d = Base64.getEncoder();
-            byte[] a = new byte[4096];
-            try {
-                val l = data.read(a);
-                a = Arrays.copyOf(a, l);
-                data = new ByteArrayInputStream(a);
-            } catch (IOException e) {
-                throw new Error(e);
-            }
-            System.err.println(d.encodeToString(a));
-        }
-
         val ret = new NonArrayClass(new DataInputStream(data), this);
         // check the name of created class matches what we expect, see spec 5.3.5.2
         // resolve ClassRef first
@@ -86,11 +73,11 @@ public class JClassLoader implements Closeable {
 
     /**
      * Load a class of given name, or return it if the class was already loaded.
+     * I will not care about initiating loader because I am not verifying loading constraints.
      *
      * @param name name of the class to load
      * @return the loaded class
      * @throws ClassNotFoundException if the class was not found
-     *                                I will not care about initiating loader because I am not verifying loading constraints.
      */
     public JClass loadClass(String name) throws ClassNotFoundException {
         // fix for class name in the form of Lclass;
