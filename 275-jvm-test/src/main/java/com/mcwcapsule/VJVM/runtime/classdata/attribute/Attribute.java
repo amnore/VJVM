@@ -1,8 +1,10 @@
 package com.mcwcapsule.VJVM.runtime.classdata.attribute;
 
 import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.UTF8Constant;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ValueConstant;
+import lombok.val;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -30,13 +32,29 @@ public class Attribute {
                     byte[] code = new byte[codeLength];
                     input.readFully(code);
                     int exceptionTableLength = input.readUnsignedShort();
-                    // skip exception table
-                    assert input.skipBytes(exceptionTableLength * 8) == exceptionTableLength * 8;
+                    val exceptionTable = new Code.ExceptionHandler[exceptionTableLength];
+                    for (int i = 0; i < exceptionTableLength; ++i) {
+                        val startPC = input.readUnsignedShort();
+                        val endPC = input.readUnsignedShort();
+                        val handlerPC = input.readUnsignedShort();
+                        val catchType = input.readUnsignedShort();
+                        val catchClassRef =
+                            (ClassRef) (catchType == 0 ? null : constantPool.getConstant(catchType));
+                        if (catchClassRef != null) {
+                            try {
+                                catchClassRef.resolve(constantPool.getJClass());
+                            } catch (ClassNotFoundException e) {
+                                throw new Error(e);
+                            }
+                        }
+                        exceptionTable[i] = new Code.ExceptionHandler(
+                            startPC, endPC, handlerPC, catchClassRef == null ? null : catchClassRef.getJClass());
+                    }
                     int attributesCount = input.readUnsignedShort();
                     Attribute[] attributes = new Attribute[attributesCount];
                     for (int i = 0; i < attributesCount; ++i)
                         attributes[i] = constructFromData(input, constantPool);
-                    ret = new Code(maxStack, maxLocals, code, attributes);
+                    ret = new Code(maxStack, maxLocals, code, exceptionTable, attributes);
                     break;
                 default:
                     // return fake attribute

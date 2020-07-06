@@ -54,12 +54,12 @@ public class VJVM {
         System.setOut(new PrintStream(myOut));
         try {
 
-            val initClass = userLoader.loadClass(_options.getEntryClass().replace('.', '/'));
-            initClass.tryInitialize(initThread);
-
             // hack: string
             val strClass = bootstrapLoader.loadClass("java/lang/String");
             strClass.tryInitialize(initThread);
+
+            val initClass = userLoader.loadClass(_options.getEntryClass().replace('.', '/'));
+            initClass.tryInitialize(initThread);
 
             val mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
             assert mainMethod.getJClass() == initClass;

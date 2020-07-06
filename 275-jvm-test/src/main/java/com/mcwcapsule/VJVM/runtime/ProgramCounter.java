@@ -28,4 +28,12 @@ public class ProgramCounter {
     public void move(int offset) {
         buf.position(buf.position() + offset);
     }
+
+    public void position(int pos) {
+        buf.position(pos);
+    }
+
+    public int position() {
+        return buf.position();
+    }
 }

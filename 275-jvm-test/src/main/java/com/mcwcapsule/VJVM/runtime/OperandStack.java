@@ -61,6 +61,10 @@ public class OperandStack {
         top -= count;
     }
 
+    public void clear() {
+        top = 0;
+    }
+
     @Override
     public String toString() {
         String sb = "OperandStack{" + "slots=" + slots +

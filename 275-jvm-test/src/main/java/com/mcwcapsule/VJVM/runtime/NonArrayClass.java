@@ -15,6 +15,7 @@ import java.io.IOException;
 public class NonArrayClass extends JClass {
     // construct from data
     public NonArrayClass(DataInput dataInput, JClassLoader classLoader) {
+        this.classLoader = classLoader;
         try {
             // check magic number
             assert dataInput.readInt() == 0xCAFEBABE;
@@ -27,6 +28,8 @@ public class NonArrayClass extends JClass {
             accessFlags = dataInput.readShort();
             int thisIndex = dataInput.readUnsignedShort();
             thisClass = (ClassRef) constantPool.getConstant(thisIndex);
+            String name = thisClass.getName();
+            packageName = name.substring(0, name.lastIndexOf('/'));
             int superIndex = dataInput.readUnsignedShort();
             if (superIndex != 0)
                 superClass = (ClassRef) constantPool.getConstant(superIndex);
@@ -51,9 +54,6 @@ public class NonArrayClass extends JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
-        this.classLoader = classLoader;
-        String name = thisClass.getName();
-        packageName = name.substring(0, name.lastIndexOf('/'));
         methodAreaIndex = VJVM.getHeap().addJClass(this);
     }
 
