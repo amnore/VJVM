@@ -13,7 +13,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-public class CallUtil {
+public class InvokeUtil {
     // (ClassName, MethodName, MethodDescriptor) -> HackFunction
     static HashMap<Triple<String, String, String>, Consumer<OperandStack>> hackTable;
 
@@ -42,8 +42,7 @@ public class CallUtil {
         });
     }
 
-    public static void callMethod(MethodInfo method, JThread thread) {
-        // Hack: TestUtil, Object::<clinit>, String::intern
+    public static void invokeMethod(MethodInfo method, JThread thread) {
         val m = hackTable.get(Triple.of(method.getJClass().getThisClass().getName(), method.getName(), method.getDescriptor()));
         if (m != null) {
             m.accept(thread.getCurrentFrame().getOpStack());
@@ -62,13 +61,13 @@ public class CallUtil {
     }
 
     /**
-     * Call a method when there is no frames in a thread.
+     * Invoke a method when there is no frames in a thread.
      *
      * @param method the method to call
      * @param thread the thread to run
      * @param args   the supplied arguments, index begins at 0, can be null if the method has no arguments
      */
-    public static void callMethodWithArgs(MethodInfo method, JThread thread, Slots args) {
+    public static void invokeMethodWithArgs(MethodInfo method, JThread thread, Slots args) {
         val frame = new JFrame(method);
         var argc = method.getArgc();
         if (!method.isStatic())

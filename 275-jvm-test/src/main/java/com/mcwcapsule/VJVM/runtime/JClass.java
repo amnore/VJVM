@@ -8,7 +8,7 @@ import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
-import com.mcwcapsule.VJVM.utils.CallUtil;
+import com.mcwcapsule.VJVM.utils.InvokeUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.Getter;
 import lombok.Setter;
@@ -212,7 +212,7 @@ public class JClass {
                 break;
             }
         if (clinit != null) {
-            CallUtil.callMethodWithArgs(clinit, thread, null);
+            InvokeUtil.invokeMethodWithArgs(clinit, thread, null);
             VJVM.getInterpreter().run(thread);
         }
 

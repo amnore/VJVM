@@ -4,7 +4,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.MethodRef;
-import com.mcwcapsule.VJVM.utils.CallUtil;
+import com.mcwcapsule.VJVM.utils.InvokeUtil;
 import lombok.val;
 
 public class INVOKESTATIC extends Instruction {
@@ -20,7 +20,7 @@ public class INVOKESTATIC extends Instruction {
         }
         if (methodRef.getJClass().getInitState() != JClass.InitState.INITIALIZED)
             methodRef.getJClass().tryInitialize(thread);
-        CallUtil.callMethod(methodRef.getInfo(), thread);
+        InvokeUtil.invokeMethod(methodRef.getInfo(), thread);
     }
 
 }

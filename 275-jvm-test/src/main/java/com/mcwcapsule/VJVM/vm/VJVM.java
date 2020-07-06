@@ -5,7 +5,7 @@ import com.mcwcapsule.VJVM.interpreter.JInterpreter;
 import com.mcwcapsule.VJVM.runtime.JHeap;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.Slots;
-import com.mcwcapsule.VJVM.utils.CallUtil;
+import com.mcwcapsule.VJVM.utils.InvokeUtil;
 import com.mcwcapsule.VJVM.utils.TestUtilException;
 import lombok.Getter;
 import lombok.val;
@@ -64,7 +64,7 @@ public class VJVM {
             val mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
             assert mainMethod.getJClass() == initClass;
             // FIXME: call main with arguments
-            CallUtil.callMethodWithArgs(mainMethod, initThread, new Slots(1));
+            InvokeUtil.invokeMethodWithArgs(mainMethod, initThread, new Slots(1));
             interpreter.run(initThread);
         } catch (TestUtilException e) {
             throw e;

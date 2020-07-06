@@ -4,7 +4,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.MethodRef;
-import com.mcwcapsule.VJVM.utils.CallUtil;
+import com.mcwcapsule.VJVM.utils.InvokeUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 
@@ -35,7 +35,7 @@ public class INVOKEINTERFACE extends Instruction {
             val objClass = heap.getJClass(heap.getSlots().getInt(obj - 1));
             method = objClass.findMethod(methodRef.getName(), methodRef.getDescriptor());
         }
-        CallUtil.callMethod(method, thread);
+        InvokeUtil.invokeMethod(method, thread);
     }
 
 }

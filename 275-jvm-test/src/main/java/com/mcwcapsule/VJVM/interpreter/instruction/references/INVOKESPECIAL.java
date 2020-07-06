@@ -4,7 +4,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.MethodRef;
-import com.mcwcapsule.VJVM.utils.CallUtil;
+import com.mcwcapsule.VJVM.utils.InvokeUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 
@@ -35,7 +35,7 @@ public class INVOKESPECIAL extends Instruction {
         else targetClass = methodRef.getJClass();
 //        val method = targetClass.findMethod(methodRef.getName(), methodRef.getDescriptor());
         val method = targetClass.getVtableMethod(methodRef.getInfo().getVtableIndex());
-        CallUtil.callMethod(method, thread);
+        InvokeUtil.invokeMethod(method, thread);
     }
 
 }
