@@ -11,6 +11,7 @@ public class DirSearchPath extends ClassSearchPath {
 
     public DirSearchPath(String path) {
         searchPath = FileSystems.getDefault().getPath(path);
+        assert searchPath.toFile().isDirectory();
     }
 
     @Override

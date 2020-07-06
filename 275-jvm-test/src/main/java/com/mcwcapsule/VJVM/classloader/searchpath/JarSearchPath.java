@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.jar.JarFile;
 
 public class JarSearchPath extends ClassSearchPath {
-    // might be null if the file doesn't extsts.
+    // might be null if the file doesn't exist.
     private JarFile file;
 
     public JarSearchPath(String name) {

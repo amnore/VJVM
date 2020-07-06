@@ -14,10 +14,12 @@ public class WildcardSearchPath extends ClassSearchPath {
     public WildcardSearchPath(String path) {
         assert path.endsWith("*");
         val searchPath = new File(path.substring(0, path.length() - 1));
-        jars = Arrays.stream(searchPath.listFiles(fileName -> {
+        assert searchPath.isDirectory();
+        val files = searchPath.listFiles(fileName -> {
             val name = fileName.getName();
             return name.endsWith(".jar") || name.endsWith(".JAR");
-        })).map(file -> {
+        });
+        jars = Arrays.stream(files).map(file -> {
             try {
                 return new JarFile(file);
             } catch (IOException e) {
