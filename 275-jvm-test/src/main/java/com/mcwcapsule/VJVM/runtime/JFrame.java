@@ -1,7 +1,7 @@
 package com.mcwcapsule.VJVM.runtime;
 
+import com.mcwcapsule.VJVM.runtime.classdata.ConstantPool;
 import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
-import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
 import lombok.Getter;
 import lombok.val;
 
@@ -9,7 +9,7 @@ import lombok.val;
 public class JFrame {
     private final Slots localVars;
     private final OperandStack opStack;
-    private final RuntimeConstantPool dynLink;
+    private final ConstantPool dynLink;
     private final MethodInfo methodInfo;
     private final JClass jClass;
     private final ProgramCounter PC;

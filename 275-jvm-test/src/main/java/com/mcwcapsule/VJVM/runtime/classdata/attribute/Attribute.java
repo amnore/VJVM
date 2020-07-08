@@ -1,6 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.classdata.attribute;
 
-import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.classdata.ConstantPool;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.UTF8Constant;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ValueConstant;
@@ -13,7 +13,7 @@ import static com.mcwcapsule.VJVM.classfiledefs.AttributeTags.ATTR_Code;
 import static com.mcwcapsule.VJVM.classfiledefs.AttributeTags.ATTR_ConstantValue;
 
 public class Attribute {
-    public static Attribute constructFromData(DataInput input, RuntimeConstantPool constantPool) {
+    public static Attribute constructFromData(DataInput input, ConstantPool constantPool) {
         try {
             Attribute ret;
             int nameIndex = input.readUnsignedShort();

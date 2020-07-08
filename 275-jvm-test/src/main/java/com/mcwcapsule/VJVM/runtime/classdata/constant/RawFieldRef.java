@@ -1,6 +1,6 @@
 package com.mcwcapsule.VJVM.runtime.classdata.constant;
 
-import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
+import com.mcwcapsule.VJVM.runtime.classdata.ConstantPool;
 import lombok.RequiredArgsConstructor;
 import lombok.var;
 
@@ -10,7 +10,7 @@ public class RawFieldRef extends UnevaluatedConstant {
     private final int nameAndTypeIndex;
 
     @Override
-    public FieldRef evaluate(RuntimeConstantPool constantPool) {
+    public FieldRef evaluate(ConstantPool constantPool) {
         var cr = constantPool.getConstant(classIndex);
         if (cr instanceof UnevaluatedConstant) {
             cr = ((UnevaluatedConstant) cr).evaluate(constantPool);

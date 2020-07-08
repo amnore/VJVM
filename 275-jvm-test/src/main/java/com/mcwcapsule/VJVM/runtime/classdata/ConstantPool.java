@@ -10,7 +10,7 @@ import lombok.val;
 import java.io.DataInput;
 import java.io.IOException;
 
-public class RuntimeConstantPool {
+public class ConstantPool {
     @Getter
     @Setter
     private JClass jClass;
@@ -23,9 +23,9 @@ public class RuntimeConstantPool {
      * Constructs a runtime constant pool from binary data
      *
      * @param dataInput stream of data, contents of this constant pool will be read from stream
-     * @param jClass the class this pool belongs to
+     * @param jClass    the class this pool belongs to
      */
-    public RuntimeConstantPool(DataInput dataInput, JClass jClass) {
+    public ConstantPool(DataInput dataInput, JClass jClass) {
         this.jClass = jClass;
         try {
             this.count = dataInput.readUnsignedShort();
@@ -44,7 +44,7 @@ public class RuntimeConstantPool {
         }
     }
 
-    public RuntimeConstantPool(Constant[] constants) {
+    public ConstantPool(Constant[] constants) {
         this.count = constants.length;
         this.constants = constants;
     }

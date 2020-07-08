@@ -2,9 +2,9 @@ package com.mcwcapsule.VJVM.runtime;
 
 import com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors;
 import com.mcwcapsule.VJVM.classloader.JClassLoader;
+import com.mcwcapsule.VJVM.runtime.classdata.ConstantPool;
 import com.mcwcapsule.VJVM.runtime.classdata.FieldInfo;
 import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
-import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
@@ -36,7 +36,7 @@ public class JClass {
     @Getter
     protected short majorVersion;
     @Getter
-    protected RuntimeConstantPool constantPool;
+    protected ConstantPool constantPool;
     @Getter
     protected short accessFlags;
     @Getter
@@ -78,7 +78,7 @@ public class JClass {
             minorVersion = dataInput.readShort();
             majorVersion = dataInput.readShort();
 
-            constantPool = new RuntimeConstantPool(dataInput, this);
+            constantPool = new ConstantPool(dataInput, this);
             accessFlags = dataInput.readShort();
             int thisIndex = dataInput.readUnsignedShort();
             thisClass = (ClassRef) constantPool.getConstant(thisIndex);
@@ -116,7 +116,7 @@ public class JClass {
         JClassLoader classLoader,
         short minorVersion,
         short majorVersion,
-        RuntimeConstantPool constantPool,
+        ConstantPool constantPool,
         short accessFlags,
         ClassRef thisClass,
         ClassRef superClass,
