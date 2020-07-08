@@ -10,7 +10,7 @@ import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
 
-public class MULTINEWARRAY extends Instruction {
+public class MULTIANEWARRAY extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
