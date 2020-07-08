@@ -2,10 +2,10 @@ package com.mcwcapsule.VJVM.interpreter.instruction.extended;
 
 import com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors;
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
-import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
+import com.mcwcapsule.VJVM.utils.ArrayUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
@@ -40,8 +40,9 @@ public class MULTINEWARRAY extends Instruction {
     }
 
     private int createArrayRecursive(int[] dimensionArr, JClass[] arrClasses, int current) {
+        assert current > 0;
         val slots = VJVM.getHeap().getSlots();
-        val arr = ((ArrayClass) arrClasses[current]).createInstance(dimensionArr[current]);
+        val arr = ArrayUtil.newInstance(arrClasses[current], dimensionArr[current]);
         if (current != 1)
             for (int i = 0; i < dimensionArr[current]; ++i)
                 slots.setAddress(arr + arrClasses[current].getInstanceSize() + i,

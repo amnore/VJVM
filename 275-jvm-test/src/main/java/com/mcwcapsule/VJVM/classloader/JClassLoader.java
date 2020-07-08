@@ -2,10 +2,9 @@ package com.mcwcapsule.VJVM.classloader;
 
 import com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors;
 import com.mcwcapsule.VJVM.classloader.searchpath.ClassSearchPath;
-import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JClass.InitState;
-import com.mcwcapsule.VJVM.runtime.NonArrayClass;
+import com.mcwcapsule.VJVM.utils.ArrayUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
@@ -36,7 +35,7 @@ public class JClassLoader implements Closeable {
      * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
     private JClass defineNonarrayClass(String name, InputStream data) throws ClassNotFoundException {
-        val ret = new NonArrayClass(new DataInputStream(data), this);
+        val ret = new JClass(new DataInputStream(data), this);
         // check the name of created class matches what we expect, see spec 5.3.5.2
         // resolve ClassRef first
         ret.getThisClass().resolve(ret);
@@ -54,7 +53,7 @@ public class JClassLoader implements Closeable {
     }
 
     private JClass defineArrayClass(String name) {
-        val ret = new ArrayClass(name, this);
+        val ret = ArrayUtil.createArrayClass(name, this);
         try {
             ret.getThisClass().resolve(ret);
             ret.getSuperClass().resolve(ret);

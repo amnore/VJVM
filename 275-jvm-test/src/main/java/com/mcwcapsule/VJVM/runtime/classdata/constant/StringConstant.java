@@ -1,7 +1,7 @@
 package com.mcwcapsule.VJVM.runtime.classdata.constant;
 
-import com.mcwcapsule.VJVM.runtime.ArrayClass;
-import com.mcwcapsule.VJVM.runtime.NonArrayClass;
+import com.mcwcapsule.VJVM.runtime.JClass;
+import com.mcwcapsule.VJVM.utils.ArrayUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 
@@ -28,17 +28,17 @@ public class StringConstant extends ValueConstant {
      * @return address of the created string
      */
     private int createInternString() {
-        NonArrayClass strC;
-        ArrayClass arrC;
+        JClass strC;
+        JClass arrC;
         try {
-            strC = (NonArrayClass) VJVM.getBootstrapLoader().loadClass("java/lang/String");
-            arrC = (ArrayClass) VJVM.getBootstrapLoader().loadClass("[C");
+            strC = VJVM.getBootstrapLoader().loadClass("java/lang/String");
+            arrC = VJVM.getBootstrapLoader().loadClass("[C");
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
         val s = (String) value;
         val str = strC.createInstance();
-        val arr = arrC.createInstance(s.length());
+        val arr = ArrayUtil.newInstance(arrC, s.length());
         val slots = VJVM.getHeap().getSlots();
 
         // fill the char array

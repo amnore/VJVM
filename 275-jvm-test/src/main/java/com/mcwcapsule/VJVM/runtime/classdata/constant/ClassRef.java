@@ -1,6 +1,5 @@
 package com.mcwcapsule.VJVM.runtime.classdata.constant;
 
-import com.mcwcapsule.VJVM.runtime.ArrayClass;
 import com.mcwcapsule.VJVM.runtime.JClass;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class ClassRef extends ResolvableConstant {
             jClass = thisClass.getClassLoader().loadClass(name);
         // check accessibility
         // workaround for arrays
-        if (thisClass instanceof ArrayClass)
+        if (thisClass.isArray())
             return;
         if (!jClass.isAccessibleTo(thisClass))
             throw new IllegalAccessError();
@@ -32,9 +31,7 @@ public class ClassRef extends ResolvableConstant {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ClassRef{");
-        sb.append("name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "ClassRef{" + "name='" + name + '\'' +
+            '}';
     }
 }

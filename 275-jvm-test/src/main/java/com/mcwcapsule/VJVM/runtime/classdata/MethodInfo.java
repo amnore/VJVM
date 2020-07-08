@@ -22,7 +22,8 @@ public class MethodInfo {
     private final String descriptor;
     private final Attribute[] attributes;
     @Getter
-    private final JClass jClass;
+    @Setter
+    private JClass jClass;
 
     // if this method doesn't hava code attribute, then code is null.
     @Getter
@@ -78,12 +79,10 @@ public class MethodInfo {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("MethodInfo{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", descriptor='").append(descriptor).append('\'');
-        sb.append(", vtableIndex=").append(vtableIndex);
-        sb.append('}');
-        return sb.toString();
+        return "MethodInfo{" + "name='" + name + '\'' +
+            ", descriptor='" + descriptor + '\'' +
+            ", vtableIndex=" + vtableIndex +
+            '}';
     }
 
     public boolean isPublic() {

@@ -22,7 +22,8 @@ public class FieldInfo {
     @Getter
     private final String descriptor;
     private final Attribute[] attributes;
-    private final JClass jClass;
+    @Setter
+    private JClass jClass;
 
     // Offset of this field in slots
     @Getter
@@ -72,12 +73,10 @@ public class FieldInfo {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("FieldInfo{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", descriptor='").append(descriptor).append('\'');
-        sb.append(", offset=").append(offset);
-        sb.append('}');
-        return sb.toString();
+        return "FieldInfo{" + "name='" + name + '\'' +
+            ", descriptor='" + descriptor + '\'' +
+            ", offset=" + offset +
+            '}';
     }
 
     public int getAttributeCount() {

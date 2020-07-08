@@ -2,7 +2,6 @@ package com.mcwcapsule.VJVM.interpreter.instruction.references;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-import com.mcwcapsule.VJVM.runtime.NonArrayClass;
 import com.mcwcapsule.VJVM.utils.ExceptionUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
@@ -16,7 +15,7 @@ public class ATHROW extends Instruction {
         // if the reference is null, throw an NullPointerException instead
         if (obj == 0) {
             try {
-                val nptrClass = (NonArrayClass) VJVM.getBootstrapLoader().loadClass("java/lang/NullPointerException");
+                val nptrClass = VJVM.getBootstrapLoader().loadClass("java/lang/NullPointerException");
                 obj = nptrClass.createInstance();
             } catch (ClassNotFoundException e) {
                 throw new Error(e);

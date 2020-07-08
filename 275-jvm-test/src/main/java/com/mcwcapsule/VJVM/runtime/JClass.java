@@ -8,6 +8,7 @@ import com.mcwcapsule.VJVM.runtime.classdata.RuntimeConstantPool;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.Attribute;
 import com.mcwcapsule.VJVM.runtime.classdata.attribute.ConstantValue;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
+import com.mcwcapsule.VJVM.utils.ArrayUtil;
 import com.mcwcapsule.VJVM.utils.InvokeUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.Getter;
@@ -15,6 +16,8 @@ import lombok.Setter;
 import lombok.val;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.DataInput;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -24,6 +27,10 @@ import static com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors.*;
 
 public class JClass {
     // inititlized with constructor
+    @Getter
+    protected JClassLoader classLoader;
+    @Getter
+    protected String packageName;
     @Getter
     protected short minorVersion;
     @Getter
@@ -41,9 +48,7 @@ public class JClass {
     protected MethodInfo[] methods;
     protected Attribute[] attributes;
     @Getter
-    protected JClassLoader classLoader;
-    @Getter
-    protected String packageName;
+    protected int methodAreaIndex;
 
     // initialized with prepare()
     @Getter
@@ -52,7 +57,6 @@ public class JClass {
     // size of instance object
     @Getter
     protected int instanceSize;
-    protected int methodAreaIndex;
 
     @Getter
     @Setter
@@ -61,6 +65,99 @@ public class JClass {
     private JThread initThread;
 
     protected JClass() {
+    }
+
+    // construct from data
+    public JClass(DataInput dataInput, JClassLoader classLoader) {
+        this.classLoader = classLoader;
+        try {
+            // check magic number
+            assert dataInput.readInt() == 0xCAFEBABE;
+            // parse data
+            // skip class version check
+            minorVersion = dataInput.readShort();
+            majorVersion = dataInput.readShort();
+
+            constantPool = new RuntimeConstantPool(dataInput, this);
+            accessFlags = dataInput.readShort();
+            int thisIndex = dataInput.readUnsignedShort();
+            thisClass = (ClassRef) constantPool.getConstant(thisIndex);
+            String name = thisClass.getName();
+            packageName = name.substring(0, name.lastIndexOf('/'));
+            int superIndex = dataInput.readUnsignedShort();
+            if (superIndex != 0)
+                superClass = (ClassRef) constantPool.getConstant(superIndex);
+            int interfacesCount = dataInput.readUnsignedShort();
+            interfaces = new ClassRef[interfacesCount];
+            for (int i = 0; i < interfacesCount; ++i) {
+                int interfaceIndex = dataInput.readUnsignedShort();
+                interfaces[i] = (ClassRef) constantPool.getConstant(interfaceIndex);
+            }
+            int fieldsCount = dataInput.readUnsignedShort();
+            fields = new FieldInfo[fieldsCount];
+            for (int i = 0; i < fieldsCount; ++i)
+                fields[i] = new FieldInfo(dataInput, this);
+            int methodsCount = dataInput.readUnsignedShort();
+            methods = new MethodInfo[methodsCount];
+            for (int i = 0; i < methodsCount; ++i)
+                methods[i] = new MethodInfo(dataInput, this);
+            int attributesCount = dataInput.readUnsignedShort();
+            attributes = new Attribute[attributesCount];
+            for (int i = 0; i < attributesCount; ++i)
+                attributes[i] = Attribute.constructFromData(dataInput, constantPool);
+        } catch (IOException e) {
+            throw new ClassFormatError();
+        }
+        methodAreaIndex = VJVM.getHeap().addJClass(this);
+    }
+
+    // create a class with all info provided, used to create array classes.
+    public JClass(
+        JClassLoader classLoader,
+        short minorVersion,
+        short majorVersion,
+        RuntimeConstantPool constantPool,
+        short accessFlags,
+        ClassRef thisClass,
+        ClassRef superClass,
+        ClassRef[] interfaces,
+        FieldInfo[] fields,
+        MethodInfo[] methods,
+        Attribute[] attributes) {
+
+        this.classLoader = classLoader;
+        this.minorVersion = minorVersion;
+        this.majorVersion = majorVersion;
+
+        this.constantPool = constantPool;
+        // set class reference in constant pool
+        if (constantPool != null)
+            constantPool.setJClass(this);
+
+        this.accessFlags = accessFlags;
+
+        this.thisClass = thisClass;
+        this.packageName = getName().substring(0, getName().lastIndexOf('/'));
+        this.superClass = superClass;
+        this.interfaces = interfaces;
+        try {
+            thisClass.resolve(this);
+            superClass.resolve(this);
+            for (val intr : interfaces)
+                intr.resolve(this);
+        } catch (ClassNotFoundException e) {
+            throw new Error(e);
+        }
+
+        this.fields = fields;
+        for (val f : fields)
+            f.setJClass(this);
+        this.methods = methods;
+        for (val m : methods)
+            m.setJClass(this);
+        this.attributes = attributes;
+
+        methodAreaIndex = VJVM.getHeap().addJClass(this);
     }
 
     public void tryVerify() {
@@ -227,15 +324,13 @@ public class JClass {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("JClass{");
-        sb.append("thisClass=").append(thisClass);
-        sb.append(", superClass=").append(superClass);
-        sb.append(", interfaces=").append(Arrays.toString(interfaces));
-        sb.append(", fields=").append(Arrays.toString(fields));
-        sb.append(", methods=").append(Arrays.toString(methods));
-        sb.append(", vtable=").append(vtable);
-        sb.append('}');
-        return sb.toString();
+        return "JClass{" + "thisClass=" + thisClass +
+            ", superClass=" + superClass +
+            ", interfaces=" + Arrays.toString(interfaces) +
+            ", fields=" + Arrays.toString(fields) +
+            ", methods=" + Arrays.toString(methods) +
+            ", vtable=" + vtable +
+            '}';
     }
 
     /**
@@ -314,10 +409,10 @@ public class JClass {
                 return true;
 
         // check for array cast
-        if (!(this instanceof ArrayClass) || !(other instanceof ArrayClass))
-            return false;
-        return ((ArrayClass) this).getElementClass().getJClass().canCastTo(
-            ((ArrayClass) other).getElementClass().getJClass());
+        if (this.isArray() && other.isArray())
+            return ArrayUtil.getComponentClass(this).canCastTo(
+                ArrayUtil.getComponentClass(other));
+        return false;
     }
 
     /**
@@ -334,11 +429,11 @@ public class JClass {
 
     public boolean isAccessibleTo(JClass other) {
         // The accessibility of an array class is the same as its component type. See spec. 5.3.3.2
-        if (this instanceof ArrayClass) {
-            val elem = ((ArrayClass) this).getElementClass();
+        if (isArray()) {
+            val elem = ArrayUtil.getComponentClass(this);
             // workaround: element is primitive type
             if (elem == null) return true;
-            return elem.getJClass().isAccessibleTo(other);
+            return elem.isAccessibleTo(other);
         }
         return isPublic() || getRuntimePackage().equals(other.getRuntimePackage());
     }
@@ -377,6 +472,25 @@ public class JClass {
 
     public boolean isModule() {
         return (accessFlags & ACC_MODULE) != 0;
+    }
+
+    public boolean isArray() {
+        return thisClass.getName().charAt(0) == '[';
+    }
+
+    public String getName() {
+        return thisClass.getName();
+    }
+
+    public int createInstance() {
+        assert getInitState() == InitState.INITIALIZED;
+        assert !isArray();
+        val heap = VJVM.getHeap();
+        int addr = heap.allocate(instanceSize);
+
+        // set class index
+        heap.getSlots().setInt(addr - 1, methodAreaIndex);
+        return addr;
     }
 
     public static class InitState {

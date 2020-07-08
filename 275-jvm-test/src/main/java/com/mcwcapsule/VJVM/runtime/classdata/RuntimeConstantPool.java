@@ -4,6 +4,7 @@ import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.Constant;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.UnevaluatedConstant;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.val;
 
 import java.io.DataInput;
@@ -11,7 +12,8 @@ import java.io.IOException;
 
 public class RuntimeConstantPool {
     @Getter
-    private final JClass jClass;
+    @Setter
+    private JClass jClass;
     // runtime constants are stored here
     private final Constant[] constants;
     // number of constants
@@ -42,9 +44,8 @@ public class RuntimeConstantPool {
         }
     }
 
-    public RuntimeConstantPool(Constant[] constants, JClass jClass) {
+    public RuntimeConstantPool(Constant[] constants) {
         this.count = constants.length;
-        this.jClass = jClass;
         this.constants = constants;
     }
 
