@@ -31,7 +31,11 @@ public class MULTIANEWARRAY extends Instruction {
                 var name = arrClasses[i + 1].getThisClass().getName().substring(1);
                 if (!FieldDescriptors.isReference(name))
                     break;
-                arrClasses[i] = frame.getJClass().getClassLoader().loadClass(name);
+                // if the component type is primitive type
+                if (!FieldDescriptors.isReference(name))
+                    arrClasses[i] = JClass.getPrimitiveClass(name);
+                else
+                    arrClasses[i] = frame.getJClass().getClassLoader().loadClass(name);
             }
         } catch (ClassNotFoundException e) {
             throw new Error(e);

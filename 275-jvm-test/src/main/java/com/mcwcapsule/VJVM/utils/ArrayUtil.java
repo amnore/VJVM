@@ -24,10 +24,9 @@ public class ArrayUtil {
         assert arrayClass.isArray();
 
         val componentType = getComponentType(arrayClass.getName());
-        // workaround for primitive types
-//        if (FieldDescriptors.isReference(componentType))
-//            return null;
-
+        // for primitive types
+        if (!FieldDescriptors.isReference(componentType))
+            return JClass.getPrimitiveClass(componentType);
         try {
             return arrayClass.getClassLoader().loadClass(componentType);
         } catch (ClassNotFoundException e) {
@@ -67,7 +66,11 @@ public class ArrayUtil {
 
         JClass componentClass;
         try {
-            componentClass = classLoader.loadClass(componentType);
+            // if the component is of primitive type
+            if (!FieldDescriptors.isReference(componentType))
+                componentClass = JClass.getPrimitiveClass(componentType);
+            else
+                componentClass = classLoader.loadClass(componentType);
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }

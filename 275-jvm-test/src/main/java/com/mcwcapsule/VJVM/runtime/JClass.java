@@ -459,7 +459,7 @@ public class JClass {
         primClasses.put("S", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("S"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
     }
 
-    // create a class with all info provided, used to create array classes.
+    // create a class with all info provided, used to create array and primitive classes.
     public JClass(
         JClassLoader classLoader,
         short minorVersion,
@@ -485,7 +485,8 @@ public class JClass {
         this.accessFlags = accessFlags;
 
         this.thisClass = thisClass;
-        this.packageName = FieldDescriptors.isReference(getName()) ? getName().substring(0, getName().lastIndexOf('/')) : null;
+        // arrays and primitive classes don't have a package
+        this.packageName = getName().charAt(0) == DESC_reference ? getName().substring(0, getName().lastIndexOf('/')) : null;
         this.superClass = superClass;
         this.interfaces = interfaces;
         try {
