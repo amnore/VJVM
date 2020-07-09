@@ -2,7 +2,6 @@ package com.mcwcapsule.VJVM.interpreter.instruction.references;
 
 import com.mcwcapsule.VJVM.interpreter.instruction.Instruction;
 import com.mcwcapsule.VJVM.runtime.JThread;
-import com.mcwcapsule.VJVM.utils.ExceptionUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 import lombok.var;
@@ -22,7 +21,6 @@ public class ATHROW extends Instruction {
             }
         }
 
-        thread.getPC().move(-1);
-        ExceptionUtil.throwException(obj, thread);
+        thread.throwException(obj);
     }
 }

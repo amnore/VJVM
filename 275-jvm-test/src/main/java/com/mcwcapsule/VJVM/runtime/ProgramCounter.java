@@ -5,6 +5,8 @@ import java.nio.ByteBuffer;
 public class ProgramCounter {
     private final ByteBuffer buf;
 
+    private int position;
+
     public ProgramCounter(byte[] code) {
         buf = ByteBuffer.wrap(code);
     }
@@ -30,10 +32,15 @@ public class ProgramCounter {
     }
 
     public void position(int pos) {
+        this.position = pos;
         buf.position(pos);
     }
 
     public int position() {
-        return buf.position();
+        return position;
+    }
+
+    public void updatePC() {
+        position = buf.position();
     }
 }

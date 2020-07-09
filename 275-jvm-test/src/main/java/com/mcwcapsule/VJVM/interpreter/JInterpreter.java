@@ -17,6 +17,7 @@ import com.mcwcapsule.VJVM.interpreter.instruction.references.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stack.*;
 import com.mcwcapsule.VJVM.interpreter.instruction.stores.*;
 import com.mcwcapsule.VJVM.runtime.JThread;
+import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
 
 public class JInterpreter {
@@ -112,6 +113,41 @@ public class JInterpreter {
             System.err.println();
 
             dispatchTable[opcode].fetchAndRun(thread);
+
+            if (thread.hasException())
+                unwind(thread);
+            else if (!thread.isEmpty())
+                thread.getPC().updatePC();
+        }
+    }
+
+    public void unwind(JThread thread) {
+        val exception = thread.getException();
+        val heap = VJVM.getHeap();
+        val excClass = heap.getJClass(heap.getSlots().getInt(exception - 1));
+
+        // unwind stack
+        while (!thread.isEmpty()) {
+            val frame = thread.getCurrentFrame();
+            val method = frame.getMethodInfo();
+            val stack = frame.getOpStack();
+            val pc = frame.getPC();
+            for (val handler : method.getCode().getExceptionTable()) {
+                if (pc.position() < handler.getStartPC()
+                    || pc.position() >= handler.getEndPC()
+                    || (handler.getCatchType() != null && !excClass.canCastTo(handler.getCatchType())))
+                    continue;
+
+                // a matching handler is found
+                pc.position(handler.getHandlerPC());
+                stack.clear();
+                stack.pushAddress(exception);
+                thread.clearException();
+                return;
+            }
+
+            // no matching handler is found in current method
+            thread.popFrame();
         }
     }
 }
