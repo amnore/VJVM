@@ -447,17 +447,7 @@ public class JClass {
         return addr;
     }
 
-    static {
-        short primAccFlags = ACC_FINAL | ACC_PUBLIC;
-        primClasses.put("Z", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("Z"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("B", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("B"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("C", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("C"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("D", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("D"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("F", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("F"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("I", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("I"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("J", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("J"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("S", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("S"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-    }
+    private static int classObject = 0;
 
     // create a class with all info provided, used to create array and primitive classes.
     public JClass(
@@ -515,6 +505,40 @@ public class JClass {
         val jClass = primClasses.get(name);
         assert jClass != null;
         return jClass;
+    }
+
+    static {
+        short primAccFlags = ACC_FINAL | ACC_PUBLIC;
+        primClasses.put("Z", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("Z"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("B", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("B"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("C", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("C"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("D", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("D"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("F", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("F"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("I", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("I"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("J", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("J"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("S", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("S"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        for (val c : primClasses.values())
+            c.setInitState(InitState.INITIALIZED);
+    }
+
+    /**
+     * Get the class object associated with this class.
+     *
+     * @return an address into the heap slots which points to the class object
+     */
+    public int getClassObject() {
+        // if the class object has already been initialized
+        if (classObject != 0) return classObject;
+        JClass classClass;
+        try {
+            classClass = VJVM.getBootstrapLoader().loadClass("java/lang/Class");
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+        classObject = classClass.createInstance();
+        val slots = VJVM.getHeap().getSlots();
+        slots.setInt(classObject + classClass.getInstanceSize() - 1, methodAreaIndex);
+        return classObject;
     }
 
     public static class InitState {

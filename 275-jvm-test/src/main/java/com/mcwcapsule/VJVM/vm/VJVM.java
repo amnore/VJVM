@@ -57,6 +57,9 @@ public class VJVM {
             // hack: string
             val strClass = bootstrapLoader.loadClass("java/lang/String");
             strClass.tryInitialize(initThread);
+            // hack: Class
+            val classClass = bootstrapLoader.loadClass("java/lang/Class");
+            classClass.tryInitialize(initThread);
 
             val initClass = userLoader.loadClass(_options.getEntryClass().replace('.', '/'));
             initClass.tryInitialize(initThread);

@@ -1,5 +1,7 @@
 # Object Layout in Heap
 
+## Layout of Class Instance
+
 When allocating objects, the return value is the address of classIndex. Extra slots are allocated before object data, and are used to store metadata such as the size of the object and the index of JClass in method area.
 
 |    name    | position (in slots) |                 description                  |
@@ -16,6 +18,8 @@ The fields of super class are positioned before those of this class.
 |  ...   |          ...           |
 | Parent | n-sizeof(Parent)...n-1 |
 |  This  |   n...n+sizeof(This)   |
+
+## Layout of Arrays
 
 The length field of an array are put before its elements.
 
@@ -40,3 +44,15 @@ The size of elements in total is ```ceil(count / elemPerSlot)```.
 |  long   |        1/2        |
 |  short  |         2         |
 | boolean |         4         |
+
+## Layout of the Class Object
+
+When creating an Class object, we insert a referencedClassIndex field at the end of this object, which is the index of referenced class in method area.
+
+|         name         | position |          description          |
+| :------------------: | :------: | :---------------------------: |
+|         size         |    -2    |                               |
+|      classIndex      |    -1    |  index of the “Class” class   |
+|     otherFields      | 0…size-2 |                               |
+| referencedClassIndex |  size-1  | index of the referenced class |
+

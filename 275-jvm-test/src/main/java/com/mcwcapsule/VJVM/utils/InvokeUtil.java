@@ -21,6 +21,12 @@ public class InvokeUtil {
         hackTable = new HashMap<>();
         hackTable.put(Triple.of("java/lang/Object", "registerNatives", "()V"), s -> {
         });
+        hackTable.put(Triple.of("java/lang/Class", "registerNatives", "()V"), s -> {
+        });
+        hackTable.put(Triple.of("java/lang/Class", "desiredAssertionStatus0", "(Ljava/lang/Class;)Z"), s -> {
+            s.popAddress();
+            s.pushInt(1);
+        });
         hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
             s -> s.pushAddress(VJVM.getHeap().getInternString(s.popAddress())));
         hackTable.put(Triple.of("cases/TestUtil", "reach", "(I)V"), s -> {
@@ -40,14 +46,21 @@ public class InvokeUtil {
                 throw new TestUtilException(String.format("%f!=%f", left, right));
             else s.pushInt(1);
         });
+        hackTable.put(Triple.of("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"), s -> {
+            s.popInt();
+        });
     }
 
     public static void invokeMethod(MethodInfo method, JThread thread) {
-        val m = hackTable.get(Triple.of(method.getJClass().getThisClass().getName(), method.getName(), method.getDescriptor()));
+        val t = Triple.of(method.getJClass().getThisClass().getName(), method.getName(), method.getDescriptor());
+        val m = hackTable.get(t);
         if (m != null) {
             m.accept(thread.getCurrentFrame().getOpStack());
             return;
         }
+
+        if (method.isNative())
+            throw new Error("Unimplemented native method: " + t.toString());
 
         val stack = thread.getCurrentFrame().getOpStack();
         val newFrame = new JFrame(method);
