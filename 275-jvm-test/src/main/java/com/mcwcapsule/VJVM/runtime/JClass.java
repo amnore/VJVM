@@ -20,6 +20,7 @@ import java.io.DataInput;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import static com.mcwcapsule.VJVM.classfiledefs.ClassAccessFlags.*;
@@ -111,54 +112,7 @@ public class JClass {
         methodAreaIndex = VJVM.getHeap().addJClass(this);
     }
 
-    // create a class with all info provided, used to create array classes.
-    public JClass(
-        JClassLoader classLoader,
-        short minorVersion,
-        short majorVersion,
-        ConstantPool constantPool,
-        short accessFlags,
-        ClassRef thisClass,
-        ClassRef superClass,
-        ClassRef[] interfaces,
-        FieldInfo[] fields,
-        MethodInfo[] methods,
-        Attribute[] attributes) {
-
-        this.classLoader = classLoader;
-        this.minorVersion = minorVersion;
-        this.majorVersion = majorVersion;
-
-        this.constantPool = constantPool;
-        // set class reference in constant pool
-        if (constantPool != null)
-            constantPool.setJClass(this);
-
-        this.accessFlags = accessFlags;
-
-        this.thisClass = thisClass;
-        this.packageName = getName().substring(0, getName().lastIndexOf('/'));
-        this.superClass = superClass;
-        this.interfaces = interfaces;
-        try {
-            thisClass.resolve(this);
-            superClass.resolve(this);
-            for (val intr : interfaces)
-                intr.resolve(this);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
-
-        this.fields = fields;
-        for (val f : fields)
-            f.setJClass(this);
-        this.methods = methods;
-        for (val m : methods)
-            m.setJClass(this);
-        this.attributes = attributes;
-
-        methodAreaIndex = VJVM.getHeap().addJClass(this);
-    }
+    private static final HashMap<String, JClass> primClasses = new HashMap<>();
 
     public void tryVerify() {
         // not verifying
@@ -491,6 +445,75 @@ public class JClass {
         // set class index
         heap.getSlots().setInt(addr - 1, methodAreaIndex);
         return addr;
+    }
+
+    static {
+        short primAccFlags = ACC_FINAL | ACC_PUBLIC;
+        primClasses.put("Z", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("Z"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("B", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("B"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("C", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("C"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("D", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("D"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("F", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("F"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("I", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("I"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("J", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("J"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("S", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("S"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+    }
+
+    // create a class with all info provided, used to create array classes.
+    public JClass(
+        JClassLoader classLoader,
+        short minorVersion,
+        short majorVersion,
+        ConstantPool constantPool,
+        short accessFlags,
+        ClassRef thisClass,
+        ClassRef superClass,
+        ClassRef[] interfaces,
+        FieldInfo[] fields,
+        MethodInfo[] methods,
+        Attribute[] attributes) {
+
+        this.classLoader = classLoader;
+        this.minorVersion = minorVersion;
+        this.majorVersion = majorVersion;
+
+        this.constantPool = constantPool;
+        // set class reference in constant pool
+        if (constantPool != null)
+            constantPool.setJClass(this);
+
+        this.accessFlags = accessFlags;
+
+        this.thisClass = thisClass;
+        this.packageName = FieldDescriptors.isReference(getName()) ? getName().substring(0, getName().lastIndexOf('/')) : null;
+        this.superClass = superClass;
+        this.interfaces = interfaces;
+        try {
+            thisClass.resolve(this);
+
+            if (superClass != null)
+                superClass.resolve(this);
+            for (val intr : interfaces)
+                intr.resolve(this);
+        } catch (ClassNotFoundException e) {
+            throw new Error(e);
+        }
+
+        this.fields = fields;
+        for (val f : fields)
+            f.setJClass(this);
+        this.methods = methods;
+        for (val m : methods)
+            m.setJClass(this);
+        this.attributes = attributes;
+
+        methodAreaIndex = VJVM.getHeap().addJClass(this);
+    }
+
+    public static JClass getPrimitiveClass(String name) {
+        val jClass = primClasses.get(name);
+        assert jClass != null;
+        return jClass;
     }
 
     public static class InitState {
