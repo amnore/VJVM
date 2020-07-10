@@ -1,9 +1,6 @@
 package com.mcwcapsule.VJVM.utils;
 
-import com.mcwcapsule.VJVM.runtime.JFrame;
-import com.mcwcapsule.VJVM.runtime.JThread;
-import com.mcwcapsule.VJVM.runtime.OperandStack;
-import com.mcwcapsule.VJVM.runtime.Slots;
+import com.mcwcapsule.VJVM.runtime.*;
 import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
@@ -48,6 +45,38 @@ public class InvokeUtil {
         });
         hackTable.put(Triple.of("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"), s -> {
             s.popInt();
+        });
+        hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"), s -> {
+            s.pushAddress(JClass.getPrimitiveClass(StringUtil.valueOf(s.popAddress())).getClassObject());
+        });
+        hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), s -> {
+        });
+        hackTable.put(Triple.of("java/lang/Double", "doubleToRawLongBits", "(D)J"), s -> {
+        });
+        hackTable.put(Triple.of("java/lang/Double", "longBitsToDouble", "(J)D"), s -> {
+        });
+        hackTable.put(Triple.of("java/lang/System", "registerNatives", "()V"), s -> {
+        });
+        hackTable.put(Triple.of("java/lang/StrictMath", "sin", "(D)D"), s -> {
+            s.pushDouble(Math.sin(s.popDouble()));
+        });
+        hackTable.put(Triple.of("java/lang/StrictMath", "exp", "(D)D"), s -> {
+            s.pushDouble(Math.exp(s.popDouble()));
+        });
+        hackTable.put(Triple.of("java/lang/StrictMath", "pow", "(DD)D"), s -> {
+            val right = s.popDouble();
+            val left = s.popDouble();
+            s.pushDouble(Math.pow(left, right));
+        });
+        hackTable.put(Triple.of("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"), s -> {
+            // only support char[], no checks
+            val length = s.popInt();
+            val destPos = s.popInt();
+            val dest = s.popAddress();
+            val srcPos = s.popInt();
+            val src = s.popAddress();
+            for (int i = 0; i < length; ++i)
+                ArrayUtil.setChar(dest, destPos + i, ArrayUtil.getChar(src, srcPos + i));
         });
     }
 

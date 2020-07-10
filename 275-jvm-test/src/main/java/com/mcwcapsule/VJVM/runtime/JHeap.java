@@ -27,7 +27,12 @@ public class JHeap {
     }
 
     public JClass getJClass(int index) {
-        return methodArea.get(index);
+        try {
+            return methodArea.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public int getInternString(int str) {

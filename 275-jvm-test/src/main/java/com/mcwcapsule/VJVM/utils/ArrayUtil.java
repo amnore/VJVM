@@ -127,4 +127,22 @@ public class ArrayUtil {
                 return length;
         }
     }
+
+    public static char getChar(int array, int index) {
+        val heap = VJVM.getHeap();
+        val slots = heap.getSlots();
+        val jClass = heap.getJClass(slots.getInt(array - 1));
+        assert jClass.isArray();
+        val raw = slots.getRaw();
+        return raw.getChar((array + jClass.getInstanceSize()) * 4 + index * 2);
+    }
+
+    public static void setChar(int array, int index, char value) {
+        val heap = VJVM.getHeap();
+        val slots = heap.getSlots();
+        val jClass = heap.getJClass(slots.getInt(array - 1));
+        assert jClass.isArray();
+        val raw = slots.getRaw();
+        raw.putChar((array + jClass.getInstanceSize()) * 4 + index * 2, value);
+    }
 }

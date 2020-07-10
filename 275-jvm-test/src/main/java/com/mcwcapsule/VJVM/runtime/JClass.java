@@ -517,6 +517,14 @@ public class JClass {
         primClasses.put("I", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("I"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
         primClasses.put("J", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("J"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
         primClasses.put("S", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("S"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
+        primClasses.put("boolean", primClasses.get("Z"));
+        primClasses.put("byte", primClasses.get("B"));
+        primClasses.put("char", primClasses.get("C"));
+        primClasses.put("double", primClasses.get("D"));
+        primClasses.put("float", primClasses.get("F"));
+        primClasses.put("int", primClasses.get("I"));
+        primClasses.put("long", primClasses.get("J"));
+        primClasses.put("short", primClasses.get("S"));
         for (val c : primClasses.values())
             c.setInitState(InitState.INITIALIZED);
     }

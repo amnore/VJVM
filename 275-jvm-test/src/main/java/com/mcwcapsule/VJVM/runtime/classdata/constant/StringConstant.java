@@ -1,9 +1,7 @@
 package com.mcwcapsule.VJVM.runtime.classdata.constant;
 
-import com.mcwcapsule.VJVM.runtime.JClass;
-import com.mcwcapsule.VJVM.utils.ArrayUtil;
+import com.mcwcapsule.VJVM.utils.StringUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
-import lombok.val;
 
 public class StringConstant extends ValueConstant {
     int strAddr;
@@ -18,38 +16,8 @@ public class StringConstant extends ValueConstant {
 
     @Override
     public Integer getValue() {
-        return strAddr == 0 ? (strAddr = createInternString()) : strAddr;
+        return strAddr == 0 ? (strAddr = VJVM.getHeap().getInternString(
+            StringUtil.createString((String) value))) : strAddr;
     }
 
-    /**
-     * Create an intern string from value.
-     * The impl assumes that a string object contains a char[] named value.
-     *
-     * @return address of the created string
-     */
-    private int createInternString() {
-        JClass strC;
-        JClass arrC;
-        try {
-            strC = VJVM.getBootstrapLoader().loadClass("java/lang/String");
-            arrC = VJVM.getBootstrapLoader().loadClass("[C");
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
-        val s = (String) value;
-        val str = strC.createInstance();
-        val arr = ArrayUtil.newInstance(arrC, s.length());
-        val slots = VJVM.getHeap().getSlots();
-
-        // fill the char array
-        for (int i = 0; i < s.length(); i += 2) {
-            int v = ((int) s.charAt(i)) << 16;
-            if (i != s.length() - 1)
-                v |= s.charAt(i + 1);
-            slots.setInt(arr + arrC.getInstanceSize() + i / 2, v);
-        }
-
-        slots.setAddress(str + strC.findField("value", "[C").getOffset(), arr);
-        return VJVM.getHeap().getInternString(str);
-    }
 }
