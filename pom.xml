@@ -14,15 +14,6 @@
         </configuration>
       </plugin>
     </plugins>
-
-    <resources>
-      <resource>
-        <directory>src/test</directory>
-        <excludes>
-          <exclude>java/cases/**</exclude>
-        </excludes>
-      </resource>
-    </resources>
   </build>
   <groupId>edu.nju</groupId>
   <artifactId>jvm-final</artifactId>
