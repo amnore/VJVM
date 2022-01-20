@@ -6,35 +6,34 @@ import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.MethodRef;
 import vjvm.utils.InvokeUtil;
 import vjvm.vm.VJVM;
-import lombok.val;
 
 public class INVOKESPECIAL extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val frame = thread.getCurrentFrame();
-        val methodRef = (MethodRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
+        var frame = thread.currentFrame();
+        var methodRef = (MethodRef) frame.dynLink().constant(thread.pc().ushort());
 
         // log
-        System.err.println(methodRef.getName());
+        System.err.println(methodRef.name());
 
-        val heap = VJVM.getHeap();
-        val opSlots = frame.getOpStack().getSlots();
-        val argc = methodRef.getArgc();
-        val currentClass = frame.getJClass();
+        var heap = VJVM.heap();
+        var opSlots = frame.opStack().slots();
+        var argc = methodRef.argc();
+        var currentClass = frame.jClass();
         try {
-            methodRef.resolve(frame.getJClass());
+            methodRef.resolve(frame.jClass());
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
         JClass targetClass;
-        JClass refClass = methodRef.getJClass();
-        if (!methodRef.getName().equals("<init>") && !refClass.isInterface()
-            && currentClass.isSubClassOf(refClass) && refClass.isSuper())
-            targetClass = currentClass.getSuperClass().getJClass();
-        else targetClass = methodRef.getJClass();
-//        val method = targetClass.findMethod(methodRef.getName(), methodRef.getDescriptor());
-        val method = targetClass.getVtableMethod(methodRef.getInfo().getVtableIndex());
+        JClass refClass = methodRef.jClass();
+        if (!methodRef.name().equals("<init>") && !refClass.interface_()
+            && currentClass.subClassOf(refClass) && refClass.super_())
+            targetClass = currentClass.superClass().jClass();
+        else targetClass = methodRef.jClass();
+//        var method = targetClass.findMethod(methodRef.name(), methodRef.descriptor());
+        var method = targetClass.vtableMethod(methodRef.info().vtableIndex());
         InvokeUtil.invokeMethod(method, thread);
     }
 

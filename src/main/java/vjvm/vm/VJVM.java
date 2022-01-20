@@ -62,29 +62,29 @@ public class VJVM implements Callable<Integer> {
         heap = new JHeap(heapSize);
         bootstrapLoader = new JClassLoader(null, bootstrapClassPath);
         userLoader = new JClassLoader(bootstrapLoader, userClassPath);
-        val initThread = new JThread();
+        var initThread = new JThread();
         addThread(initThread);
 
         // set err stream
-        val myErr = new ByteArrayOutputStream();
+        var myErr = new ByteArrayOutputStream();
         System.setErr(new PrintStream(myErr));
-        val oldOut = System.out;
-        val myOut = new ByteArrayOutputStream();
+        var oldOut = System.out;
+        var myOut = new ByteArrayOutputStream();
         System.setOut(new PrintStream(myOut));
         try {
 
             // hack: string
-            val strClass = bootstrapLoader.loadClass("java/lang/String");
+            var strClass = bootstrapLoader.loadClass("java/lang/String");
             strClass.tryInitialize(initThread);
             // hack: Class
-            val classClass = bootstrapLoader.loadClass("java/lang/Class");
+            var classClass = bootstrapLoader.loadClass("java/lang/Class");
             classClass.tryInitialize(initThread);
 
-            val initClass = userLoader.loadClass(entryClass.replace('.', '/'));
+            var initClass = userLoader.loadClass(entryClass.replace('.', '/'));
             initClass.tryInitialize(initThread);
 
-            val mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
-            assert mainMethod.getJClass() == initClass;
+            var mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
+            assert mainMethod.jClass() == initClass;
             // FIXME: call main with arguments
             InvokeUtil.invokeMethodWithArgs(mainMethod, initThread, new Slots(1));
             interpreter.run(initThread);

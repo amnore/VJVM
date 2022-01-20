@@ -15,19 +15,19 @@ public class FieldDescriptors {
     /**
      * Get the size (in slots) of a type.
      */
-    public static int getSize(String descriptor) {
-        return getSize(descriptor.charAt(0));
+    public static int size(String descriptor) {
+        return size(descriptor.charAt(0));
     }
 
-    public static int getSize(char c) {
+    public static int size(char c) {
         return (c == DESC_double || c == DESC_long) ? 2 : 1;
     }
 
-    public static boolean isReference(String descriptor) {
-        return isReference(descriptor.charAt(0));
+    public static boolean reference(String descriptor) {
+        return reference(descriptor.charAt(0));
     }
 
-    public static boolean isReference(char c) {
+    public static boolean reference(char c) {
         return c == DESC_reference || c == DESC_array;
     }
 }

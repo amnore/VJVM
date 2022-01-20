@@ -8,9 +8,9 @@ public class FCMPL extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val right = stack.popFloat();
-        val left = stack.popFloat();
+        var stack = thread.currentFrame().opStack();
+        var right = stack.popFloat();
+        var left = stack.popFloat();
         stack.pushInt(Float.compare(left, right));
     }
 

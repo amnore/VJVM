@@ -7,29 +7,29 @@ import java.util.Stack;
 public class JThread {
     private final Stack<JFrame> frames = new Stack<>();
     @Getter
-    private ProgramCounter PC;
+    private ProgramCounter pc;
     @Getter
     private int exception;
 
-    public JFrame getCurrentFrame() {
+    public JFrame currentFrame() {
         return frames.lastElement();
     }
 
     public void popFrame() {
         frames.pop();
-        PC = frames.empty() ? null : frames.lastElement().getPC();
+        pc = frames.empty() ? null : frames.lastElement().pc();
     }
 
     public void pushFrame(JFrame frame) {
         frames.push(frame);
-        PC = frame.getPC();
+        pc = frame.pc();
     }
 
-    public int getFrameCount() {
+    public int frameCount() {
         return frames.size();
     }
 
-    public boolean isEmpty() {
+    public boolean empty() {
         return frames.empty();
     }
 

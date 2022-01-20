@@ -8,7 +8,7 @@ public class I2L extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
+        var stack = thread.currentFrame().opStack();
         stack.pushLong(stack.popInt());
     }
 

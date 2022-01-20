@@ -16,16 +16,16 @@ public class ClassRef extends ResolvableConstant {
         if (jClass != null)
             return;
         // check whether the reference points to this class
-        if (name.equals(thisClass.getThisClass().name))
+        if (name.equals(thisClass.thisClass().name))
             jClass = thisClass;
             // if not, load the Class using the defining class loader of this class
         else
-            jClass = thisClass.getClassLoader().loadClass(name);
+            jClass = thisClass.classLoader().loadClass(name);
         // check accessibility
         // workaround for arrays
-        if (thisClass.isArray())
+        if (thisClass.array())
             return;
-        if (!jClass.isAccessibleTo(thisClass))
+        if (!jClass.accessibleTo(thisClass))
             throw new IllegalAccessError();
     }
 

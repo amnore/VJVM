@@ -10,8 +10,8 @@ public class RETURN1S extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var ret = thread.getCurrentFrame().getOpStack().popInt();
-        val returnType = thread.getCurrentFrame().getMethodInfo().getDescriptor().charAt(0);
+        var ret = thread.currentFrame().opStack().popInt();
+        var returnType = thread.currentFrame().methodInfo().descriptor().charAt(0);
         switch (returnType) {
             case DESC_boolean:
                 ret &= 1;
@@ -27,7 +27,7 @@ public class RETURN1S extends Instruction {
                 break;
         }
         thread.popFrame();
-        thread.getCurrentFrame().getOpStack().pushInt(ret);
+        thread.currentFrame().opStack().pushInt(ret);
     }
 
 }

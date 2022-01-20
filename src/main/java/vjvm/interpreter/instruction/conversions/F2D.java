@@ -8,7 +8,7 @@ public class F2D extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
+        var stack = thread.currentFrame().opStack();
         stack.pushDouble(stack.popFloat());
     }
 

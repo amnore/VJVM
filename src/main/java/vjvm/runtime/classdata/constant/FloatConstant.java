@@ -6,7 +6,7 @@ public class FloatConstant extends ValueConstant {
     }
 
     @Override
-    public Float getValue() {
+    public Float value() {
         return (Float) value;
     }
 }

@@ -8,7 +8,7 @@ public class D2F extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
+        var stack = thread.currentFrame().opStack();
         stack.pushFloat((float) stack.popDouble());
     }
 

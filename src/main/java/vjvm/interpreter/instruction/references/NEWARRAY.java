@@ -5,7 +5,6 @@ import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.utils.ArrayUtil;
 import vjvm.vm.VJVM;
-import lombok.val;
 
 public class NEWARRAY extends Instruction {
     private static final String[] arrType = {
@@ -14,18 +13,18 @@ public class NEWARRAY extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val atype = thread.getPC().getUnsignedByte();
+        var atype = thread.pc().ubyte();
         assert atype >= 4;
         JClass jClass;
         try {
-            jClass = VJVM.getBootstrapLoader().loadClass(arrType[atype]);
+            jClass = VJVM.bootstrapLoader().loadClass(arrType[atype]);
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        if (jClass.getInitState() != JClass.InitState.INITIALIZED)
+        if (jClass.initState() != JClass.InitState.INITIALIZED)
             jClass.tryInitialize(thread);
-        val stack = thread.getCurrentFrame().getOpStack();
-        val ref = ArrayUtil.newInstance(jClass, stack.popInt());
+        var stack = thread.currentFrame().opStack();
+        var ref = ArrayUtil.newInstance(jClass, stack.popInt());
         stack.pushAddress(ref);
     }
 

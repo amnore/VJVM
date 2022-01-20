@@ -10,7 +10,7 @@ public class FCONST_X extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        thread.getCurrentFrame().getOpStack().pushFloat(value);
+        thread.currentFrame().opStack().pushFloat(value);
     }
 
 }

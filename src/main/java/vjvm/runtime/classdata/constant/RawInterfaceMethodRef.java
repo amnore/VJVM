@@ -10,17 +10,17 @@ public class RawInterfaceMethodRef extends UnevaluatedConstant {
 
     @Override
     public MethodRef evaluate(ConstantPool constantPool) {
-        var cr = constantPool.getConstant(classIndex);
+        var cr = constantPool.constant(classIndex);
         if (cr instanceof UnevaluatedConstant) {
             cr = ((UnevaluatedConstant) cr).evaluate(constantPool);
-            constantPool.setConstant(classIndex, cr);
+            constantPool.constant(classIndex, cr);
         }
-        var nt = constantPool.getConstant(nameAndTypeIndex);
+        var nt = constantPool.constant(nameAndTypeIndex);
         if (nt instanceof UnevaluatedConstant) {
             nt = ((UnevaluatedConstant) nt).evaluate(constantPool);
-            constantPool.setConstant(nameAndTypeIndex, nt);
+            constantPool.constant(nameAndTypeIndex, nt);
         }
-        return new MethodRef((ClassRef) cr, ((NameAndTypeConstant) nt).getName(),
-            ((NameAndTypeConstant) nt).getDescriptor(), true);
+        return new MethodRef((ClassRef) cr, ((NameAndTypeConstant) nt).name(),
+            ((NameAndTypeConstant) nt).descriptor(), true);
     }
 }

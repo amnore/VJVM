@@ -9,7 +9,7 @@ public class RawStringConstant extends UnevaluatedConstant {
 
     @Override
     public StringConstant evaluate(ConstantPool constantPool) {
-        return new StringConstant(((UTF8Constant) constantPool.getConstant(stringIndex)).getValue());
+        return new StringConstant(((UTF8Constant) constantPool.constant(stringIndex)).value());
     }
 
 }

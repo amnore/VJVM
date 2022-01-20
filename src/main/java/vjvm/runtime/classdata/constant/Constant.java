@@ -13,7 +13,7 @@ public class Constant {
         try {
             Constant result;
             int count;
-            val tag = input.readByte();
+            var tag = input.readByte();
             switch (tag) {
                 case CONSTANT_Class:
                     result = new RawClassRef(input.readUnsignedShort());
@@ -22,8 +22,8 @@ public class Constant {
                 case CONSTANT_Fieldref:
                 case CONSTANT_Methodref:
                 case CONSTANT_InterfaceMethodref:
-                    val classIndex = input.readUnsignedShort();
-                    val nameAndTypeIndex = input.readUnsignedShort();
+                    var classIndex = input.readUnsignedShort();
+                    var nameAndTypeIndex = input.readUnsignedShort();
                     result = tag == CONSTANT_Fieldref ? new RawFieldRef(classIndex, nameAndTypeIndex)
                         : tag == CONSTANT_Methodref ? new RawMethodRef(classIndex, nameAndTypeIndex)
                         : new RawInterfaceMethodRef(classIndex, nameAndTypeIndex);
@@ -50,8 +50,8 @@ public class Constant {
                     count = 2;
                     break;
                 case CONSTANT_NameAndType:
-                    val nameIndex = input.readUnsignedShort();
-                    val descIndex = input.readUnsignedShort();
+                    var nameIndex = input.readUnsignedShort();
+                    var descIndex = input.readUnsignedShort();
                     result = new RawNameAndTypeConstant(nameIndex, descIndex);
                     count = 1;
                     break;

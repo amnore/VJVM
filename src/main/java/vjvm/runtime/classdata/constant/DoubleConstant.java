@@ -6,7 +6,7 @@ public class DoubleConstant extends ValueConstant {
     }
 
     @Override
-    public Double getValue() {
+    public Double value() {
         return (Double) value;
     }
 }

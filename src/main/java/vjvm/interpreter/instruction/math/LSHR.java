@@ -8,9 +8,9 @@ public class LSHR extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val v2 = stack.popInt();
-        val v1 = stack.popLong();
+        var stack = thread.currentFrame().opStack();
+        var v2 = stack.popInt();
+        var v1 = stack.popLong();
         stack.pushLong(v1 >> v2);
     }
 

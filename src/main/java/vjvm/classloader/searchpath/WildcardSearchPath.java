@@ -13,10 +13,10 @@ public class WildcardSearchPath extends ClassSearchPath {
 
     public WildcardSearchPath(String path) {
         assert path.endsWith("*");
-        val searchPath = new File(path.substring(0, path.length() - 1));
+        var searchPath = new File(path.substring(0, path.length() - 1));
         assert searchPath.isDirectory();
-        val files = searchPath.listFiles(fileName -> {
-            val name = fileName.getName();
+        var files = searchPath.listFiles(fileName -> {
+            var name = fileName.getName();
             return name.endsWith(".jar") || name.endsWith(".JAR");
         });
         jars = Arrays.stream(files).map(file -> {
@@ -31,8 +31,8 @@ public class WildcardSearchPath extends ClassSearchPath {
     @Override
     public InputStream findClass(String name) {
         try {
-            for (val jarFile : jars) {
-                val entry = jarFile.getEntry(name + ".class");
+            for (var jarFile : jars) {
+                var entry = jarFile.getEntry(name + ".class");
                 if (entry != null)
                     return jarFile.getInputStream(entry);
             }
@@ -44,7 +44,7 @@ public class WildcardSearchPath extends ClassSearchPath {
 
     @Override
     public void close() throws IOException {
-        for (val file : jars)
+        for (var file : jars)
             file.close();
     }
 

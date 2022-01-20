@@ -5,30 +5,29 @@ import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.constant.FieldRef;
-import lombok.val;
 
 public class GETSTATIC extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val frame = thread.getCurrentFrame();
-        val stack = frame.getOpStack();
+        var frame = thread.currentFrame();
+        var stack = frame.opStack();
         FieldInfo field;
         JClass jClass;
         try {
-            val ref = (FieldRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
-            ref.resolve(frame.getJClass());
-            field = ref.getInfo();
-            jClass = ref.getClassRef().getJClass();
+            var ref = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
+            ref.resolve(frame.jClass());
+            field = ref.info();
+            jClass = ref.classRef().jClass();
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        if (jClass.getInitState() != JClass.InitState.INITIALIZED)
+        if (jClass.initState() != JClass.InitState.INITIALIZED)
             jClass.tryInitialize(thread);
-        if (field.getSize() == 2)
-            stack.pushLong(jClass.getStaticFields().getLong(field.getOffset()));
+        if (field.size() == 2)
+            stack.pushLong(jClass.staticFields().long_(field.offset()));
         else
-            stack.pushInt(jClass.getStaticFields().getInt(field.getOffset()));
+            stack.pushInt(jClass.staticFields().int_(field.offset()));
     }
 
 }

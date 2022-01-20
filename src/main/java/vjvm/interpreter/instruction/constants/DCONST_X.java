@@ -10,7 +10,7 @@ public class DCONST_X extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        thread.getCurrentFrame().getOpStack().pushDouble(value);
+        thread.currentFrame().opStack().pushDouble(value);
     }
 
 }

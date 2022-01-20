@@ -13,9 +13,9 @@ public class IOPR extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val right = stack.popInt();
-        val left = stack.popInt();
+        var stack = thread.currentFrame().opStack();
+        var right = stack.popInt();
+        var left = stack.popInt();
         stack.pushInt(opr.applyAsInt(left, right));
     }
 

@@ -2,15 +2,14 @@ package vjvm.interpreter.instruction.math;
 
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
-import lombok.val;
 
 public class IINC extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val slots = thread.getCurrentFrame().getLocalVars();
-        val index = thread.getPC().getUnsignedByte();
-        slots.setInt(index, slots.getInt(index) + thread.getPC().getByte());
+        var slots = thread.currentFrame().localVars();
+        var index = thread.pc().ubyte();
+        slots.int_(index, slots.int_(index) + thread.pc().byte_());
     }
 
 }

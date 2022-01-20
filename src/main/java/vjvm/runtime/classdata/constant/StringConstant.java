@@ -10,13 +10,13 @@ public class StringConstant extends ValueConstant {
         super(value);
     }
 
-    public String getString() {
+    public String string() {
         return (String) value;
     }
 
     @Override
-    public Integer getValue() {
-        return strAddr == 0 ? (strAddr = VJVM.getHeap().getInternString(
+    public Integer value() {
+        return strAddr == 0 ? (strAddr = VJVM.heap().internString(
             StringUtil.createString((String) value))) : strAddr;
     }
 

@@ -18,7 +18,6 @@ import vjvm.interpreter.instruction.stack.*;
 import vjvm.interpreter.instruction.stores.*;
 import vjvm.runtime.JThread;
 import vjvm.vm.VJVM;
-import lombok.val;
 
 public class JInterpreter {
     private final Instruction[] dispatchTable;
@@ -97,49 +96,49 @@ public class JInterpreter {
     public void run(JThread thread) {
         // since this method may be invoked when JVM stack isn't empty,
         // for example, by the initialize() method of JClass, we need to exit at the right time.
-        int count = thread.getFrameCount();
+        int count = thread.frameCount();
 
-        while (thread.getFrameCount() >= count) {
-            val opcode = Byte.toUnsignedInt(thread.getPC().getByte());
+        while (thread.frameCount() >= count) {
+            var opcode = Byte.toUnsignedInt(thread.pc().byte_());
             if (dispatchTable[opcode] == null)
                 throw new Error(String.format("Unimplemented: %d", opcode));
 
 
             // print debug info
-            System.err.println("method: " + thread.getCurrentFrame().getJClass().getThisClass().getName() + ':' + thread.getCurrentFrame().getMethodInfo().getName() + ';' + thread.getCurrentFrame().getMethodInfo().getDescriptor());
+            System.err.println("method: " + thread.currentFrame().jClass().thisClass().name() + ':' + thread.currentFrame().methodInfo().name() + ';' + thread.currentFrame().methodInfo().descriptor());
             System.err.println(String.format("opcode: %s(%d)", dispatchTable[opcode].getClass().getSimpleName(), opcode));
-            System.err.println("local: " + thread.getCurrentFrame().getLocalVars().toString());
-            System.err.println("stack: " + thread.getCurrentFrame().getOpStack().toString());
+            System.err.println("local: " + thread.currentFrame().localVars().toString());
+            System.err.println("stack: " + thread.currentFrame().opStack().toString());
             System.err.println();
 
             dispatchTable[opcode].fetchAndRun(thread);
 
             if (thread.hasException())
                 unwind(thread);
-            else if (!thread.isEmpty())
-                thread.getPC().updatePC();
+            else if (!thread.empty())
+                thread.pc().update();
         }
     }
 
     public void unwind(JThread thread) {
-        val exception = thread.getException();
-        val heap = VJVM.getHeap();
-        val excClass = heap.getJClass(heap.getSlots().getInt(exception - 1));
+        var exception = thread.exception();
+        var heap = VJVM.heap();
+        var excClass = heap.jClass(heap.slots().int_(exception - 1));
 
         // unwind stack
-        while (!thread.isEmpty()) {
-            val frame = thread.getCurrentFrame();
-            val method = frame.getMethodInfo();
-            val stack = frame.getOpStack();
-            val pc = frame.getPC();
-            for (val handler : method.getCode().getExceptionTable()) {
-                if (pc.position() < handler.getStartPC()
-                    || pc.position() >= handler.getEndPC()
-                    || (handler.getCatchType() != null && !excClass.canCastTo(handler.getCatchType())))
+        while (!thread.empty()) {
+            var frame = thread.currentFrame();
+            var method = frame.methodInfo();
+            var stack = frame.opStack();
+            var pc = frame.pc();
+            for (var handler : method.code().exceptionTable()) {
+                if (pc.position() < handler.startPC()
+                    || pc.position() >= handler.endPC()
+                    || (handler.catchType() != null && !excClass.castableTo(handler.catchType())))
                     continue;
 
                 // a matching handler is found
-                pc.position(handler.getHandlerPC());
+                pc.position(handler.handlerPC());
                 stack.clear();
                 stack.pushAddress(exception);
                 thread.clearException();

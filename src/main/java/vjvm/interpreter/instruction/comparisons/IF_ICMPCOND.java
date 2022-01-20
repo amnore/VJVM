@@ -4,7 +4,6 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.utils.BiIntPredicate;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 @RequiredArgsConstructor
 public class IF_ICMPCOND extends Instruction {
@@ -12,11 +11,11 @@ public class IF_ICMPCOND extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val right = stack.popInt();
-        val left = stack.popInt();
-        val pc = thread.getPC();
-        val offset = pc.getShort();
+        var stack = thread.currentFrame().opStack();
+        var right = stack.popInt();
+        var left = stack.popInt();
+        var pc = thread.pc();
+        var offset = pc.short_();
         if (pred.test(left, right))
             pc.move(offset - 3);
     }

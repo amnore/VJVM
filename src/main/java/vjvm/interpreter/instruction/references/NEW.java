@@ -4,23 +4,22 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
-import lombok.val;
 
 public class NEW extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val frame = thread.getCurrentFrame();
-        val classRef = (ClassRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
+        var frame = thread.currentFrame();
+        var classRef = (ClassRef) frame.dynLink().constant(thread.pc().ushort());
         try {
-            classRef.resolve(frame.getJClass());
+            classRef.resolve(frame.jClass());
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        val jClass = classRef.getJClass();
-        if (jClass.getInitState() != JClass.InitState.INITIALIZED)
+        var jClass = classRef.jClass();
+        if (jClass.initState() != JClass.InitState.INITIALIZED)
             jClass.tryInitialize(thread);
-        frame.getOpStack().pushAddress(jClass.createInstance());
+        frame.opStack().pushAddress(jClass.createInstance());
     }
 
 }

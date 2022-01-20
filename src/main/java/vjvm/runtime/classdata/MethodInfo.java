@@ -7,7 +7,6 @@ import vjvm.runtime.classdata.attribute.Code;
 import vjvm.runtime.classdata.constant.UTF8Constant;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -36,12 +35,12 @@ public class MethodInfo {
     public MethodInfo(DataInput dataInput, JClass jClass) {
         try {
             this.jClass = jClass;
-            val constantPool = jClass.getConstantPool();
+            var constantPool = jClass.constantPool();
             accessFlags = dataInput.readShort();
             int nameIndex = dataInput.readUnsignedShort();
-            name = ((UTF8Constant) constantPool.getConstant(nameIndex)).getValue();
+            name = ((UTF8Constant) constantPool.constant(nameIndex)).value();
             int descriptorIndex = dataInput.readUnsignedShort();
-            descriptor = ((UTF8Constant) constantPool.getConstant(descriptorIndex)).getValue();
+            descriptor = ((UTF8Constant) constantPool.constant(descriptorIndex)).value();
             int attrCount = dataInput.readUnsignedShort();
             attributes = new Attribute[attrCount];
             for (int i = 0; i < attrCount; ++i) {
@@ -50,31 +49,31 @@ public class MethodInfo {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
-        for (val i : attributes)
+        for (var i : attributes)
             if (i instanceof Code) {
                 code = (Code) i;
                 break;
             }
     }
 
-    public int getArgc() {
-        return MethodDescriptors.getArgc(descriptor);
+    public int argc() {
+        return MethodDescriptors.argc(descriptor);
     }
 
-    public boolean isAccessibleTo(JClass other, JClass referencedJClass) {
-        if (isPublic())
+    public boolean accessibleTo(JClass other, JClass referencedJClass) {
+        if (public_())
             return true;
-        if (isProtected() && (other == jClass || other.isSubClassOf(jClass))) {
-            if (isStatic())
+        if (protected_() && (other == jClass || other.subClassOf(jClass))) {
+            if (static_())
                 return true;
-            if (referencedJClass == other || referencedJClass.isSubClassOf(other)
-                || other.isSubClassOf(referencedJClass))
+            if (referencedJClass == other || referencedJClass.subClassOf(other)
+                || other.subClassOf(referencedJClass))
                 return true;
         }
-        if (isProtected() || (!isPublic() && !isPrivate())) {
-            return jClass.getRuntimePackage().equals(other.getRuntimePackage());
+        if (protected_() || (!public_() && !private_())) {
+            return jClass.runtimePackage().equals(other.runtimePackage());
         }
-        return isPrivate() && other == jClass;
+        return private_() && other == jClass;
     }
 
     @Override
@@ -85,51 +84,51 @@ public class MethodInfo {
             '}';
     }
 
-    public boolean isPublic() {
+    public boolean public_() {
         return (accessFlags & ACC_PUBLIC) != 0;
     }
 
-    public boolean isPrivate() {
+    public boolean private_() {
         return (accessFlags & ACC_PRIVATE) != 0;
     }
 
-    public boolean isProtected() {
+    public boolean protected_() {
         return (accessFlags & ACC_PROTECTED) != 0;
     }
 
-    public boolean isStatic() {
+    public boolean static_() {
         return (accessFlags & ACC_STATIC) != 0;
     }
 
-    public boolean isFinal() {
+    public boolean final_() {
         return (accessFlags & ACC_FINAL) != 0;
     }
 
-    public boolean isSynchronized() {
+    public boolean synchronized_() {
         return (accessFlags & ACC_SYNCHRONIZED) != 0;
     }
 
-    public boolean isBridge() {
+    public boolean bridge() {
         return (accessFlags & ACC_BRIDGE) != 0;
     }
 
-    public boolean isVaargs() {
+    public boolean vaargs() {
         return (accessFlags & ACC_VARARGS) != 0;
     }
 
-    public boolean isNative() {
+    public boolean native_() {
         return (accessFlags & ACC_NATIVE) != 0;
     }
 
-    public boolean isAbstract() {
+    public boolean abstract_() {
         return (accessFlags & ACC_ABSTRACT) != 0;
     }
 
-    public boolean isStrict() {
+    public boolean strict() {
         return (accessFlags & ACC_STRICT) != 0;
     }
 
-    public boolean isSynthetic() {
+    public boolean synthetic() {
         return (accessFlags & ACC_SYNTHETIC) != 0;
     }
 }

@@ -3,7 +3,6 @@ package vjvm.interpreter.instruction.comparisons;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 
 import java.util.function.IntPredicate;
 
@@ -13,10 +12,10 @@ public class IFCOND extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val value = stack.popInt();
-        val pc = thread.getPC();
-        val offset = pc.getShort();
+        var stack = thread.currentFrame().opStack();
+        var value = stack.popInt();
+        var pc = thread.pc();
+        var offset = pc.short_();
         if (pred.test(value))
             pc.move(offset - 3);
     }

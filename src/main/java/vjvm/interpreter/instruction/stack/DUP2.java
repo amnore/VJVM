@@ -8,8 +8,8 @@ public class DUP2 extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val value = stack.popLong();
+        var stack = thread.currentFrame().opStack();
+        var value = stack.popLong();
         stack.pushLong(value);
         stack.pushLong(value);
     }

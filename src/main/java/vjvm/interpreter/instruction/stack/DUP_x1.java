@@ -8,9 +8,9 @@ public class DUP_x1 extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val value = stack.popInt();
-        val value2 = stack.popInt();
+        var stack = thread.currentFrame().opStack();
+        var value = stack.popInt();
+        var value2 = stack.popInt();
         stack.pushInt(value);
         stack.pushInt(value2);
         stack.pushInt(value);

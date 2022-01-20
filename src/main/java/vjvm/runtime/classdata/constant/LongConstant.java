@@ -6,7 +6,7 @@ public class LongConstant extends ValueConstant {
     }
 
     @Override
-    public Long getValue() {
+    public Long value() {
         return (Long) value;
     }
 }

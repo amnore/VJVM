@@ -6,31 +6,30 @@ import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.constant.MethodRef;
 import vjvm.utils.InvokeUtil;
 import vjvm.vm.VJVM;
-import lombok.val;
 
 public class INVOKEVIRTUAL extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val frame = thread.getCurrentFrame();
-        val methodRef = (MethodRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
+        var frame = thread.currentFrame();
+        var methodRef = (MethodRef) frame.dynLink().constant(thread.pc().ushort());
         try {
-            methodRef.resolve(frame.getJClass());
+            methodRef.resolve(frame.jClass());
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
 
         // select the method to call, see spec. 5.4.6
         MethodInfo method;
-        if (methodRef.getInfo().isPrivate())
-            method = methodRef.getInfo();
+        if (methodRef.info().private_())
+            method = methodRef.info();
         else {
-            val heap = VJVM.getHeap();
-            val stack = frame.getOpStack();
-            val obj = stack.getSlots().getAddress(stack.getTop() - methodRef.getArgc() - 1);
-            val objClass = heap.getJClass(heap.getSlots().getInt(obj - 1));
-//            method = objClass.findMethod(methodRef.getName(), methodRef.getDescriptor());
-            method = objClass.getVtableMethod(methodRef.getInfo().getVtableIndex());
+            var heap = VJVM.heap();
+            var stack = frame.opStack();
+            var obj = stack.slots().addressAt(stack.top() - methodRef.argc() - 1);
+            var objClass = heap.jClass(heap.slots().int_(obj - 1));
+//            method = objClass.findMethod(methodRef.name(), methodRef.descriptor());
+            method = objClass.vtableMethod(methodRef.info().vtableIndex());
         }
         InvokeUtil.invokeMethod(method, thread);
     }

@@ -8,7 +8,7 @@ public class I2S extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
+        var stack = thread.currentFrame().opStack();
         stack.pushInt((short) stack.popInt());
     }
 

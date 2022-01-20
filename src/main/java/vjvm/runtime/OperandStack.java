@@ -13,39 +13,39 @@ public class OperandStack {
     }
 
     public void pushInt(int value) {
-        slots.setInt(top++, value);
+        slots.int_(top++, value);
     }
 
     public int popInt() {
-        return slots.getInt(--top);
+        return slots.int_(--top);
     }
 
     public void pushFloat(float value) {
-        slots.setFloat(top++, value);
+        slots.float_(top++, value);
     }
 
     public float popFloat() {
-        return slots.getFloat(--top);
+        return slots.float_(--top);
     }
 
     public void pushLong(long value) {
-        slots.setLong(top, value);
+        slots.long_(top, value);
         top += 2;
     }
 
     public long popLong() {
         top -= 2;
-        return slots.getLong(top);
+        return slots.long_(top);
     }
 
     public void pushDouble(double value) {
-        slots.setDouble(top, value);
+        slots.double_(top, value);
         top += 2;
     }
 
     public double popDouble() {
         top -= 2;
-        return slots.getDouble(top);
+        return slots.double_(top);
     }
 
     public void pushAddress(int value) {

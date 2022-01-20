@@ -8,7 +8,7 @@ public class I2C extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
+        var stack = thread.currentFrame().opStack();
         stack.pushInt((char) stack.popInt());
     }
 

@@ -3,20 +3,19 @@ package vjvm.interpreter.instruction.loads;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.vm.VJVM;
-import lombok.val;
 
 public class AIFALOAD extends Instruction {
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val index = stack.popInt();
-        val obj = stack.popAddress();
-        val heap = VJVM.getHeap();
-        val slots = heap.getSlots();
-        val jClass = heap.getJClass(slots.getInt(obj - 1));
-        assert jClass.isArray();
+        var stack = thread.currentFrame().opStack();
+        var index = stack.popInt();
+        var obj = stack.popAddress();
+        var heap = VJVM.heap();
+        var slots = heap.slots();
+        var jClass = heap.jClass(slots.int_(obj - 1));
+        assert jClass.array();
         // the address of the element is obj + sizeof(ArrayClass) + index
-        val value = slots.getInt(obj + jClass.getInstanceSize() + index);
+        var value = slots.int_(obj + jClass.instanceSize() + index);
         stack.pushInt(value);
     }
 }

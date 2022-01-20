@@ -17,13 +17,13 @@ public class Attribute {
         try {
             Attribute ret;
             int nameIndex = input.readUnsignedShort();
-            String name = ((UTF8Constant) constantPool.getConstant(nameIndex)).getValue();
+            String name = ((UTF8Constant) constantPool.constant(nameIndex)).value();
             long attrLength = Integer.toUnsignedLong(input.readInt());
             switch (name) {
                 case ATTR_ConstantValue:
                     assert attrLength == 2;
                     int valueIndex = input.readUnsignedShort();
-                    ret = new ConstantValue(((ValueConstant) constantPool.getConstant(valueIndex)).getValue());
+                    ret = new ConstantValue(((ValueConstant) constantPool.constant(valueIndex)).value());
                     break;
                 case ATTR_Code:
                     int maxStack = input.readUnsignedShort();
@@ -32,23 +32,23 @@ public class Attribute {
                     byte[] code = new byte[codeLength];
                     input.readFully(code);
                     int exceptionTableLength = input.readUnsignedShort();
-                    val exceptionTable = new Code.ExceptionHandler[exceptionTableLength];
+                    var exceptionTable = new Code.ExceptionHandler[exceptionTableLength];
                     for (int i = 0; i < exceptionTableLength; ++i) {
-                        val startPC = input.readUnsignedShort();
-                        val endPC = input.readUnsignedShort();
-                        val handlerPC = input.readUnsignedShort();
-                        val catchType = input.readUnsignedShort();
-                        val catchClassRef =
-                            (ClassRef) (catchType == 0 ? null : constantPool.getConstant(catchType));
+                        var startPC = input.readUnsignedShort();
+                        var endPC = input.readUnsignedShort();
+                        var handlerPC = input.readUnsignedShort();
+                        var catchType = input.readUnsignedShort();
+                        var catchClassRef =
+                            (ClassRef) (catchType == 0 ? null : constantPool.constant(catchType));
                         if (catchClassRef != null) {
                             try {
-                                catchClassRef.resolve(constantPool.getJClass());
+                                catchClassRef.resolve(constantPool.jClass());
                             } catch (ClassNotFoundException e) {
                                 throw new Error(e);
                             }
                         }
                         exceptionTable[i] = new Code.ExceptionHandler(
-                            startPC, endPC, handlerPC, catchClassRef == null ? null : catchClassRef.getJClass());
+                            startPC, endPC, handlerPC, catchClassRef == null ? null : catchClassRef.jClass());
                     }
                     int attributesCount = input.readUnsignedShort();
                     Attribute[] attributes = new Attribute[attributesCount];

@@ -5,22 +5,21 @@ import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.MethodRef;
 import vjvm.utils.InvokeUtil;
-import lombok.val;
 
 public class INVOKESTATIC extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val frame = thread.getCurrentFrame();
-        val methodRef = (MethodRef) frame.getDynLink().getConstant(thread.getPC().getUnsignedShort());
+        var frame = thread.currentFrame();
+        var methodRef = (MethodRef) frame.dynLink().constant(thread.pc().ushort());
         try {
-            methodRef.resolve(frame.getJClass());
+            methodRef.resolve(frame.jClass());
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        if (methodRef.getJClass().getInitState() != JClass.InitState.INITIALIZED)
-            methodRef.getJClass().tryInitialize(thread);
-        InvokeUtil.invokeMethod(methodRef.getInfo(), thread);
+        if (methodRef.jClass().initState() != JClass.InitState.INITIALIZED)
+            methodRef.jClass().tryInitialize(thread);
+        InvokeUtil.invokeMethod(methodRef.info(), thread);
     }
 
 }

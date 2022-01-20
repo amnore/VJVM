@@ -8,9 +8,9 @@ public class RETURN2S extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val ret = thread.getCurrentFrame().getOpStack().popLong();
+        var ret = thread.currentFrame().opStack().popLong();
         thread.popFrame();
-        thread.getCurrentFrame().getOpStack().pushLong(ret);
+        thread.currentFrame().opStack().pushLong(ret);
     }
 
 }

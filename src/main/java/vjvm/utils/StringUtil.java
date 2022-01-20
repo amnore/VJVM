@@ -2,7 +2,6 @@ package vjvm.utils;
 
 import vjvm.runtime.JClass;
 import vjvm.vm.VJVM;
-import lombok.val;
 
 public class StringUtil {
 
@@ -11,16 +10,16 @@ public class StringUtil {
         JClass charArrayClass;
         int arrOffset;
         try {
-            stringClass = VJVM.getBootstrapLoader().loadClass("java/lang/String");
-            charArrayClass = VJVM.getBootstrapLoader().loadClass("[C");
-            arrOffset = stringClass.findField("value", "[C").getOffset();
+            stringClass = VJVM.bootstrapLoader().loadClass("java/lang/String");
+            charArrayClass = VJVM.bootstrapLoader().loadClass("[C");
+            arrOffset = stringClass.findField("value", "[C").offset();
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        val slots = VJVM.getHeap().getSlots();
-        val arr = slots.getInt(str + arrOffset);
-        val len = slots.getInt(arr + charArrayClass.getInstanceSize() - 1);
-        val v = new char[len];
+        var slots = VJVM.heap().slots();
+        var arr = slots.int_(str + arrOffset);
+        var len = slots.int_(arr + charArrayClass.instanceSize() - 1);
+        var v = new char[len];
         for (int i = 0; i < len; ++i)
             v[i] = ArrayUtil.getChar(arr, i);
         return new String(v);
@@ -38,21 +37,21 @@ public class StringUtil {
         JClass charArrayClass;
         int arrOffset;
         try {
-            stringClass = VJVM.getBootstrapLoader().loadClass("java/lang/String");
-            charArrayClass = VJVM.getBootstrapLoader().loadClass("[C");
-            arrOffset = stringClass.findField("value", "[C").getOffset();
+            stringClass = VJVM.bootstrapLoader().loadClass("java/lang/String");
+            charArrayClass = VJVM.bootstrapLoader().loadClass("[C");
+            arrOffset = stringClass.findField("value", "[C").offset();
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
-        val str = stringClass.createInstance();
-        val arr = ArrayUtil.newInstance(charArrayClass, value.length());
-        val slots = VJVM.getHeap().getSlots();
+        var str = stringClass.createInstance();
+        var arr = ArrayUtil.newInstance(charArrayClass, value.length());
+        var slots = VJVM.heap().slots();
 
         // fill the char array
         for (int i = 0; i < value.length(); ++i)
             ArrayUtil.setChar(arr, i, value.charAt(i));
 
-        slots.setAddress(str + arrOffset, arr);
+        slots.addressAt(str + arrOffset, arr);
         return str;
     }
 }

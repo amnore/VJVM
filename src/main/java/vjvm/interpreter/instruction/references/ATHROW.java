@@ -8,12 +8,12 @@ import lombok.val;
 public class ATHROW extends Instruction {
     @Override
     public void fetchAndRun(JThread thread) {
-        var obj = thread.getCurrentFrame().getOpStack().popAddress();
+        var obj = thread.currentFrame().opStack().popAddress();
 
         // if the reference is null, throw an NullPointerException instead
         if (obj == 0) {
             try {
-                val nptrClass = VJVM.getBootstrapLoader().loadClass("java/lang/NullPointerException");
+                var nptrClass = VJVM.bootstrapLoader().loadClass("java/lang/NullPointerException");
                 obj = nptrClass.createInstance();
             } catch (ClassNotFoundException e) {
                 throw new Error(e);

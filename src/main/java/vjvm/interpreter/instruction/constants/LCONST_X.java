@@ -10,7 +10,7 @@ public class LCONST_X extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        thread.getCurrentFrame().getOpStack().pushLong(value);
+        thread.currentFrame().opStack().pushLong(value);
     }
 
 }

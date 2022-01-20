@@ -24,16 +24,16 @@ public class FieldRef extends ResolvableConstant {
     @Override
     public void resolve(JClass thisClass) throws ClassNotFoundException {
         classRef.resolve(thisClass);
-        jClass = classRef.getJClass();
+        jClass = classRef.jClass();
         info = jClass.findField(name, descriptor);
         if (info == null)
             throw new NoSuchFieldError();
-        if (!info.isAccessibleTo(thisClass, jClass))
+        if (!info.accessibleTo(thisClass, jClass))
             throw new IllegalAccessError();
     }
 
-    public int getSize() {
-        return FieldDescriptors.getSize(descriptor);
+    public int size() {
+        return FieldDescriptors.size(descriptor);
     }
 
     @Override

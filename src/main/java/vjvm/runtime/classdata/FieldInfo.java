@@ -7,7 +7,6 @@ import vjvm.runtime.classdata.constant.UTF8Constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.val;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -33,12 +32,12 @@ public class FieldInfo {
     public FieldInfo(DataInput dataInput, JClass jClass) {
         try {
             this.jClass = jClass;
-            val constantPool = jClass.getConstantPool();
+            var constantPool = jClass.constantPool();
             accessFlags = dataInput.readShort();
             int nameIndex = dataInput.readUnsignedShort();
-            name = ((UTF8Constant) constantPool.getConstant(nameIndex)).getValue();
+            name = ((UTF8Constant) constantPool.constant(nameIndex)).value();
             int descIndex = dataInput.readUnsignedShort();
-            descriptor = ((UTF8Constant) constantPool.getConstant(descIndex)).getValue();
+            descriptor = ((UTF8Constant) constantPool.constant(descIndex)).value();
             int attributesCount = dataInput.readUnsignedShort();
             attributes = new Attribute[attributesCount];
             for (int i = 0; i < attributesCount; ++i)
@@ -55,20 +54,20 @@ public class FieldInfo {
      * @param referencedJClass the referenced class in FieldRef
      * @return whether this field is accessible to other
      */
-    public boolean isAccessibleTo(JClass other, JClass referencedJClass) {
-        if (isPublic())
+    public boolean accessibleTo(JClass other, JClass referencedJClass) {
+        if (public_())
             return true;
-        if (isProtected() && (other == jClass || other.isSubClassOf(jClass))) {
-            if (isStatic())
+        if (protected_() && (other == jClass || other.subClassOf(jClass))) {
+            if (static_())
                 return true;
-            if (referencedJClass == other || referencedJClass.isSubClassOf(other)
-                || other.isSubClassOf(referencedJClass))
+            if (referencedJClass == other || referencedJClass.subClassOf(other)
+                || other.subClassOf(referencedJClass))
                 return true;
         }
-        if (isProtected() || (!isPublic() && !isPrivate())) {
-            return jClass.getRuntimePackage().equals(other.getRuntimePackage());
+        if (protected_() || (!public_() && !private_())) {
+            return jClass.runtimePackage().equals(other.runtimePackage());
         }
-        return isPrivate() && other == jClass;
+        return private_() && other == jClass;
     }
 
     @Override
@@ -79,47 +78,47 @@ public class FieldInfo {
             '}';
     }
 
-    public int getAttributeCount() {
+    public int attributeCount() {
         return attributes.length;
     }
 
-    public Attribute getAttribute(int index) {
+    public Attribute attribute(int index) {
         return attributes[index];
     }
 
-    public int getSize() {
-        return FieldDescriptors.getSize(descriptor);
+    public int size() {
+        return FieldDescriptors.size(descriptor);
     }
 
-    public boolean isPublic() {
+    public boolean public_() {
         return (accessFlags & ACC_PUBLIC) != 0;
     }
 
-    public boolean isPrivate() {
+    public boolean private_() {
         return (accessFlags & ACC_PRIVATE) != 0;
     }
 
-    public boolean isProtected() {
+    public boolean protected_() {
         return (accessFlags & ACC_PROTECTED) != 0;
     }
 
-    public boolean isStatic() {
+    public boolean static_() {
         return (accessFlags & ACC_STATIC) != 0;
     }
 
-    public boolean isFinal() {
+    public boolean final_() {
         return (accessFlags & ACC_FINAL) != 0;
     }
 
-    public boolean isTransient() {
+    public boolean transient_() {
         return (accessFlags & ACC_TRANSIENT) != 0;
     }
 
-    public boolean isSynthetic() {
+    public boolean synthetic() {
         return (accessFlags & ACC_SYNTHETIC) != 0;
     }
 
-    public boolean isEnum() {
+    public boolean enum_() {
         return (accessFlags & ACC_ENUM) != 0;
     }
 }

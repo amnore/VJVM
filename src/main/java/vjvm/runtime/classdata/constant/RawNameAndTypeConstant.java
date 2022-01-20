@@ -10,7 +10,7 @@ public class RawNameAndTypeConstant extends UnevaluatedConstant {
 
     @Override
     public NameAndTypeConstant evaluate(ConstantPool constantPool) {
-        return new NameAndTypeConstant(((UTF8Constant) constantPool.getConstant(nameIndex)).getValue(),
-            ((UTF8Constant) constantPool.getConstant(descriptorIndex)).getValue());
+        return new NameAndTypeConstant(((UTF8Constant) constantPool.constant(nameIndex)).value(),
+            ((UTF8Constant) constantPool.constant(descriptorIndex)).value());
     }
 }

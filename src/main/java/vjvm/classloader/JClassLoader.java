@@ -6,7 +6,6 @@ import vjvm.runtime.JClass;
 import vjvm.runtime.JClass.InitState;
 import vjvm.utils.ArrayUtil;
 import vjvm.vm.VJVM;
-import lombok.val;
 
 import java.io.Closeable;
 import java.io.DataInputStream;
@@ -34,30 +33,30 @@ public class JClassLoader implements Closeable {
      * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
     private JClass defineNonarrayClass(String name, InputStream data) throws ClassNotFoundException {
-        val ret = new JClass(new DataInputStream(data), this);
+        var ret = new JClass(new DataInputStream(data), this);
         // check the name of created class matches what we expect, see spec 5.3.5.2
         // resolve ClassRef first
-        ret.getThisClass().resolve(ret);
-        if (!ret.getThisClass().getName().equals(name))
+        ret.thisClass().resolve(ret);
+        if (!ret.thisClass().name().equals(name))
             throw new NoClassDefFoundError();
         // resolve the super class and super interfaces, see spec 5.3.5 and 5.4.1
-        if (ret.getSuperClass() != null)
-            ret.getSuperClass().resolve(ret);
-        for (int i = 0; i < ret.getSuperInterfacesCount(); ++i)
-            ret.getSuperInterface(i).resolve(ret);
+        if (ret.superClass() != null)
+            ret.superClass().resolve(ret);
+        for (int i = 0; i < ret.superInterfacesCount(); ++i)
+            ret.superInterface(i).resolve(ret);
         // add to loaded class
         definedClass.put(name, ret);
-        ret.setInitState(InitState.LOADED);
+        ret.initState(InitState.LOADED);
         return ret;
     }
 
     private JClass defineArrayClass(String name) {
-        val ret = ArrayUtil.createArrayClass(name, this);
+        var ret = ArrayUtil.createArrayClass(name, this);
         try {
-            ret.getThisClass().resolve(ret);
-            ret.getSuperClass().resolve(ret);
-            for (int i = 0; i < ret.getSuperInterfacesCount(); ++i)
-                ret.getSuperInterface(i).resolve(ret);
+            ret.thisClass().resolve(ret);
+            ret.superClass().resolve(ret);
+            for (int i = 0; i < ret.superInterfacesCount(); ++i)
+                ret.superInterface(i).resolve(ret);
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
@@ -65,7 +64,7 @@ public class JClassLoader implements Closeable {
 
         // arrays doesn't need init
         ret.tryPrepare();
-        ret.setInitState(InitState.INITIALIZED);
+        ret.initState(InitState.INITIALIZED);
         return ret;
     }
 
@@ -86,10 +85,10 @@ public class JClassLoader implements Closeable {
         if (name.charAt(0) == FieldDescriptors.DESC_array) {
             if (definedClass.get(name) != null)
                 return definedClass.get(name);
-            if (FieldDescriptors.isReference(name.charAt(1))) {
-                val elemClass = loadClass(name.substring(1));
-                return elemClass.getClassLoader().defineArrayClass(name);
-            } else return VJVM.getBootstrapLoader().defineArrayClass(name);
+            if (FieldDescriptors.reference(name.charAt(1))) {
+                var elemClass = loadClass(name.substring(1));
+                return elemClass.classLoader().defineArrayClass(name);
+            } else return VJVM.bootstrapLoader().defineArrayClass(name);
         }
 
         // the class is not an array class
@@ -117,13 +116,13 @@ public class JClassLoader implements Closeable {
         throw new ClassNotFoundException(name);
     }
 
-    public JClass getDefinedClass(String name) {
+    public JClass definedClass(String name) {
         return definedClass.get(name);
     }
 
     @Override
     public void close() throws IOException {
-        for (val s : searchPaths)
+        for (var s : searchPaths)
             s.close();
     }
 }

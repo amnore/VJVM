@@ -11,19 +11,19 @@ public class ProgramCounter {
         buf = ByteBuffer.wrap(code);
     }
 
-    public byte getByte() {
+    public byte byte_() {
         return buf.get();
     }
 
-    public int getUnsignedByte() {
+    public int ubyte() {
         return Byte.toUnsignedInt(buf.get());
     }
 
-    public short getShort() {
+    public short short_() {
         return buf.getShort();
     }
 
-    public int getUnsignedShort() {
+    public int ushort() {
         return Short.toUnsignedInt(buf.getShort());
     }
 
@@ -40,7 +40,7 @@ public class ProgramCounter {
         return position;
     }
 
-    public void updatePC() {
+    public void update() {
         position = buf.position();
     }
 }

@@ -3,7 +3,6 @@ package vjvm.runtime;
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.MethodInfo;
 import lombok.Getter;
-import lombok.val;
 
 @Getter
 public class JFrame {
@@ -12,15 +11,15 @@ public class JFrame {
     private final ConstantPool dynLink;
     private final MethodInfo methodInfo;
     private final JClass jClass;
-    private final ProgramCounter PC;
+    private final ProgramCounter pc;
 
     public JFrame(MethodInfo method) {
-        val code = method.getCode();
-        jClass = method.getJClass();
-        localVars = new Slots(code.getMaxLocals());
-        opStack = new OperandStack(code.getMaxStack());
-        dynLink = jClass.getConstantPool();
+        var code = method.code();
+        jClass = method.jClass();
+        localVars = new Slots(code.maxLocals());
+        opStack = new OperandStack(code.maxStack());
+        dynLink = jClass.constantPool();
         methodInfo = method;
-        PC = new ProgramCounter(code.getCode());
+        pc = new ProgramCounter(code.code());
     }
 }

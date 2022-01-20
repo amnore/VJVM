@@ -2,7 +2,6 @@ package vjvm.runtime;
 
 import vjvm.vm.VJVM;
 import lombok.Getter;
-import lombok.val;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +25,7 @@ public class JHeap {
         return methodArea.size() - 1;
     }
 
-    public JClass getJClass(int index) {
+    public JClass jClass(int index) {
         try {
             return methodArea.get(index);
         } catch (IndexOutOfBoundsException e) {
@@ -35,9 +34,9 @@ public class JHeap {
         }
     }
 
-    public int getInternString(int str) {
-        val wrapper = new StringWrapper(str);
-        val addr = internPool.get(wrapper);
+    public int internString(int str) {
+        var wrapper = new StringWrapper(str);
+        var addr = internPool.get(wrapper);
         if (addr == null) {
             internPool.put(wrapper, str);
             return str;
@@ -50,7 +49,7 @@ public class JHeap {
     public int allocate(int size) {
         int ret = current + extraSize;
         // set object size
-        slots.setInt(current, size);
+        slots.int_(current, size);
         current += extraSize + size;
         return ret;
     }
@@ -67,13 +66,13 @@ class StringWrapper {
 
     public StringWrapper(int str) {
         if (arrOffset == -1)
-            arrOffset = VJVM.getBootstrapLoader().getDefinedClass("java/lang/String")
-                .findField("value", "[C").getOffset();
+            arrOffset = VJVM.bootstrapLoader().definedClass("java/lang/String")
+                .findField("value", "[C").offset();
         if (lengthOffset == -1)
-            lengthOffset = VJVM.getBootstrapLoader().getDefinedClass("[C").getInstanceSize() - 1;
+            lengthOffset = VJVM.bootstrapLoader().definedClass("[C").instanceSize() - 1;
         if (slots == null)
-            slots = VJVM.getHeap().getSlots();
-        array = slots.getAddress(str + arrOffset);
+            slots = VJVM.heap().slots();
+        array = slots.addressAt(str + arrOffset);
         hash = calcHash();
     }
 
@@ -84,11 +83,11 @@ class StringWrapper {
         StringWrapper that = (StringWrapper) o;
         if (hash != that.hash)
             return false;
-        int len = slots.getInt(array + lengthOffset);
-        if (len != slots.getInt(that.array + lengthOffset))
+        int len = slots.int_(array + lengthOffset);
+        if (len != slots.int_(that.array + lengthOffset))
             return false;
         for (int i = lengthOffset + 1; i <= lengthOffset + len; ++i)
-            if (slots.getInt(i + array) != slots.getInt(i + that.array))
+            if (slots.int_(i + array) != slots.int_(i + that.array))
                 return false;
         return true;
     }
@@ -99,10 +98,10 @@ class StringWrapper {
     }
 
     private int calcHash() {
-        int len = slots.getInt(array + lengthOffset);
+        int len = slots.int_(array + lengthOffset);
         int hash = 0;
         for (int i = array + lengthOffset + 1; i <= array + lengthOffset + len; ++i)
-            hash = hash * 31 + slots.getInt(i);
+            hash = hash * 31 + slots.int_(i);
         return hash;
     }
 }

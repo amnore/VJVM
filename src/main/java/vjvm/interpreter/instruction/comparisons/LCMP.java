@@ -8,9 +8,9 @@ public class LCMP extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val right = stack.popLong();
-        val left = stack.popLong();
+        var stack = thread.currentFrame().opStack();
+        var right = stack.popLong();
+        var left = stack.popLong();
         stack.pushInt(Long.compare(left, right));
     }
 

@@ -8,9 +8,9 @@ public class DCMPG extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val stack = thread.getCurrentFrame().getOpStack();
-        val right = stack.popDouble();
-        val left = stack.popDouble();
+        var stack = thread.currentFrame().opStack();
+        var right = stack.popDouble();
+        var left = stack.popDouble();
         stack.pushInt(Double.compare(left, right));
     }
 

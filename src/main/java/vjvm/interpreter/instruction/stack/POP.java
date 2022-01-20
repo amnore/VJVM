@@ -6,7 +6,7 @@ import vjvm.runtime.JThread;
 public class POP extends Instruction {
     @Override
     public void fetchAndRun(JThread thread) {
-        thread.getCurrentFrame().getOpStack().popInt();
+        thread.currentFrame().opStack().popInt();
     }
 
 }

@@ -12,7 +12,7 @@ public class MethodRef extends ResolvableConstant {
     private final ClassRef classRef;
     private final String name;
     private final String descriptor;
-    private final boolean isInterfaceMethod;
+    private final boolean interfaceMethod;
 
     private MethodInfo info;
     private JClass jClass;
@@ -23,19 +23,19 @@ public class MethodRef extends ResolvableConstant {
     @Override
     public void resolve(JClass thisClass) throws ClassNotFoundException {
         classRef.resolve(thisClass);
-        jClass = classRef.getJClass();
-        if (jClass.isInterface() ^ isInterfaceMethod)
+        jClass = classRef.jClass();
+        if (jClass.interface_() ^ interfaceMethod)
             throw new IncompatibleClassChangeError();
         // ignore signature polymorphic methods
         info = jClass.findMethod(name, descriptor);
         if (info == null)
             throw new NoSuchMethodError();
-        if (!info.isAccessibleTo(thisClass, jClass))
+        if (!info.accessibleTo(thisClass, jClass))
             throw new IllegalAccessError();
     }
 
-    public int getArgc() {
-        return MethodDescriptors.getArgc(descriptor);
+    public int argc() {
+        return MethodDescriptors.argc(descriptor);
     }
 
     @Override

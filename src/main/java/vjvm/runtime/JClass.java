@@ -13,7 +13,6 @@ import vjvm.utils.InvokeUtil;
 import vjvm.vm.VJVM;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.DataInput;
@@ -82,17 +81,17 @@ public class JClass {
             constantPool = new ConstantPool(dataInput, this);
             accessFlags = dataInput.readShort();
             int thisIndex = dataInput.readUnsignedShort();
-            thisClass = (ClassRef) constantPool.getConstant(thisIndex);
-            String name = thisClass.getName();
+            thisClass = (ClassRef) constantPool.constant(thisIndex);
+            String name = thisClass.name();
             packageName = name.substring(0, name.lastIndexOf('/'));
             int superIndex = dataInput.readUnsignedShort();
             if (superIndex != 0)
-                superClass = (ClassRef) constantPool.getConstant(superIndex);
+                superClass = (ClassRef) constantPool.constant(superIndex);
             int interfacesCount = dataInput.readUnsignedShort();
             interfaces = new ClassRef[interfacesCount];
             for (int i = 0; i < interfacesCount; ++i) {
                 int interfaceIndex = dataInput.readUnsignedShort();
-                interfaces[i] = (ClassRef) constantPool.getConstant(interfaceIndex);
+                interfaces[i] = (ClassRef) constantPool.constant(interfaceIndex);
             }
             int fieldsCount = dataInput.readUnsignedShort();
             fields = new FieldInfo[fieldsCount];
@@ -109,7 +108,7 @@ public class JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
-        methodAreaIndex = VJVM.getHeap().addJClass(this);
+        methodAreaIndex = VJVM.heap().addJClass(this);
     }
 
     private static final HashMap<String, JClass> primClasses = new HashMap<>();
@@ -130,43 +129,43 @@ public class JClass {
         tryVerify();
         // prepare super classes and super interfaces
         if (superClass != null)
-            superClass.getJClass().tryPrepare();
-        for (val i : interfaces)
-            i.getJClass().tryPrepare();
+            superClass.jClass().tryPrepare();
+        for (var i : interfaces)
+            i.jClass().tryPrepare();
         initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
-        val staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::isStatic).collect(Collectors.toList());
-        for (val field : staticFieldInfos) {
-            field.setOffset(staticSize);
-            staticSize += FieldDescriptors.getSize(field.getDescriptor());
+        var staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::static_).collect(Collectors.toList());
+        for (var field : staticFieldInfos) {
+            field.offset(staticSize);
+            staticSize += FieldDescriptors.size(field.descriptor());
         }
         staticFields = new Slots(staticSize);
         // load ConstantValue
-        for (val field : staticFieldInfos) {
-            if (!field.isFinal())
+        for (var field : staticFieldInfos) {
+            if (!field.final_())
                 continue;
-            for (int i = 0; i < field.getAttributeCount(); ++i)
-                if (field.getAttribute(i) instanceof ConstantValue) {
-                    int offset = field.getOffset();
-                    Object value = ((ConstantValue) field.getAttribute(i)).getValue();
-                    switch (field.getDescriptor().charAt(0)) {
+            for (int i = 0; i < field.attributeCount(); ++i)
+                if (field.attribute(i) instanceof ConstantValue) {
+                    int offset = field.offset();
+                    Object value = ((ConstantValue) field.attribute(i)).value();
+                    switch (field.descriptor().charAt(0)) {
                         case DESC_boolean:
                         case DESC_byte:
                         case DESC_char:
                         case DESC_short:
                         case DESC_int:
                             // The stored value is an Integer
-                            staticFields.setInt(offset, (Integer) value);
+                            staticFields.int_(offset, (Integer) value);
                             break;
                         case DESC_float:
-                            staticFields.setFloat(offset, (Float) value);
+                            staticFields.float_(offset, (Float) value);
                             break;
                         case DESC_long:
-                            staticFields.setLong(offset, (Long) value);
+                            staticFields.long_(offset, (Long) value);
                             break;
                         case DESC_double:
-                            staticFields.setDouble(offset, (Double) value);
+                            staticFields.double_(offset, (Double) value);
                             break;
                     }
                     break;
@@ -174,18 +173,18 @@ public class JClass {
         }
 
         // init instance fields
-        instanceSize = superClass == null ? 0 : superClass.getJClass().instanceSize;
-        for (val field : fields) {
-            if (field.isStatic())
+        instanceSize = superClass == null ? 0 : superClass.jClass().instanceSize;
+        for (var field : fields) {
+            if (field.static_())
                 continue;
-            field.setOffset(instanceSize);
-            instanceSize += field.getSize();
+            field.offset(instanceSize);
+            instanceSize += field.size();
         }
 
         // init vtable
         // copy super's vtable
         if (superClass != null)
-            vtable = new ArrayList<>(superClass.getJClass().vtable);
+            vtable = new ArrayList<>(superClass.jClass().vtable);
         else vtable = new ArrayList<>();
         // insert or override for each method, see spec. 5.4.5
         // transitive overriding is not considered
@@ -193,24 +192,24 @@ public class JClass {
         // for other instance methods, they are all added to vtable
         int superlen = vtable.size();
         outer:
-        for (val mc : methods) {
-            if (mc.isStatic()) continue;
+        for (var mc : methods) {
+            if (mc.static_()) continue;
             for (int j = 0; j < superlen; ++j) {
-                val ma = vtable.get(j);
-                if (!mc.getName().equals(ma.getName()) || !mc.getDescriptor().equals(ma.getDescriptor()))
+                var ma = vtable.get(j);
+                if (!mc.name().equals(ma.name()) || !mc.descriptor().equals(ma.descriptor()))
                     continue;
-                if (mc.isPrivate())
+                if (mc.private_())
                     continue;
-                if (ma.isPublic() || ma.isProtected()
-                    || (!ma.isPrivate() && ma.getJClass().getPackageName().equals(packageName))) {
+                if (ma.public_() || ma.protected_()
+                    || (!ma.private_() && ma.jClass().packageName().equals(packageName))) {
                     vtable.set(j, mc);
-                    mc.setVtableIndex(j);
+                    mc.vtableIndex(j);
                     continue outer;
                 }
             }
             // if there is not override found
             vtable.add(mc);
-            mc.setVtableIndex(vtable.size() - 1);
+            mc.vtableIndex(vtable.size() - 1);
         }
 
         initState = InitState.PREPARED;
@@ -248,23 +247,23 @@ public class JClass {
 
         // step7
         if (superClass != null)
-            superClass.getJClass().tryInitialize(thread);
-        for (val i : interfaces)
-            i.getJClass().tryInitialize(thread);
+            superClass.jClass().tryInitialize(thread);
+        for (var i : interfaces)
+            i.jClass().tryInitialize(thread);
 
         // step8: not doing
 
         // step9
         // find <clinit>
         MethodInfo clinit = null;
-        for (val i : methods)
-            if (i.getName().equals("<clinit>") && i.getDescriptor().equals("()V")) {
+        for (var i : methods)
+            if (i.name().equals("<clinit>") && i.descriptor().equals("()V")) {
                 clinit = i;
                 break;
             }
         if (clinit != null) {
             InvokeUtil.invokeMethodWithArgs(clinit, thread, null);
-            VJVM.getInterpreter().run(thread);
+            VJVM.interpreter().run(thread);
         }
 
         // step10
@@ -295,54 +294,54 @@ public class JClass {
      * @return the found field, or null if not found
      */
     public FieldInfo findField(String name, String descriptor) {
-        for (val field : fields)
-            if (field.getName().equals(name) && field.getDescriptor().equals(descriptor))
+        for (var field : fields)
+            if (field.name().equals(name) && field.descriptor().equals(descriptor))
                 return field;
         // find in super interfaces
-        for (val si : interfaces) {
+        for (var si : interfaces) {
             // according to spec. 5.3.5.3, the reference to super interfaces have already been resolved.
-            val result = si.getJClass().findField(name, descriptor);
+            var result = si.jClass().findField(name, descriptor);
             if (result != null)
                 return result;
         }
         // then find in super class
-        return superClass == null ? null : superClass.getJClass().findField(name, descriptor);
+        return superClass == null ? null : superClass.jClass().findField(name, descriptor);
     }
 
     /**
      * Similar to findField, but find in super classes first. See spec. 5.4.3.3
      */
     public MethodInfo findMethod(String name, String descriptor) {
-        for (val method : methods)
-            if (method.getName().equals(name) && method.getDescriptor().equals(descriptor))
+        for (var method : methods)
+            if (method.name().equals(name) && method.descriptor().equals(descriptor))
                 return method;
         if (superClass != null) {
-            val result = superClass.getJClass().findMethod(name, descriptor);
+            var result = superClass.jClass().findMethod(name, descriptor);
             if (result != null)
                 return result;
         }
         // Using the rules from JDK7 instead of JDK8
-        for (val si : interfaces) {
-            val result = si.getJClass().findMethod(name, descriptor);
+        for (var si : interfaces) {
+            var result = si.jClass().findMethod(name, descriptor);
             if (result != null)
                 return result;
         }
         return null;
     }
 
-    public ClassRef getSuperInterface(int index) {
+    public ClassRef superInterface(int index) {
         return interfaces[index];
     }
 
-    public int getSuperInterfacesCount() {
+    public int superInterfacesCount() {
         return interfaces.length;
     }
 
-    public Pair<String, JClassLoader> getRuntimePackage() {
+    public Pair<String, JClassLoader> runtimePackage() {
         return Pair.of(packageName, classLoader);
     }
 
-    public MethodInfo getVtableMethod(int index) {
+    public MethodInfo vtableMethod(int index) {
         return vtable.get(index);
     }
 
@@ -352,20 +351,20 @@ public class JClass {
      * @param other the class to check against.
      * @return Whether this class can be cast to other.
      */
-    public boolean canCastTo(JClass other) {
+    public boolean castableTo(JClass other) {
         if (this == other) return true;
 
         // check for super class and super interfaces
-        if (superClass != null && superClass.getJClass().canCastTo(other))
+        if (superClass != null && superClass.jClass().castableTo(other))
             return true;
-        for (val i : interfaces)
-            if (i.getJClass().canCastTo(other))
+        for (var i : interfaces)
+            if (i.jClass().castableTo(other))
                 return true;
 
         // check for array cast
-        if (this.isArray() && other.isArray())
-            return ArrayUtil.getComponentClass(this).canCastTo(
-                ArrayUtil.getComponentClass(other));
+        if (this.array() && other.array())
+            return ArrayUtil.componentClass(this).castableTo(
+                ArrayUtil.componentClass(other));
         return false;
     }
 
@@ -376,74 +375,74 @@ public class JClass {
      * @param other the class to check against
      * @return Whether this class is a subclass of other. Returns false if this == other.
      */
-    public boolean isSubClassOf(JClass other) {
+    public boolean subClassOf(JClass other) {
         return superClass != null
-            && (superClass.getJClass() == other || superClass.getJClass().isSubClassOf(other));
+            && (superClass.jClass() == other || superClass.jClass().subClassOf(other));
     }
 
-    public boolean isAccessibleTo(JClass other) {
+    public boolean accessibleTo(JClass other) {
         // The accessibility of an array class is the same as its component type. See spec. 5.3.3.2
-        if (isArray()) {
-            val elem = ArrayUtil.getComponentClass(this);
+        if (array()) {
+            var elem = ArrayUtil.componentClass(this);
             // workaround: element is primitive type
             if (elem == null) return true;
-            return elem.isAccessibleTo(other);
+            return elem.accessibleTo(other);
         }
-        return isPublic() || getRuntimePackage().equals(other.getRuntimePackage());
+        return public_() || runtimePackage().equals(other.runtimePackage());
     }
 
-    public boolean isPublic() {
+    public boolean public_() {
         return (accessFlags & ACC_PUBLIC) != 0;
     }
 
-    public boolean isFinal() {
+    public boolean final_() {
         return (accessFlags & ACC_FINAL) != 0;
     }
 
-    public boolean isSuper() {
+    public boolean super_() {
         return (accessFlags & ACC_SUPER) != 0;
     }
 
-    public boolean isInterface() {
+    public boolean interface_() {
         return (accessFlags & ACC_INTERFACE) != 0;
     }
 
-    public boolean isAbstract() {
+    public boolean abstract_() {
         return (accessFlags & ACC_ABSTRACT) != 0;
     }
 
-    public boolean isSynthetic() {
+    public boolean synthetic() {
         return (accessFlags & ACC_SYNTHETIC) != 0;
     }
 
-    public boolean isAnnotation() {
+    public boolean annotation() {
         return (accessFlags & ACC_ANNOTATION) != 0;
     }
 
-    public boolean isEnum() {
+    public boolean enum_() {
         return (accessFlags & ACC_ENUM) != 0;
     }
 
-    public boolean isModule() {
+    public boolean module() {
         return (accessFlags & ACC_MODULE) != 0;
     }
 
-    public boolean isArray() {
-        return thisClass.getName().charAt(0) == '[';
+    public boolean array() {
+        return thisClass.name().charAt(0) == '[';
     }
 
-    public String getName() {
-        return thisClass.getName();
+    public String name() {
+        return thisClass.name();
     }
 
     public int createInstance() {
-        assert getInitState() == InitState.INITIALIZED;
-        assert !isArray();
-        val heap = VJVM.getHeap();
+        assert initState == InitState.INITIALIZED;
+        assert !array();
+        var heap = VJVM.heap();
         int addr = heap.allocate(instanceSize);
 
         // set class index
-        heap.getSlots().setInt(addr - 1, methodAreaIndex);
+        heap.slots().int_(addr - 1, methodAreaIndex);
         return addr;
     }
 
@@ -470,13 +469,13 @@ public class JClass {
         this.constantPool = constantPool;
         // set class reference in constant pool
         if (constantPool != null)
-            constantPool.setJClass(this);
+            constantPool.jClass(this);
 
         this.accessFlags = accessFlags;
 
         this.thisClass = thisClass;
         // arrays and primitive classes don't have a package
-        this.packageName = getName().charAt(0) == DESC_reference ? getName().substring(0, getName().lastIndexOf('/')) : null;
+        this.packageName = name().charAt(0) == DESC_reference ? name().substring(0, name().lastIndexOf('/')) : null;
         this.superClass = superClass;
         this.interfaces = interfaces;
         try {
@@ -484,25 +483,25 @@ public class JClass {
 
             if (superClass != null)
                 superClass.resolve(this);
-            for (val intr : interfaces)
+            for (var intr : interfaces)
                 intr.resolve(this);
         } catch (ClassNotFoundException e) {
             throw new Error(e);
         }
 
         this.fields = fields;
-        for (val f : fields)
-            f.setJClass(this);
+        for (var f : fields)
+            f.jClass(this);
         this.methods = methods;
-        for (val m : methods)
-            m.setJClass(this);
+        for (var m : methods)
+            m.jClass(this);
         this.attributes = attributes;
 
-        methodAreaIndex = VJVM.getHeap().addJClass(this);
+        methodAreaIndex = VJVM.heap().addJClass(this);
     }
 
-    public static JClass getPrimitiveClass(String name) {
-        val jClass = primClasses.get(name);
+    public static JClass primitiveClass(String name) {
+        var jClass = primClasses.get(name);
         assert jClass != null;
         return jClass;
     }
@@ -525,8 +524,8 @@ public class JClass {
         primClasses.put("int", primClasses.get("I"));
         primClasses.put("long", primClasses.get("J"));
         primClasses.put("short", primClasses.get("S"));
-        for (val c : primClasses.values())
-            c.setInitState(InitState.INITIALIZED);
+        for (var c : primClasses.values())
+            c.initState(InitState.INITIALIZED);
     }
 
     /**
@@ -534,18 +533,18 @@ public class JClass {
      *
      * @return an address into the heap slots which points to the class object
      */
-    public int getClassObject() {
+    public int classObject() {
         // if the class object has already been initialized
         if (classObject != 0) return classObject;
         JClass classClass;
         try {
-            classClass = VJVM.getBootstrapLoader().loadClass("java/lang/Class");
+            classClass = VJVM.bootstrapLoader().loadClass("java/lang/Class");
         } catch (Exception e) {
             throw new Error(e);
         }
         classObject = classClass.createInstance();
-        val slots = VJVM.getHeap().getSlots();
-        slots.setInt(classObject + classClass.getInstanceSize() - 1, methodAreaIndex);
+        var slots = VJVM.heap().slots();
+        slots.int_(classObject + classClass.instanceSize() - 1, methodAreaIndex);
         return classObject;
     }
 

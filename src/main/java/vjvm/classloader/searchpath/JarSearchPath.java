@@ -23,7 +23,7 @@ public class JarSearchPath extends ClassSearchPath {
         if (file == null)
             return null;
         try {
-            val entry = file.getEntry(name + ".class");
+            var entry = file.getEntry(name + ".class");
             return entry == null ? null : file.getInputStream(entry);
         } catch (IOException e) {
             return null;

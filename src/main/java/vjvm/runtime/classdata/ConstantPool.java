@@ -5,7 +5,6 @@ import vjvm.runtime.classdata.constant.Constant;
 import vjvm.runtime.classdata.constant.UnevaluatedConstant;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.val;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class ConstantPool {
             this.count = dataInput.readUnsignedShort();
             constants = new Constant[count];
             for (int i = 1; i < count; ) {
-                val r = Constant.construntFromData(dataInput);
+                var r = Constant.construntFromData(dataInput);
                 constants[i] = r.getLeft();
                 i += r.getRight();
             }
@@ -55,12 +54,12 @@ public class ConstantPool {
      * @param index the index of the constant
      * @return the constant in the pool
      */
-    public Constant getConstant(int index) {
+    public Constant constant(int index) {
         assert index > 0 && index < count;
         return constants[index];
     }
 
-    public void setConstant(int index, Constant constant) {
+    public void constant(int index, Constant constant) {
         constants[index] = constant;
     }
 

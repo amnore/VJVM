@@ -6,7 +6,7 @@ public class IntegerConstant extends ValueConstant {
     }
 
     @Override
-    public Integer getValue() {
+    public Integer value() {
         return (Integer) value;
     }
 }

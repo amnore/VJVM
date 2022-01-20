@@ -4,25 +4,24 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.runtime.classdata.constant.ValueConstant;
-import lombok.val;
 
 public class LDC extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        val frame = thread.getCurrentFrame();
-        val stack = frame.getOpStack();
-        val index = thread.getPC().getUnsignedByte();
-        val constant = frame.getDynLink().getConstant(index);
+        var frame = thread.currentFrame();
+        var stack = frame.opStack();
+        var index = thread.pc().ubyte();
+        var constant = frame.dynLink().constant(index);
         if (constant instanceof ClassRef) {
             try {
-                ((ClassRef) constant).resolve(frame.getJClass());
+                ((ClassRef) constant).resolve(frame.jClass());
             } catch (ClassNotFoundException e) {
                 throw new Error(e);
             }
-            stack.pushAddress(((ClassRef) constant).getJClass().getClassObject());
+            stack.pushAddress(((ClassRef) constant).jClass().classObject());
         } else {
-            val value = ((ValueConstant) frame.getDynLink().getConstant(index)).getValue();
+            var value = ((ValueConstant) frame.dynLink().constant(index)).value();
             if (value instanceof Integer)
                 stack.pushInt((Integer) value);
             else if (value instanceof Float)
