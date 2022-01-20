@@ -1,0 +1,43 @@
+plugins {
+  id 'application'
+  id "io.freefair.lombok" version "6.3.0"
+}
+
+group = 'edu.nju.se'
+version = '0.0.1'
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  implementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+  implementation 'org.apache.commons:commons-lang3:3.12.0'
+  implementation 'commons-cli:commons-cli:1.5.0'
+  implementation 'info.picocli:picocli:4.6.2'
+
+  annotationProcessor 'info.picocli:picocli-codegen:4.6.2'
+}
+
+compileJava {
+    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
+}
+
+application {
+  mainClass = "vjvm.vm.VJVM"
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': 'vjvm.vm.VJVM'
+  }
+
+  duplicatesStrategy('exclude')
+  from {
+    configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
