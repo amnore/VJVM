@@ -6,7 +6,6 @@ import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.FieldRef;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
-import lombok.var;
 
 public class PUTFIELD extends Instruction {
 

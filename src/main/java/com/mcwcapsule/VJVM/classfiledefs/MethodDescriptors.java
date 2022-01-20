@@ -1,6 +1,5 @@
 package com.mcwcapsule.VJVM.classfiledefs;
 
-import lombok.var;
 
 import static com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors.DESC_array;
 import static com.mcwcapsule.VJVM.classfiledefs.FieldDescriptors.DESC_reference;

@@ -6,7 +6,6 @@ import com.mcwcapsule.VJVM.runtime.JClass;
 import com.mcwcapsule.VJVM.runtime.JThread;
 import com.mcwcapsule.VJVM.runtime.classdata.constant.FieldRef;
 import lombok.val;
-import lombok.var;
 
 public class PUTSTATIC extends Instruction {
 

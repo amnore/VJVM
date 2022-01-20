@@ -7,7 +7,6 @@ import com.mcwcapsule.VJVM.runtime.JClass.InitState;
 import com.mcwcapsule.VJVM.utils.ArrayUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
-import lombok.var;
 
 import java.io.Closeable;
 import java.io.DataInputStream;

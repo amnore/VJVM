@@ -8,7 +8,6 @@ import com.mcwcapsule.VJVM.runtime.classdata.constant.ClassRef;
 import com.mcwcapsule.VJVM.utils.ArrayUtil;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
-import lombok.var;
 
 public class MULTIANEWARRAY extends Instruction {
 

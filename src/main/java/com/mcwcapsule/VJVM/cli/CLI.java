@@ -2,7 +2,6 @@ package com.mcwcapsule.VJVM.cli;
 
 import com.mcwcapsule.VJVM.vm.VJVM;
 import com.mcwcapsule.VJVM.vm.VMOptions;
-import lombok.var;
 import org.apache.commons.cli.*;
 
 import java.util.Arrays;

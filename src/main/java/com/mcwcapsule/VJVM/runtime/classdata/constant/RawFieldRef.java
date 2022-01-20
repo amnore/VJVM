@@ -2,7 +2,6 @@ package com.mcwcapsule.VJVM.runtime.classdata.constant;
 
 import com.mcwcapsule.VJVM.runtime.classdata.ConstantPool;
 import lombok.RequiredArgsConstructor;
-import lombok.var;
 
 @RequiredArgsConstructor
 public class RawFieldRef extends UnevaluatedConstant {

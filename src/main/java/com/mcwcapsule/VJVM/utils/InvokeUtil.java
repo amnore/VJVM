@@ -4,7 +4,6 @@ import com.mcwcapsule.VJVM.runtime.*;
 import com.mcwcapsule.VJVM.runtime.classdata.MethodInfo;
 import com.mcwcapsule.VJVM.vm.VJVM;
 import lombok.val;
-import lombok.var;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
