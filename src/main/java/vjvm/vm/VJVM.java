@@ -1,5 +1,6 @@
 package vjvm.vm;
 
+import picocli.CommandLine;
 import vjvm.classloader.JClassLoader;
 import vjvm.interpreter.JInterpreter;
 import vjvm.runtime.JHeap;
@@ -15,8 +16,28 @@ import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
-public class VJVM {
+import static picocli.CommandLine.*;
+import static vjvm.utils.ClassPathUtil.findJavaPath;
+
+@Command(name = "vjvm", mixinStandardHelpOptions = true, version = "vjvm 0.0.1",
+    description = "A toy JVM written in java")
+public class VJVM implements Callable<Integer> {
+    @Option(names = { "-cp", "--classpath" }, paramLabel = "CLASSPATH",
+        description = "the class path to search, multiple paths should be separated by ':'")
+    String userClassPath = ".";
+
+    @Parameters(index = "0")
+    String entryClass = "";
+
+    @Parameters(index = "1..*")
+    String[] args = {};
+
+    final int heapSize = 1024;
+
+    final static String bootstrapClassPath = findJavaPath();
+
     private static final ArrayList<JThread> threads = new ArrayList<>();
     @Getter
     static JClassLoader bootstrapLoader;
@@ -26,8 +47,6 @@ public class VJVM {
     private static JHeap heap;
     @Getter
     private static JInterpreter interpreter;
-    @Getter
-    private static VMOptions options;
 
     public static void addThread(JThread thread) {
         threads.add(thread);
@@ -37,12 +56,12 @@ public class VJVM {
         threads.remove(thread);
     }
 
-    public static void init(VMOptions _options) {
+    @Override
+    public Integer call() {
         interpreter = new JInterpreter();
-        heap = new JHeap(_options.getHeapSize());
-        options = _options;
-        bootstrapLoader = new JClassLoader(null, _options.getBootstrapClassPath());
-        userLoader = new JClassLoader(bootstrapLoader, _options.getUserClassPath());
+        heap = new JHeap(heapSize);
+        bootstrapLoader = new JClassLoader(null, bootstrapClassPath);
+        userLoader = new JClassLoader(bootstrapLoader, userClassPath);
         val initThread = new JThread();
         addThread(initThread);
 
@@ -61,7 +80,7 @@ public class VJVM {
             val classClass = bootstrapLoader.loadClass("java/lang/Class");
             classClass.tryInitialize(initThread);
 
-            val initClass = userLoader.loadClass(_options.getEntryClass().replace('.', '/'));
+            val initClass = userLoader.loadClass(entryClass.replace('.', '/'));
             initClass.tryInitialize(initThread);
 
             val mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
@@ -81,5 +100,11 @@ public class VJVM {
             System.err.println(myOut.toString());
             oldOut.print(myOut.toString());
         }
+
+        return 0;
+    }
+
+    public static void main(String[] args) {
+        System.exit(new CommandLine(new VJVM()).execute(args));
     }
 }
