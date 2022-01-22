@@ -17,7 +17,6 @@ public class INVOKEINTERFACE extends Instruction {
         var argc = methodRef.argc();
         pc.byte_();
         assert pc.byte_() == 0;
-        methodRef.resolve(frame.jClass());
 
         // select the method to call, see spec. 5.4.6
         MethodInfo method;

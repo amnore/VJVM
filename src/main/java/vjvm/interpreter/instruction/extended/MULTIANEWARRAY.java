@@ -23,7 +23,6 @@ public class MULTIANEWARRAY extends Instruction {
             dimArr[i] = stack.popInt();
 
         var arrClasses = new JClass[dimensions + 1];
-        arrClassRef.resolve(frame.jClass());
         arrClasses[dimensions] = arrClassRef.jClass();
         for (int i = dimensions - 1; i >= 0; --i) {
             var name = arrClasses[i + 1].thisClass().name().substring(1);
@@ -31,7 +30,7 @@ public class MULTIANEWARRAY extends Instruction {
                 break;
             // if the component type is primitive type
             if (!FieldDescriptors.reference(name))
-                arrClasses[i] = JClass.primitiveClass(name);
+                arrClasses[i] = thread.context().primitiveClass(name);
             else
                 arrClasses[i] = frame.jClass().classLoader().loadClass(name);
         }

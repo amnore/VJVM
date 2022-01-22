@@ -45,7 +45,7 @@ public class InvokeUtil {
             s.popInt();
         });
         hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"), s -> {
-            s.pushAddress(JClass.primitiveClass(StringUtil.valueOf(s.popAddress(), s.context())).classObject());
+            s.pushAddress(s.context().primitiveClass(StringUtil.valueOf(s.popAddress(), s.context())).classObject());
         });
         hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), s -> {
         });

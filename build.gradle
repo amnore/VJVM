@@ -1,6 +1,6 @@
 plugins {
   id 'application'
-  id "io.freefair.lombok" version "6.3.0"
+  id "io.freefair.lombok" version '6.3.0'
 }
 
 group = 'edu.nju.se'
@@ -26,12 +26,12 @@ compileJava {
 }
 
 application {
-  mainClass = "vjvm.vm.VJVM"
+  mainClass = 'vjvm.vm.Main'
 }
 
 jar {
   manifest {
-    attributes 'Main-Class': 'vjvm.vm.VJVM'
+    attributes 'Main-Class': 'vjvm.vm.Main'
   }
 
   duplicatesStrategy('exclude')

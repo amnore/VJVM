@@ -12,7 +12,6 @@ public class PUTSTATIC extends Instruction {
     public void fetchAndRun(JThread thread) {
         var frame = thread.currentFrame();
         var fieldRef = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
-        fieldRef.resolve(frame.jClass());
 
         var jClass = fieldRef.jClass();
         if (jClass.initState() != JClass.InitState.INITIALIZED)

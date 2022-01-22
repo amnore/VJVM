@@ -22,8 +22,6 @@ public class INVOKESPECIAL extends Instruction {
         var argc = methodRef.argc();
         var currentClass = frame.jClass();
 
-        methodRef.resolve(frame.jClass());
-
         JClass targetClass;
         JClass refClass = methodRef.jClass();
         if (!methodRef.name().equals("<init>") && !refClass.interface_()

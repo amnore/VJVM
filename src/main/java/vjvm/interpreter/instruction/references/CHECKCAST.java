@@ -17,8 +17,6 @@ public class CHECKCAST extends Instruction {
             return;
         }
 
-        classRef.resolve(frame.jClass());
-
         var jClass = classRef.jClass();
         var objClass = thread.context().heap().jClass(thread.context().heap().slots().int_(obj - 1));
         System.err.println(jClass.thisClass().name());

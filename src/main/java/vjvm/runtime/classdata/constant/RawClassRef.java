@@ -9,7 +9,7 @@ public class RawClassRef extends UnevaluatedConstant {
 
     @Override
     public ClassRef evaluate(ConstantPool constantPool) {
-        return new ClassRef(((UTF8Constant) constantPool.constant(nameIndex)).value());
+        return new ClassRef(constantPool.jClass(), ((UTF8Constant) constantPool.constant(nameIndex)).value());
     }
 
 }

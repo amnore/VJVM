@@ -15,7 +15,6 @@ public class PUTFIELD extends Instruction {
 
         // log
         System.err.println(fieldRef.name());
-        fieldRef.resolve(frame.jClass());
 
         var stack = frame.opStack();
         var field = fieldRef.info();

@@ -57,6 +57,7 @@ public class FieldInfo {
     public boolean accessibleTo(JClass other, JClass referencedJClass) {
         if (public_())
             return true;
+
         if (protected_() && (other == jClass || other.subClassOf(jClass))) {
             if (static_())
                 return true;
@@ -64,10 +65,19 @@ public class FieldInfo {
                 || other.subClassOf(referencedJClass))
                 return true;
         }
+
         if (protected_() || (!public_() && !private_())) {
             return jClass.runtimePackage().equals(other.runtimePackage());
         }
-        return private_() && other == jClass;
+
+        if (private_()) {
+            if (jClass == other)
+                return true;
+
+            return jClass.nestHost() == other.nestHost();
+        }
+
+        return false;
     }
 
     @Override

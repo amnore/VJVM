@@ -15,7 +15,6 @@ public class ANEWARRAY extends Instruction {
         var count = stack.popInt();
         var ref = (ClassRef) frame.dynLink().constant(thread.pc().ushort());
 
-        ref.resolve(frame.jClass());
         JClass arrayClass = ref.jClass().classLoader().loadClass("[L" + ref.name() + ';');
 
         if (arrayClass.instanceSize() != JClass.InitState.INITIALIZED)

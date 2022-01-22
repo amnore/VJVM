@@ -10,6 +10,7 @@ import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.attribute.Attribute;
 import vjvm.runtime.classdata.constant.ClassRef;
+import vjvm.vm.VMContext;
 
 import static vjvm.classfiledefs.FieldDescriptors.*;
 
@@ -19,13 +20,13 @@ public class ArrayUtil {
         return arrayType.substring(1);
     }
 
-    public static JClass componentClass(JClass arrayClass) {
+    public static JClass componentClass(JClass arrayClass, VMContext ctx) {
         assert arrayClass.array();
 
         var componentType = componentType(arrayClass.name());
         // for primitive types
         if (!FieldDescriptors.reference(componentType))
-            return JClass.primitiveClass(componentType);
+            return ctx.primitiveClass(componentType);
         return arrayClass.classLoader().loadClass(componentType);
     }
 
@@ -53,14 +54,12 @@ public class ArrayUtil {
     public static JClass createArrayClass(String arrayType, JClassLoader classLoader) {
         short minorVersion = 0;
         short majorVersion = 0;
-        var thisClass = new ClassRef(arrayType);
-        var superClass = new ClassRef("java/lang/Object");
         var componentType = arrayType.substring(1);
 
         JClass componentClass;
         // if the component is of primitive type
         if (!FieldDescriptors.reference(componentType))
-            componentClass = JClass.primitiveClass(componentType);
+            componentClass = classLoader.context().primitiveClass(componentType);
         else
             componentClass = classLoader.loadClass(componentType);
 
@@ -68,10 +67,6 @@ public class ArrayUtil {
         var accessFlags = (short) (ClassAccessFlags.ACC_FINAL | (FieldDescriptors.reference(componentType)
             ? (componentClass.accessFlags() & (ClassAccessFlags.ACC_PUBLIC))
             : ClassAccessFlags.ACC_PUBLIC) | ClassAccessFlags.ACC_SYNTHETIC);
-
-        // Arrays implement Cloneable and Serializable, see JLS 4.10.3.
-        var interfaces = new ClassRef[]
-            {new ClassRef("java/lang/Cloneable"), new ClassRef("java/io/Serializable")};
 
         // length field
         var fields = new FieldInfo[]{new FieldInfo(
@@ -90,12 +85,14 @@ public class ArrayUtil {
             majorVersion,
             null,
             accessFlags,
-            thisClass,
-            superClass,
-            interfaces,
+            arrayType,
+            "java/lang/Object",
+            // Arrays implement Cloneable and Serializable, see JLS 4.10.3.
+            new String[]{"java/lang/Cloneable", "java/io/Serializable"},
             fields,
             methods,
-            attributes
+            attributes,
+            classLoader.context()
         );
     }
 

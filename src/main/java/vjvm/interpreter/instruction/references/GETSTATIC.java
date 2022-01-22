@@ -16,7 +16,6 @@ public class GETSTATIC extends Instruction {
         JClass jClass;
 
         var ref = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
-        ref.resolve(frame.jClass());
         field = ref.info();
         jClass = ref.classRef().jClass();
 

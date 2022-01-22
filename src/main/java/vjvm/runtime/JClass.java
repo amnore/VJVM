@@ -1,12 +1,17 @@
 package vjvm.runtime;
 
+import lombok.SneakyThrows;
+import org.w3c.dom.Attr;
 import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.classloader.JClassLoader;
+import vjvm.classloader.JClassNotFoundException;
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.attribute.Attribute;
 import vjvm.runtime.classdata.attribute.ConstantValue;
+import vjvm.runtime.classdata.attribute.NestHost;
+import vjvm.runtime.classdata.attribute.NestMember;
 import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.utils.ArrayUtil;
 import vjvm.utils.InvokeUtil;
@@ -17,9 +22,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.DataInput;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 
 import static vjvm.classfiledefs.ClassAccessFlags.*;
@@ -65,57 +70,67 @@ public class JClass {
     private JThread initThread;
     @Getter
     private VMContext context;
+    private JClass nestHost;
 
     protected JClass() {
     }
 
     // construct from data
+    @SneakyThrows
     public JClass(DataInput dataInput, JClassLoader classLoader) {
         this.classLoader = classLoader;
-        try {
-            // check magic number
-            assert dataInput.readInt() == 0xCAFEBABE;
-            // parse data
-            // skip class version check
-            minorVersion = dataInput.readShort();
-            majorVersion = dataInput.readShort();
+        context = classLoader.context();
 
-            constantPool = new ConstantPool(dataInput, this);
-            accessFlags = dataInput.readShort();
-            int thisIndex = dataInput.readUnsignedShort();
-            thisClass = (ClassRef) constantPool.constant(thisIndex);
-            String name = thisClass.name();
-            packageName = name.substring(0, name.lastIndexOf('/'));
-            int superIndex = dataInput.readUnsignedShort();
-            if (superIndex != 0)
-                superClass = (ClassRef) constantPool.constant(superIndex);
-            int interfacesCount = dataInput.readUnsignedShort();
-            interfaces = new ClassRef[interfacesCount];
-            for (int i = 0; i < interfacesCount; ++i) {
-                int interfaceIndex = dataInput.readUnsignedShort();
-                interfaces[i] = (ClassRef) constantPool.constant(interfaceIndex);
-            }
-            int fieldsCount = dataInput.readUnsignedShort();
-            fields = new FieldInfo[fieldsCount];
-            for (int i = 0; i < fieldsCount; ++i)
-                fields[i] = new FieldInfo(dataInput, this);
-            int methodsCount = dataInput.readUnsignedShort();
-            methods = new MethodInfo[methodsCount];
-            for (int i = 0; i < methodsCount; ++i)
-                methods[i] = new MethodInfo(dataInput, this);
-            int attributesCount = dataInput.readUnsignedShort();
-            attributes = new Attribute[attributesCount];
-            for (int i = 0; i < attributesCount; ++i)
-                attributes[i] = Attribute.constructFromData(dataInput, constantPool);
-        } catch (IOException e) {
-            throw new ClassFormatError();
+        // check magic number
+        var magic = dataInput.readInt();
+        if (magic != 0xcafebabe) {
+            throw new InvalidClassException(String.format(
+                "Wrong magic number, expected: 0xcafebabe, got: %x", magic));
+        }
+        // parse data
+        // skip class version check
+        minorVersion = dataInput.readShort();
+        majorVersion = dataInput.readShort();
+
+        constantPool = new ConstantPool(dataInput, this);
+        accessFlags = dataInput.readShort();
+        int thisIndex = dataInput.readUnsignedShort();
+        thisClass = (ClassRef) constantPool.constant(thisIndex);
+        String name = thisClass.name();
+        packageName = name.substring(0, name.lastIndexOf('/'));
+        int superIndex = dataInput.readUnsignedShort();
+        if (superIndex != 0)
+            superClass = (ClassRef) constantPool.constant(superIndex);
+        int interfacesCount = dataInput.readUnsignedShort();
+        interfaces = new ClassRef[interfacesCount];
+        for (int i = 0; i < interfacesCount; ++i) {
+            int interfaceIndex = dataInput.readUnsignedShort();
+            interfaces[i] = (ClassRef) constantPool.constant(interfaceIndex);
+        }
+        int fieldsCount = dataInput.readUnsignedShort();
+        fields = new FieldInfo[fieldsCount];
+        for (int i = 0; i < fieldsCount; ++i)
+            fields[i] = new FieldInfo(dataInput, this);
+        int methodsCount = dataInput.readUnsignedShort();
+        methods = new MethodInfo[methodsCount];
+        for (int i = 0; i < methodsCount; ++i)
+            methods[i] = new MethodInfo(dataInput, this);
+        int attributesCount = dataInput.readUnsignedShort();
+        attributes = new Attribute[attributesCount];
+        for (int i = 0; i < attributesCount; ++i)
+            attributes[i] = Attribute.constructFromData(dataInput, constantPool);
+
+        // Spec. 5.3.3, 5.3.4: resolve super class and interfaces
+        thisClass.resolve();
+        if (superClass != null) {
+            superClass.resolve();
+        }
+        for (var i: interfaces) {
+            i.resolve();
         }
 
-        context = classLoader.context();
         methodAreaIndex = context.heap().addJClass(this);
     }
-
-    private static final HashMap<String, JClass> primClasses = new HashMap<>();
 
     public void tryVerify() {
         // not verifying
@@ -139,7 +154,7 @@ public class JClass {
         initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
-        var staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::static_).collect(Collectors.toList());
+        var staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::static_).toList();
         for (var field : staticFieldInfos) {
             field.offset(staticSize);
             staticSize += FieldDescriptors.size(field.descriptor());
@@ -154,23 +169,12 @@ public class JClass {
                     int offset = field.offset();
                     Object value = ((ConstantValue) field.attribute(i)).value();
                     switch (field.descriptor().charAt(0)) {
-                        case DESC_boolean:
-                        case DESC_byte:
-                        case DESC_char:
-                        case DESC_short:
-                        case DESC_int:
+                        case DESC_boolean, DESC_byte, DESC_char, DESC_short, DESC_int ->
                             // The stored value is an Integer
                             staticFields.int_(offset, (Integer) value);
-                            break;
-                        case DESC_float:
-                            staticFields.float_(offset, (Float) value);
-                            break;
-                        case DESC_long:
-                            staticFields.long_(offset, (Long) value);
-                            break;
-                        case DESC_double:
-                            staticFields.double_(offset, (Double) value);
-                            break;
+                        case DESC_float -> staticFields.float_(offset, (Float) value);
+                        case DESC_long -> staticFields.long_(offset, (Long) value);
+                        case DESC_double -> staticFields.double_(offset, (Double) value);
                     }
                     break;
                 }
@@ -333,6 +337,16 @@ public class JClass {
         return null;
     }
 
+    public <T extends Attribute> T findAttribute(Class<T> attributeType) {
+        for (var a: attributes) {
+            if (attributeType.isInstance(a)) {
+                return (T)a;
+            }
+        }
+
+        return null;
+    }
+
     public ClassRef superInterface(int index) {
         return interfaces[index];
     }
@@ -367,8 +381,8 @@ public class JClass {
 
         // check for array cast
         if (this.array() && other.array())
-            return ArrayUtil.componentClass(this).castableTo(
-                ArrayUtil.componentClass(other));
+            return ArrayUtil.componentClass(this, context).castableTo(
+                ArrayUtil.componentClass(other, context));
         return false;
     }
 
@@ -387,7 +401,7 @@ public class JClass {
     public boolean accessibleTo(JClass other) {
         // The accessibility of an array class is the same as its component type. See spec. 5.3.3.2
         if (array()) {
-            var elem = ArrayUtil.componentClass(this);
+            var elem = ArrayUtil.componentClass(this, context);
             // workaround: element is primitive type
             if (elem == null) return true;
             return elem.accessibleTo(other);
@@ -459,12 +473,14 @@ public class JClass {
         short majorVersion,
         ConstantPool constantPool,
         short accessFlags,
-        ClassRef thisClass,
-        ClassRef superClass,
-        ClassRef[] interfaces,
+        String name,
+        String superClassName,
+        String[] interfaceNames,
         FieldInfo[] fields,
         MethodInfo[] methods,
-        Attribute[] attributes) {
+        Attribute[] attributes,
+        VMContext context) {
+        this.context = context;
 
         this.classLoader = classLoader;
         this.minorVersion = minorVersion;
@@ -477,17 +493,16 @@ public class JClass {
 
         this.accessFlags = accessFlags;
 
-        this.thisClass = thisClass;
+        this.thisClass = new ClassRef(this, name);
         // arrays and primitive classes don't have a package
         this.packageName = name().charAt(0) == DESC_reference ? name().substring(0, name().lastIndexOf('/')) : null;
-        this.superClass = superClass;
-        this.interfaces = interfaces;
 
-        thisClass.resolve(this);
-        if (superClass != null)
-            superClass.resolve(this);
-        for (var intr : interfaces)
-            intr.resolve(this);
+        if (superClassName != null){
+            this.superClass = new ClassRef(this, superClassName);
+        }
+
+        this.interfaces = Arrays.stream(interfaceNames)
+            .map(n -> new ClassRef(this, n)).toArray(ClassRef[]::new);
 
         this.fields = fields;
         for (var f : fields)
@@ -497,35 +512,13 @@ public class JClass {
             m.jClass(this);
         this.attributes = attributes;
 
-        methodAreaIndex = context.heap().addJClass(this);
-    }
+        thisClass.resolve();
+        if (superClass != null)
+            superClass.resolve();
+        for (var intr : interfaces)
+            intr.resolve();
 
-    public static JClass primitiveClass(String name) {
-        var jClass = primClasses.get(name);
-        assert jClass != null;
-        return jClass;
-    }
-
-    static {
-        short primAccFlags = ACC_FINAL | ACC_PUBLIC;
-        primClasses.put("Z", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("Z"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("B", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("B"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("C", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("C"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("D", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("D"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("F", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("F"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("I", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("I"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("J", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("J"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("S", new JClass(null, (short) 0, (short) 0, null, primAccFlags, new ClassRef("S"), null, new ClassRef[0], new FieldInfo[0], new MethodInfo[0], null));
-        primClasses.put("boolean", primClasses.get("Z"));
-        primClasses.put("byte", primClasses.get("B"));
-        primClasses.put("char", primClasses.get("C"));
-        primClasses.put("double", primClasses.get("D"));
-        primClasses.put("float", primClasses.get("F"));
-        primClasses.put("int", primClasses.get("I"));
-        primClasses.put("long", primClasses.get("J"));
-        primClasses.put("short", primClasses.get("S"));
-        for (var c : primClasses.values())
-            c.initState(InitState.INITIALIZED);
+        methodAreaIndex = this.context.heap().addJClass(this);
     }
 
     /**
@@ -546,6 +539,32 @@ public class JClass {
         var slots = context.heap().slots();
         slots.int_(classObject + classClass.instanceSize() - 1, methodAreaIndex);
         return classObject;
+    }
+
+    public JClass nestHost() {
+        if (nestHost != null)
+            return nestHost;
+
+        var attr = findAttribute(NestHost.class);
+        if (attr == null) {
+            return nestHost = this;
+        }
+
+        JClass host;
+        try {
+            host = attr.hostClass().jClass();
+        } catch (Exception e) {
+            return nestHost = this;
+        }
+
+        NestMember m;
+        if (!host.runtimePackage().equals(runtimePackage())
+        || (m = host.findAttribute(NestMember.class)) == null
+        || !m.contains(name())) {
+            return nestHost = this;
+        }
+
+        return nestHost = host;
     }
 
     public static class InitState {

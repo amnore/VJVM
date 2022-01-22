@@ -25,10 +25,10 @@ public class StringUtil {
 
     /**
      * Create an intern string from value.
-     * The impl assumes that a string object contains a char[] named value.
+     * The impl assumes that a string object contains a byte[] named value.
      *
      * @param value value of the string
-     * @param heap JVM heap
+     * @param ctx JVM context
      * @return address of the created string
      */
     public static int createString(String value, VMContext ctx) {
@@ -37,8 +37,8 @@ public class StringUtil {
         int arrOffset;
 
         stringClass = ctx.bootstrapLoader().loadClass("java/lang/String");
-        charArrayClass = ctx.bootstrapLoader().loadClass("[C");
-        arrOffset = stringClass.findField("value", "[C").offset();
+        charArrayClass = ctx.bootstrapLoader().loadClass("[B");
+        arrOffset = stringClass.findField("value", "[B").offset();
 
         var str = stringClass.createInstance();
         var arr = ArrayUtil.newInstance(charArrayClass, value.length(), ctx.heap());

@@ -20,7 +20,7 @@ public class RawFieldRef extends UnevaluatedConstant {
             nt = ((UnevaluatedConstant) nt).evaluate(constantPool);
             constantPool.constant(nameAndTypeIndex, nt);
         }
-        return new FieldRef((ClassRef) cr, ((NameAndTypeConstant) nt).name(),
+        return new FieldRef(constantPool.jClass(), (ClassRef) cr, ((NameAndTypeConstant) nt).name(),
             ((NameAndTypeConstant) nt).descriptor());
     }
 

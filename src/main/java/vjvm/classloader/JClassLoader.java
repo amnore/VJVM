@@ -23,9 +23,9 @@ public class JClassLoader implements Closeable {
     @Getter
     private final VMContext context;
 
-    public JClassLoader(JClassLoader parent, String path, VMContext ctx) {
+    public JClassLoader(JClassLoader parent, ClassSearchPath[] searchPaths, VMContext ctx) {
         this.parent = parent;
-        searchPaths = ClassSearchPath.constructSearchPath(path);
+        this.searchPaths = searchPaths;
         context = ctx;
     }
 
@@ -35,20 +35,10 @@ public class JClassLoader implements Closeable {
      * @param name name of the class
      * @param data data of the class
      * @return the defined class
-     * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
     private JClass defineNonarrayClass(String name, InputStream data) {
         var ret = new JClass(new DataInputStream(data), this);
-        // check the name of created class matches what we expect, see spec 5.3.5.2
-        // resolve ClassRef first
-        ret.thisClass().resolve(ret);
-        if (!ret.thisClass().name().equals(name))
-            throw new NoClassDefFoundError();
-        // resolve the super class and super interfaces, see spec 5.3.5 and 5.4.1
-        if (ret.superClass() != null)
-            ret.superClass().resolve(ret);
-        for (int i = 0; i < ret.superInterfacesCount(); ++i)
-            ret.superInterface(i).resolve(ret);
+
         // add to loaded class
         definedClass.put(name, ret);
         ret.initState(InitState.LOADED);
@@ -57,13 +47,8 @@ public class JClassLoader implements Closeable {
 
     private JClass defineArrayClass(String name) {
         var ret = ArrayUtil.createArrayClass(name, this);
-        ret.thisClass().resolve(ret);
-        ret.superClass().resolve(ret);
-        for (int i = 0; i < ret.superInterfacesCount(); ++i)
-            ret.superInterface(i).resolve(ret);
 
         definedClass.put(name, ret);
-
         // arrays doesn't need init
         ret.tryPrepare();
         ret.initState(InitState.INITIALIZED);
@@ -76,7 +61,6 @@ public class JClassLoader implements Closeable {
      *
      * @param name name of the class to load
      * @return the loaded class
-     * @throws ClassNotFoundException if the class was not found
      */
     public JClass loadClass(String name) {
         // fix for class name in the form of Lclass;
@@ -97,8 +81,12 @@ public class JClassLoader implements Closeable {
         // find in parent first
         JClass ret;
         if (parent != null) {
-            ret = parent.loadClass(name);
-            return ret;
+            try {
+                ret = parent.loadClass(name);
+                return ret;
+            } catch (JClassNotFoundException e) {
+                // Continue...
+            }
         }
 
         // find in loaded classes

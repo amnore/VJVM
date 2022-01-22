@@ -21,6 +21,6 @@ public class RawMethodRef extends UnevaluatedConstant {
             constantPool.constant(nameAndTypeIndex, nt);
         }
         return new MethodRef((ClassRef) cr, ((NameAndTypeConstant) nt).name(),
-            ((NameAndTypeConstant) nt).descriptor(), false);
+            ((NameAndTypeConstant) nt).descriptor(), false, constantPool.jClass());
     }
 }

@@ -13,7 +13,6 @@ public class INVOKEVIRTUAL extends Instruction {
     public void fetchAndRun(JThread thread) {
         var frame = thread.currentFrame();
         var methodRef = (MethodRef) frame.dynLink().constant(thread.pc().ushort());
-        methodRef.resolve(frame.jClass());
 
         // select the method to call, see spec. 5.4.6
         MethodInfo method;

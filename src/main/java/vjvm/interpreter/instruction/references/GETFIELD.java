@@ -21,7 +21,6 @@ public class GETFIELD extends Instruction {
         if (obj == 0)
             throw new NullPointerException();
         FieldInfo field;
-        ref.resolve(frame.jClass());
         field = ref.info();
 
         var slots = thread.context().heap().slots();

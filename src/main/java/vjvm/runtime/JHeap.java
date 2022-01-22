@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JHeap {
-    private final int extraSize = 2;
+    private static final int extraSize = 2;
     private final ArrayList<JClass> methodArea;
     @Getter
     private final Slots slots;
@@ -69,9 +69,9 @@ class StringWrapper {
     public StringWrapper(int str, VMContext ctx) {
         if (arrOffset == -1)
             arrOffset = ctx.bootstrapLoader().definedClass("java/lang/String")
-                .findField("value", "[C").offset();
+                .findField("value", "[B").offset();
         if (lengthOffset == -1)
-            lengthOffset = ctx.bootstrapLoader().definedClass("[C").instanceSize() - 1;
+            lengthOffset = ctx.bootstrapLoader().definedClass("[B").instanceSize() - 1;
         if (slots == null)
             slots = ctx.heap().slots();
         array = slots.addressAt(str + arrOffset);

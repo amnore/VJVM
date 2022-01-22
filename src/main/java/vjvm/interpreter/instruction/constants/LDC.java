@@ -14,7 +14,6 @@ public class LDC extends Instruction {
         var index = thread.pc().ubyte();
         var constant = frame.dynLink().constant(index);
         if (constant instanceof ClassRef) {
-            ((ClassRef) constant).resolve(frame.jClass());
             stack.pushAddress(((ClassRef) constant).jClass().classObject());
         } else {
             var value = ((ValueConstant) frame.dynLink().constant(index)).value();
