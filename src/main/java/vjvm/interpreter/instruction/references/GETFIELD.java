@@ -24,7 +24,7 @@ public class GETFIELD extends Instruction {
         ref.resolve(frame.jClass());
         field = ref.info();
 
-        var slots = VMContext.heap().slots();
+        var slots = thread.context().heap().slots();
         if (field.size() == 2)
             stack.pushLong(slots.long_(obj + field.offset()));
         else stack.pushInt(slots.int_(obj + field.offset()));

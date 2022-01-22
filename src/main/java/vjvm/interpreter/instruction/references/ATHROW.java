@@ -12,7 +12,7 @@ public class ATHROW extends Instruction {
 
         // if the reference is null, throw an NullPointerException instead
         if (obj == 0) {
-            var nptrClass = VMContext.bootstrapLoader().loadClass("java/lang/NullPointerException");
+            var nptrClass = thread.context().bootstrapLoader().loadClass("java/lang/NullPointerException");
             obj = nptrClass.createInstance();
         }
 

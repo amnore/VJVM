@@ -7,17 +7,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class JHeap {
-    private static final int extraSize = 2;
+    private final int extraSize = 2;
     private final ArrayList<JClass> methodArea;
     @Getter
     private final Slots slots;
     private int current = 0;
     private final HashMap<StringWrapper, Integer> internPool;
+    private final VMContext context;
 
-    public JHeap(int heapSize) {
+    public JHeap(int heapSize, VMContext ctx) {
         methodArea = new ArrayList<>();
         slots = new Slots(heapSize);
         internPool = new HashMap<>();
+        context = ctx;
     }
 
     public int addJClass(JClass jClass) {
@@ -35,7 +37,7 @@ public class JHeap {
     }
 
     public int internString(int str) {
-        var wrapper = new StringWrapper(str);
+        var wrapper = new StringWrapper(str, context);
         var addr = internPool.get(wrapper);
         if (addr == null) {
             internPool.put(wrapper, str);
@@ -57,21 +59,21 @@ public class JHeap {
 }
 
 class StringWrapper {
-    static int arrOffset = -1;
-    static int lengthOffset = -1;
-    static Slots slots;
+    int arrOffset = -1;
+    int lengthOffset = -1;
+    Slots slots;
 
     int array;
     int hash;
 
-    public StringWrapper(int str) {
+    public StringWrapper(int str, VMContext ctx) {
         if (arrOffset == -1)
-            arrOffset = VMContext.bootstrapLoader().definedClass("java/lang/String")
+            arrOffset = ctx.bootstrapLoader().definedClass("java/lang/String")
                 .findField("value", "[C").offset();
         if (lengthOffset == -1)
-            lengthOffset = VMContext.bootstrapLoader().definedClass("[C").instanceSize() - 1;
+            lengthOffset = ctx.bootstrapLoader().definedClass("[C").instanceSize() - 1;
         if (slots == null)
-            slots = VMContext.heap().slots();
+            slots = ctx.heap().slots();
         array = slots.addressAt(str + arrOffset);
         hash = calcHash();
     }

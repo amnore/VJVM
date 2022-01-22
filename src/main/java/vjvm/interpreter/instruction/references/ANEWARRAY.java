@@ -20,7 +20,7 @@ public class ANEWARRAY extends Instruction {
 
         if (arrayClass.instanceSize() != JClass.InitState.INITIALIZED)
             arrayClass.tryInitialize(thread);
-        var arr = ArrayUtil.newInstance(arrayClass, count);
+        var arr = ArrayUtil.newInstance(arrayClass, count, thread.context().heap());
         stack.pushAddress(arr);
     }
 

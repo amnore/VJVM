@@ -17,7 +17,7 @@ public class INVOKESPECIAL extends Instruction {
         // log
         System.err.println(methodRef.name());
 
-        var heap = VMContext.heap();
+        var heap = thread.context().heap();
         var opSlots = frame.opStack().slots();
         var argc = methodRef.argc();
         var currentClass = frame.jClass();

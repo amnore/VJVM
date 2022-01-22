@@ -122,7 +122,7 @@ public class JInterpreter {
 
     public void unwind(JThread thread) {
         var exception = thread.exception();
-        var heap = VMContext.heap();
+        var heap = thread.context().heap();
         var excClass = heap.jClass(heap.slots().int_(exception - 1));
 
         // unwind stack

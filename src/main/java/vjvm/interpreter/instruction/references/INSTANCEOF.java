@@ -21,7 +21,7 @@ public class INSTANCEOF extends Instruction {
         classRef.resolve(frame.jClass());
 
         var jClass = classRef.jClass();
-        var objClass = VMContext.heap().jClass(VMContext.heap().slots().int_(obj - 1));
+        var objClass = thread.context().heap().jClass(thread.context().heap().slots().int_(obj - 1));
         System.err.println(jClass.thisClass().name());
         System.err.println(objClass.thisClass().name());
         stack.pushInt(objClass.castableTo(jClass) ? 1 : 0);

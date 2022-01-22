@@ -3,6 +3,7 @@ package vjvm.runtime.classdata;
 import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.constant.Constant;
 import vjvm.runtime.classdata.constant.UnevaluatedConstant;
+import vjvm.vm.VMContext;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -67,4 +68,7 @@ public class ConstantPool {
         return constants.length;
     }
 
+    public VMContext context() {
+        return jClass.context();
+    }
 }

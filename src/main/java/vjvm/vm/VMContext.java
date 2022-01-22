@@ -13,24 +13,24 @@ import vjvm.runtime.Slots;
 import vjvm.utils.InvokeUtil;
 
 public class VMContext {
-    private static final String bootstrapClassPath = findJavaPath();
-    private static final ArrayList<JThread> threads = new ArrayList<>();
+    private final String bootstrapClassPath = findJavaPath();
+    private final ArrayList<JThread> threads = new ArrayList<>();
     @Getter
-    private static JClassLoader bootstrapLoader;
+    private JClassLoader bootstrapLoader;
     @Getter
-    private static JInterpreter interpreter;
+    private JInterpreter interpreter;
     @Getter
-    private static JHeap heap;
+    private JHeap heap;
     @Getter
-    private static JClassLoader userLoader;
+    private JClassLoader userLoader;
     private final int heapSize = 1024;
 
     VMContext(String userClassPath) {
         interpreter = new JInterpreter();
-        heap = new JHeap(heapSize);
-        bootstrapLoader = new JClassLoader(null, VMContext.bootstrapClassPath);
-        userLoader = new JClassLoader(VMContext.bootstrapLoader, userClassPath);
-        var initThread = new JThread();
+        heap = new JHeap(heapSize, this);
+        bootstrapLoader = new JClassLoader(null, bootstrapClassPath, this);
+        userLoader = new JClassLoader(bootstrapLoader, userClassPath, this);
+        var initThread = new JThread(this);
         threads.add(initThread);
 
         // hack: string
@@ -49,6 +49,6 @@ public class VMContext {
         var mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
         assert mainMethod.jClass() == initClass;
         InvokeUtil.invokeMethodWithArgs(mainMethod, initThread, new Slots(1));
-        VMContext.interpreter.run(initThread);
+        interpreter.run(initThread);
     }
 }

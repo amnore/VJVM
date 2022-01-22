@@ -24,7 +24,7 @@ public class INVOKEINTERFACE extends Instruction {
         if (methodRef.info().private_())
             method = methodRef.info();
         else {
-            var heap = VMContext.heap();
+            var heap = thread.context().heap();
             var stack = frame.opStack();
             var obj = stack.slots().addressAt(stack.top() - methodRef.argc() - 1);
             var objClass = heap.jClass(heap.slots().int_(obj - 1));

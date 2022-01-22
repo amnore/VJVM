@@ -1,6 +1,7 @@
 package vjvm.runtime;
 
 import lombok.Getter;
+import vjvm.vm.VMContext;
 
 import java.util.Stack;
 
@@ -10,6 +11,12 @@ public class JThread {
     private ProgramCounter pc;
     @Getter
     private int exception;
+    @Getter
+    private final VMContext context;
+
+    public JThread(VMContext ctx) {
+        context = ctx;
+    }
 
     public JFrame currentFrame() {
         return frames.lastElement();

@@ -23,7 +23,7 @@ public class InvokeUtil {
             s.pushInt(1);
         });
         hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
-            s -> s.pushAddress(VMContext.heap().internString(s.popAddress())));
+            s -> s.pushAddress(s.context().heap().internString(s.popAddress())));
         hackTable.put(Triple.of("cases/TestUtil", "reach", "(I)V"), s -> {
             System.out.println(s.popInt());
         });
@@ -45,7 +45,7 @@ public class InvokeUtil {
             s.popInt();
         });
         hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"), s -> {
-            s.pushAddress(JClass.primitiveClass(StringUtil.valueOf(s.popAddress())).classObject());
+            s.pushAddress(JClass.primitiveClass(StringUtil.valueOf(s.popAddress(), s.context())).classObject());
         });
         hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), s -> {
         });
@@ -74,7 +74,7 @@ public class InvokeUtil {
             var srcPos = s.popInt();
             var src = s.popAddress();
             for (int i = 0; i < length; ++i)
-                ArrayUtil.setChar(dest, destPos + i, ArrayUtil.getChar(src, srcPos + i));
+                ArrayUtil.setChar(dest, destPos + i, ArrayUtil.getChar(src, srcPos + i, s.context().heap()), s.context().heap());
         });
     }
 
@@ -90,7 +90,7 @@ public class InvokeUtil {
             throw new Error("Unimplemented native method: " + t.toString());
 
         var stack = thread.currentFrame().opStack();
-        var newFrame = new JFrame(method);
+        var newFrame = new JFrame(method, thread.context());
         var argSlots = method.argc();
         if (!method.static_())
             ++argSlots;
@@ -108,12 +108,12 @@ public class InvokeUtil {
      * @param args   the supplied arguments, index begins at 0, can be null if the method has no arguments
      */
     public static void invokeMethodWithArgs(MethodInfo method, JThread thread, Slots args) {
-        var frame = new JFrame(method);
+        var frame = new JFrame(method, thread.context());
         var argc = method.argc();
         if (!method.static_())
             ++argc;
         if (argc != 0)
             args.copyTo(0, argc, frame.localVars(), 0);
-        thread.pushFrame(new JFrame(method));
+        thread.pushFrame(new JFrame(method, thread.context()));
     }
 }

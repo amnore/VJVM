@@ -10,7 +10,7 @@ public class LDALOAD extends Instruction {
         var stack = thread.currentFrame().opStack();
         var index = stack.popInt();
         var obj = stack.popAddress();
-        var heap = VMContext.heap();
+        var heap = thread.context().heap();
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(obj - 1));
         assert jClass.array();

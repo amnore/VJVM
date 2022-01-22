@@ -5,11 +5,11 @@ import vjvm.classfiledefs.FieldAccessFlags;
 import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.classloader.JClassLoader;
 import vjvm.runtime.JClass;
+import vjvm.runtime.JHeap;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.attribute.Attribute;
 import vjvm.runtime.classdata.constant.ClassRef;
-import vjvm.vm.VMContext;
 
 import static vjvm.classfiledefs.FieldDescriptors.*;
 
@@ -29,19 +29,17 @@ public class ArrayUtil {
         return arrayClass.classLoader().loadClass(componentType);
     }
 
-    public static int length(int arrayRef) {
-        var heap = VMContext.heap();
+    public static int length(int arrayRef, JHeap heap) {
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(arrayRef - 1));
         assert jClass.array();
         return slots.int_(arrayRef + jClass.instanceSize() - 1);
     }
 
-    public static int newInstance(JClass arrayClass, int length) {
+    public static int newInstance(JClass arrayClass, int length, JHeap heap) {
         // allocate array
         var objSize = arrayClass.instanceSize();
         var arrSize = lengthInSlots(arrayClass.name().substring(1), length);
-        var heap = VMContext.heap();
         var slots = heap.slots();
         var ret = heap.allocate(objSize + arrSize);
 
@@ -119,16 +117,14 @@ public class ArrayUtil {
         }
     }
 
-    public static char getChar(int array, int index) {
-        var heap = VMContext.heap();
+    public static char getChar(int array, int index, JHeap heap) {
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(array - 1));
         assert jClass.array();
         return slots.charAt((array + jClass.instanceSize()) * 4 + index * 2);
     }
 
-    public static void setChar(int array, int index, char value) {
-        var heap = VMContext.heap();
+    public static void setChar(int array, int index, char value, JHeap heap) {
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(array - 1));
         assert jClass.array();

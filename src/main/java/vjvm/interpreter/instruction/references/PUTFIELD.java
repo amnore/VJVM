@@ -19,7 +19,7 @@ public class PUTFIELD extends Instruction {
 
         var stack = frame.opStack();
         var field = fieldRef.info();
-        var slots = VMContext.heap().slots();
+        var slots = thread.context().heap().slots();
         if (fieldRef.size() == 1) {
             var value = stack.popInt();
             var ref = stack.popAddress();

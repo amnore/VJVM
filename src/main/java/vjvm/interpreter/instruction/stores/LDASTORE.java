@@ -11,7 +11,7 @@ public class LDASTORE extends Instruction {
         var value = stack.popLong();
         var index = stack.popInt();
         var obj = stack.popAddress();
-        var heap = VMContext.heap();
+        var heap = thread.context().heap();
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(obj - 1));
         assert jClass.array();

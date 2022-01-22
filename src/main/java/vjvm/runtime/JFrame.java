@@ -2,6 +2,7 @@ package vjvm.runtime;
 
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.MethodInfo;
+import vjvm.vm.VMContext;
 import lombok.Getter;
 
 @Getter
@@ -13,11 +14,11 @@ public class JFrame {
     private final JClass jClass;
     private final ProgramCounter pc;
 
-    public JFrame(MethodInfo method) {
+    public JFrame(MethodInfo method, VMContext context) {
         var code = method.code();
         jClass = method.jClass();
         localVars = new Slots(code.maxLocals());
-        opStack = new OperandStack(code.maxStack());
+        opStack = new OperandStack(code.maxStack(), context);
         dynLink = jClass.constantPool();
         methodInfo = method;
         pc = new ProgramCounter(code.code());

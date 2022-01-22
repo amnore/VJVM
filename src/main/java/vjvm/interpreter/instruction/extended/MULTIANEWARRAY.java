@@ -36,17 +36,17 @@ public class MULTIANEWARRAY extends Instruction {
                 arrClasses[i] = frame.jClass().classLoader().loadClass(name);
         }
 
-        stack.pushAddress(createArrayRecursive(dimArr, arrClasses, dimensions));
+        stack.pushAddress(createArrayRecursive(dimArr, arrClasses, dimensions, thread.context()));
     }
 
-    private int createArrayRecursive(int[] dimensionArr, JClass[] arrClasses, int current) {
+    private int createArrayRecursive(int[] dimensionArr, JClass[] arrClasses, int current, VMContext ctx) {
         assert current > 0;
-        var slots = VMContext.heap().slots();
-        var arr = ArrayUtil.newInstance(arrClasses[current], dimensionArr[current]);
+        var slots = ctx.heap().slots();
+        var arr = ArrayUtil.newInstance(arrClasses[current], dimensionArr[current], ctx.heap());
         if (current != 1)
             for (int i = 0; i < dimensionArr[current]; ++i)
                 slots.addressAt(arr + arrClasses[current].instanceSize() + i,
-                    createArrayRecursive(dimensionArr, arrClasses, current - 1));
+                    createArrayRecursive(dimensionArr, arrClasses, current - 1, ctx));
         return arr;
     }
 }

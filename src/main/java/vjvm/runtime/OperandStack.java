@@ -1,15 +1,18 @@
 package vjvm.runtime;
 
 import lombok.Getter;
+import vjvm.vm.VMContext;
 
 @Getter
 public class OperandStack {
     private final Slots slots;
     private int top;
+    private VMContext context;
 
-    public OperandStack(int stackSize) {
+    public OperandStack(int stackSize, VMContext ctx) {
         slots = new Slots(stackSize);
         top = 0;
+        context = ctx;
     }
 
     public void pushInt(int value) {

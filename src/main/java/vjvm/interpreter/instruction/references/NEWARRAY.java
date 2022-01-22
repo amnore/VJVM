@@ -15,12 +15,12 @@ public class NEWARRAY extends Instruction {
     public void fetchAndRun(JThread thread) {
         var atype = thread.pc().ubyte();
         assert atype >= 4;
-        JClass jClass = VMContext.bootstrapLoader().loadClass(arrType[atype]);
+        JClass jClass = thread.context().bootstrapLoader().loadClass(arrType[atype]);
 
         if (jClass.initState() != JClass.InitState.INITIALIZED)
             jClass.tryInitialize(thread);
         var stack = thread.currentFrame().opStack();
-        var ref = ArrayUtil.newInstance(jClass, stack.popInt());
+        var ref = ArrayUtil.newInstance(jClass, stack.popInt(), thread.context().heap());
         stack.pushAddress(ref);
     }
 

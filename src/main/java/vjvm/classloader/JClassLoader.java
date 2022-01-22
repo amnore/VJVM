@@ -13,15 +13,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import lombok.Getter;
+
 public class JClassLoader implements Closeable {
     // The parent of bootstrap class loader is null
     private final JClassLoader parent;
     private final ClassSearchPath[] searchPaths;
     private final HashMap<String, JClass> definedClass = new HashMap<>();
+    @Getter
+    private final VMContext context;
 
-    public JClassLoader(JClassLoader parent, String path) {
+    public JClassLoader(JClassLoader parent, String path, VMContext ctx) {
         this.parent = parent;
         searchPaths = ClassSearchPath.constructSearchPath(path);
+        context = ctx;
     }
 
     /**
@@ -85,7 +90,7 @@ public class JClassLoader implements Closeable {
             if (FieldDescriptors.reference(name.charAt(1))) {
                 var elemClass = loadClass(name.substring(1));
                 return elemClass.classLoader().defineArrayClass(name);
-            } else return VMContext.bootstrapLoader().defineArrayClass(name);
+            } else return context.bootstrapLoader().defineArrayClass(name);
         }
 
         // the class is not an array class

@@ -63,6 +63,8 @@ public class JClass {
     protected int initState;
     // the thread calling the initialize method
     private JThread initThread;
+    @Getter
+    private VMContext context;
 
     protected JClass() {
     }
@@ -108,7 +110,9 @@ public class JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
-        methodAreaIndex = VMContext.heap().addJClass(this);
+
+        context = classLoader.context();
+        methodAreaIndex = context.heap().addJClass(this);
     }
 
     private static final HashMap<String, JClass> primClasses = new HashMap<>();
@@ -263,7 +267,7 @@ public class JClass {
             }
         if (clinit != null) {
             InvokeUtil.invokeMethodWithArgs(clinit, thread, null);
-            VMContext.interpreter().run(thread);
+            context.interpreter().run(thread);
         }
 
         // step10
@@ -438,7 +442,7 @@ public class JClass {
     public int createInstance() {
         assert initState == InitState.INITIALIZED;
         assert !array();
-        var heap = VMContext.heap();
+        var heap = context.heap();
         int addr = heap.allocate(instanceSize);
 
         // set class index
@@ -446,7 +450,7 @@ public class JClass {
         return addr;
     }
 
-    private static int classObject = 0;
+    private int classObject = 0;
 
     // create a class with all info provided, used to create array and primitive classes.
     public JClass(
@@ -493,7 +497,7 @@ public class JClass {
             m.jClass(this);
         this.attributes = attributes;
 
-        methodAreaIndex = VMContext.heap().addJClass(this);
+        methodAreaIndex = context.heap().addJClass(this);
     }
 
     public static JClass primitiveClass(String name) {
@@ -534,12 +538,12 @@ public class JClass {
         if (classObject != 0) return classObject;
         JClass classClass;
         try {
-            classClass = VMContext.bootstrapLoader().loadClass("java/lang/Class");
+            classClass = context.bootstrapLoader().loadClass("java/lang/Class");
         } catch (Exception e) {
             throw new Error(e);
         }
         classObject = classClass.createInstance();
-        var slots = VMContext.heap().slots();
+        var slots = context.heap().slots();
         slots.int_(classObject + classClass.instanceSize() - 1, methodAreaIndex);
         return classObject;
     }
