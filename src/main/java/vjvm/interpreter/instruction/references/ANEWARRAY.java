@@ -14,13 +14,10 @@ public class ANEWARRAY extends Instruction {
         var stack = frame.opStack();
         var count = stack.popInt();
         var ref = (ClassRef) frame.dynLink().constant(thread.pc().ushort());
-        JClass arrayClass;
-        try {
-            ref.resolve(frame.jClass());
-            arrayClass = ref.jClass().classLoader().loadClass("[L" + ref.name() + ';');
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+
+        ref.resolve(frame.jClass());
+        JClass arrayClass = ref.jClass().classLoader().loadClass("[L" + ref.name() + ';');
+
         if (arrayClass.instanceSize() != JClass.InitState.INITIALIZED)
             arrayClass.tryInitialize(thread);
         var arr = ArrayUtil.newInstance(arrayClass, count);

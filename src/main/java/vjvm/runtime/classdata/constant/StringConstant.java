@@ -1,7 +1,7 @@
 package vjvm.runtime.classdata.constant;
 
 import vjvm.utils.StringUtil;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class StringConstant extends ValueConstant {
     int strAddr;
@@ -16,7 +16,7 @@ public class StringConstant extends ValueConstant {
 
     @Override
     public Integer value() {
-        return strAddr == 0 ? (strAddr = VJVM.heap().internString(
+        return strAddr == 0 ? (strAddr = VMContext.heap().internString(
             StringUtil.createString((String) value))) : strAddr;
     }
 

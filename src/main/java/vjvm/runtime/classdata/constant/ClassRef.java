@@ -11,7 +11,7 @@ public class ClassRef extends ResolvableConstant {
     private JClass jClass;
 
     @Override
-    public void resolve(JClass thisClass) throws ClassNotFoundException {
+    public void resolve(JClass thisClass) {
         // if already resolved, to nothing
         if (jClass != null)
             return;

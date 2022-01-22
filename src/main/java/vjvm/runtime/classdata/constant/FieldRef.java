@@ -22,7 +22,7 @@ public class FieldRef extends ResolvableConstant {
      * @param thisClass the class holding this reference
      */
     @Override
-    public void resolve(JClass thisClass) throws ClassNotFoundException {
+    public void resolve(JClass thisClass) {
         classRef.resolve(thisClass);
         jClass = classRef.jClass();
         info = jClass.findField(name, descriptor);

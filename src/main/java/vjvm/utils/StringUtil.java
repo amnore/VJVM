@@ -1,7 +1,7 @@
 package vjvm.utils;
 
 import vjvm.runtime.JClass;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class StringUtil {
 
@@ -9,14 +9,12 @@ public class StringUtil {
         JClass stringClass;
         JClass charArrayClass;
         int arrOffset;
-        try {
-            stringClass = VJVM.bootstrapLoader().loadClass("java/lang/String");
-            charArrayClass = VJVM.bootstrapLoader().loadClass("[C");
-            arrOffset = stringClass.findField("value", "[C").offset();
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
-        var slots = VJVM.heap().slots();
+
+        stringClass = VMContext.bootstrapLoader().loadClass("java/lang/String");
+        charArrayClass = VMContext.bootstrapLoader().loadClass("[C");
+        arrOffset = stringClass.findField("value", "[C").offset();
+
+        var slots = VMContext.heap().slots();
         var arr = slots.int_(str + arrOffset);
         var len = slots.int_(arr + charArrayClass.instanceSize() - 1);
         var v = new char[len];
@@ -36,16 +34,14 @@ public class StringUtil {
         JClass stringClass;
         JClass charArrayClass;
         int arrOffset;
-        try {
-            stringClass = VJVM.bootstrapLoader().loadClass("java/lang/String");
-            charArrayClass = VJVM.bootstrapLoader().loadClass("[C");
-            arrOffset = stringClass.findField("value", "[C").offset();
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+
+        stringClass = VMContext.bootstrapLoader().loadClass("java/lang/String");
+        charArrayClass = VMContext.bootstrapLoader().loadClass("[C");
+        arrOffset = stringClass.findField("value", "[C").offset();
+
         var str = stringClass.createInstance();
         var arr = ArrayUtil.newInstance(charArrayClass, value.length());
-        var slots = VJVM.heap().slots();
+        var slots = VMContext.heap().slots();
 
         // fill the char array
         for (int i = 0; i < value.length(); ++i)

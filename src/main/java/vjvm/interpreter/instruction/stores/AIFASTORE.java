@@ -2,7 +2,7 @@ package vjvm.interpreter.instruction.stores;
 
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class AIFASTORE extends Instruction {
     @Override
@@ -11,7 +11,7 @@ public class AIFASTORE extends Instruction {
         var value = stack.popInt();
         var index = stack.popInt();
         var obj = stack.popAddress();
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(obj - 1));
         assert jClass.array();

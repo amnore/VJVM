@@ -5,7 +5,7 @@ import vjvm.classloader.searchpath.ClassSearchPath;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JClass.InitState;
 import vjvm.utils.ArrayUtil;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 import java.io.Closeable;
 import java.io.DataInputStream;
@@ -32,7 +32,7 @@ public class JClassLoader implements Closeable {
      * @return the defined class
      * @throws ClassNotFoundException sesolving super class and interfaces might throw this exception
      */
-    private JClass defineNonarrayClass(String name, InputStream data) throws ClassNotFoundException {
+    private JClass defineNonarrayClass(String name, InputStream data) {
         var ret = new JClass(new DataInputStream(data), this);
         // check the name of created class matches what we expect, see spec 5.3.5.2
         // resolve ClassRef first
@@ -52,14 +52,11 @@ public class JClassLoader implements Closeable {
 
     private JClass defineArrayClass(String name) {
         var ret = ArrayUtil.createArrayClass(name, this);
-        try {
-            ret.thisClass().resolve(ret);
-            ret.superClass().resolve(ret);
-            for (int i = 0; i < ret.superInterfacesCount(); ++i)
-                ret.superInterface(i).resolve(ret);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+        ret.thisClass().resolve(ret);
+        ret.superClass().resolve(ret);
+        for (int i = 0; i < ret.superInterfacesCount(); ++i)
+            ret.superInterface(i).resolve(ret);
+
         definedClass.put(name, ret);
 
         // arrays doesn't need init
@@ -76,7 +73,7 @@ public class JClassLoader implements Closeable {
      * @return the loaded class
      * @throws ClassNotFoundException if the class was not found
      */
-    public JClass loadClass(String name) throws ClassNotFoundException {
+    public JClass loadClass(String name) {
         // fix for class name in the form of Lclass;
         if (name.charAt(0) == 'L' && name.charAt(name.length() - 1) == ';')
             name = name.substring(1, name.length() - 1);
@@ -88,20 +85,17 @@ public class JClassLoader implements Closeable {
             if (FieldDescriptors.reference(name.charAt(1))) {
                 var elemClass = loadClass(name.substring(1));
                 return elemClass.classLoader().defineArrayClass(name);
-            } else return VJVM.bootstrapLoader().defineArrayClass(name);
+            } else return VMContext.bootstrapLoader().defineArrayClass(name);
         }
 
         // the class is not an array class
         // find in parent first
         JClass ret;
-        try {
-            if (parent != null) {
-                ret = parent.loadClass(name);
-                return ret;
-            }
-        } catch (ClassNotFoundException e) {
-            // the parent didn't find the class
+        if (parent != null) {
+            ret = parent.loadClass(name);
+            return ret;
         }
+
         // find in loaded classes
         ret = definedClass.get(name);
         if (ret != null)
@@ -113,7 +107,7 @@ public class JClassLoader implements Closeable {
             if (iStream != null)
                 return defineNonarrayClass(name, iStream);
         }
-        throw new ClassNotFoundException(name);
+        throw new JClassNotFoundException(name);
     }
 
     public JClass definedClass(String name) {

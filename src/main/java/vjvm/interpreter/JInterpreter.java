@@ -17,7 +17,7 @@ import vjvm.interpreter.instruction.references.*;
 import vjvm.interpreter.instruction.stack.*;
 import vjvm.interpreter.instruction.stores.*;
 import vjvm.runtime.JThread;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class JInterpreter {
     private final Instruction[] dispatchTable;
@@ -122,7 +122,7 @@ public class JInterpreter {
 
     public void unwind(JThread thread) {
         var exception = thread.exception();
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         var excClass = heap.jClass(heap.slots().int_(exception - 1));
 
         // unwind stack

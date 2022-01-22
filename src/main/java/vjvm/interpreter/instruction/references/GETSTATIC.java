@@ -14,14 +14,12 @@ public class GETSTATIC extends Instruction {
         var stack = frame.opStack();
         FieldInfo field;
         JClass jClass;
-        try {
-            var ref = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
-            ref.resolve(frame.jClass());
-            field = ref.info();
-            jClass = ref.classRef().jClass();
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+
+        var ref = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
+        ref.resolve(frame.jClass());
+        field = ref.info();
+        jClass = ref.classRef().jClass();
+
         if (jClass.initState() != JClass.InitState.INITIALIZED)
             jClass.tryInitialize(thread);
         if (field.size() == 2)

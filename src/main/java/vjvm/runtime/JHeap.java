@@ -1,6 +1,6 @@
 package vjvm.runtime;
 
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -66,12 +66,12 @@ class StringWrapper {
 
     public StringWrapper(int str) {
         if (arrOffset == -1)
-            arrOffset = VJVM.bootstrapLoader().definedClass("java/lang/String")
+            arrOffset = VMContext.bootstrapLoader().definedClass("java/lang/String")
                 .findField("value", "[C").offset();
         if (lengthOffset == -1)
-            lengthOffset = VJVM.bootstrapLoader().definedClass("[C").instanceSize() - 1;
+            lengthOffset = VMContext.bootstrapLoader().definedClass("[C").instanceSize() - 1;
         if (slots == null)
-            slots = VJVM.heap().slots();
+            slots = VMContext.heap().slots();
         array = slots.addressAt(str + arrOffset);
         hash = calcHash();
     }

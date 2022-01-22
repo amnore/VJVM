@@ -12,11 +12,8 @@ public class INVOKESTATIC extends Instruction {
     public void fetchAndRun(JThread thread) {
         var frame = thread.currentFrame();
         var methodRef = (MethodRef) frame.dynLink().constant(thread.pc().ushort());
-        try {
-            methodRef.resolve(frame.jClass());
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+        methodRef.resolve(frame.jClass());
+
         if (methodRef.jClass().initState() != JClass.InitState.INITIALIZED)
             methodRef.jClass().tryInitialize(thread);
         InvokeUtil.invokeMethod(methodRef.info(), thread);

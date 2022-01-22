@@ -10,7 +10,7 @@ import vjvm.runtime.classdata.attribute.ConstantValue;
 import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.utils.ArrayUtil;
 import vjvm.utils.InvokeUtil;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.tuple.Pair;
@@ -108,7 +108,7 @@ public class JClass {
         } catch (IOException e) {
             throw new ClassFormatError();
         }
-        methodAreaIndex = VJVM.heap().addJClass(this);
+        methodAreaIndex = VMContext.heap().addJClass(this);
     }
 
     private static final HashMap<String, JClass> primClasses = new HashMap<>();
@@ -263,7 +263,7 @@ public class JClass {
             }
         if (clinit != null) {
             InvokeUtil.invokeMethodWithArgs(clinit, thread, null);
-            VJVM.interpreter().run(thread);
+            VMContext.interpreter().run(thread);
         }
 
         // step10
@@ -438,7 +438,7 @@ public class JClass {
     public int createInstance() {
         assert initState == InitState.INITIALIZED;
         assert !array();
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         int addr = heap.allocate(instanceSize);
 
         // set class index
@@ -478,16 +478,12 @@ public class JClass {
         this.packageName = name().charAt(0) == DESC_reference ? name().substring(0, name().lastIndexOf('/')) : null;
         this.superClass = superClass;
         this.interfaces = interfaces;
-        try {
-            thisClass.resolve(this);
 
-            if (superClass != null)
-                superClass.resolve(this);
-            for (var intr : interfaces)
-                intr.resolve(this);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+        thisClass.resolve(this);
+        if (superClass != null)
+            superClass.resolve(this);
+        for (var intr : interfaces)
+            intr.resolve(this);
 
         this.fields = fields;
         for (var f : fields)
@@ -497,7 +493,7 @@ public class JClass {
             m.jClass(this);
         this.attributes = attributes;
 
-        methodAreaIndex = VJVM.heap().addJClass(this);
+        methodAreaIndex = VMContext.heap().addJClass(this);
     }
 
     public static JClass primitiveClass(String name) {
@@ -538,12 +534,12 @@ public class JClass {
         if (classObject != 0) return classObject;
         JClass classClass;
         try {
-            classClass = VJVM.bootstrapLoader().loadClass("java/lang/Class");
+            classClass = VMContext.bootstrapLoader().loadClass("java/lang/Class");
         } catch (Exception e) {
             throw new Error(e);
         }
         classObject = classClass.createInstance();
-        var slots = VJVM.heap().slots();
+        var slots = VMContext.heap().slots();
         slots.int_(classObject + classClass.instanceSize() - 1, methodAreaIndex);
         return classObject;
     }

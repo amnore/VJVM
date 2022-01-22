@@ -4,7 +4,7 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.constant.FieldRef;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class GETFIELD extends Instruction {
 
@@ -21,13 +21,10 @@ public class GETFIELD extends Instruction {
         if (obj == 0)
             throw new NullPointerException();
         FieldInfo field;
-        try {
-            ref.resolve(frame.jClass());
-            field = ref.info();
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
-        var slots = VJVM.heap().slots();
+        ref.resolve(frame.jClass());
+        field = ref.info();
+
+        var slots = VMContext.heap().slots();
         if (field.size() == 2)
             stack.pushLong(slots.long_(obj + field.offset()));
         else stack.pushInt(slots.int_(obj + field.offset()));

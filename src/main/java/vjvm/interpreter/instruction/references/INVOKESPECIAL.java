@@ -5,7 +5,7 @@ import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.MethodRef;
 import vjvm.utils.InvokeUtil;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class INVOKESPECIAL extends Instruction {
 
@@ -17,15 +17,13 @@ public class INVOKESPECIAL extends Instruction {
         // log
         System.err.println(methodRef.name());
 
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         var opSlots = frame.opStack().slots();
         var argc = methodRef.argc();
         var currentClass = frame.jClass();
-        try {
-            methodRef.resolve(frame.jClass());
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+
+        methodRef.resolve(frame.jClass());
+
         JClass targetClass;
         JClass refClass = methodRef.jClass();
         if (!methodRef.name().equals("<init>") && !refClass.interface_()

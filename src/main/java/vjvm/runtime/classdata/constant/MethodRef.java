@@ -21,7 +21,7 @@ public class MethodRef extends ResolvableConstant {
      * Resolve the referenced method. See spec. 5.4.3.3, 5.4.3.4.
      */
     @Override
-    public void resolve(JClass thisClass) throws ClassNotFoundException {
+    public void resolve(JClass thisClass) {
         classRef.resolve(thisClass);
         jClass = classRef.jClass();
         if (jClass.interface_() ^ interfaceMethod)

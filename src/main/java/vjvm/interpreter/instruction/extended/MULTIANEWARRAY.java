@@ -6,7 +6,7 @@ import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.utils.ArrayUtil;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class MULTIANEWARRAY extends Instruction {
 
@@ -21,29 +21,27 @@ public class MULTIANEWARRAY extends Instruction {
         var dimArr = new int[dimensions + 1];
         for (int i = 1; i <= dimensions; ++i)
             dimArr[i] = stack.popInt();
+
         var arrClasses = new JClass[dimensions + 1];
-        try {
-            arrClassRef.resolve(frame.jClass());
-            arrClasses[dimensions] = arrClassRef.jClass();
-            for (int i = dimensions - 1; i >= 0; --i) {
-                var name = arrClasses[i + 1].thisClass().name().substring(1);
-                if (!FieldDescriptors.reference(name))
-                    break;
-                // if the component type is primitive type
-                if (!FieldDescriptors.reference(name))
-                    arrClasses[i] = JClass.primitiveClass(name);
-                else
-                    arrClasses[i] = frame.jClass().classLoader().loadClass(name);
-            }
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
+        arrClassRef.resolve(frame.jClass());
+        arrClasses[dimensions] = arrClassRef.jClass();
+        for (int i = dimensions - 1; i >= 0; --i) {
+            var name = arrClasses[i + 1].thisClass().name().substring(1);
+            if (!FieldDescriptors.reference(name))
+                break;
+            // if the component type is primitive type
+            if (!FieldDescriptors.reference(name))
+                arrClasses[i] = JClass.primitiveClass(name);
+            else
+                arrClasses[i] = frame.jClass().classLoader().loadClass(name);
         }
+
         stack.pushAddress(createArrayRecursive(dimArr, arrClasses, dimensions));
     }
 
     private int createArrayRecursive(int[] dimensionArr, JClass[] arrClasses, int current) {
         assert current > 0;
-        var slots = VJVM.heap().slots();
+        var slots = VMContext.heap().slots();
         var arr = ArrayUtil.newInstance(arrClasses[current], dimensionArr[current]);
         if (current != 1)
             for (int i = 0; i < dimensionArr[current]; ++i)

@@ -4,7 +4,7 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.utils.ArrayUtil;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class NEWARRAY extends Instruction {
     private static final String[] arrType = {
@@ -15,12 +15,8 @@ public class NEWARRAY extends Instruction {
     public void fetchAndRun(JThread thread) {
         var atype = thread.pc().ubyte();
         assert atype >= 4;
-        JClass jClass;
-        try {
-            jClass = VJVM.bootstrapLoader().loadClass(arrType[atype]);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+        JClass jClass = VMContext.bootstrapLoader().loadClass(arrType[atype]);
+
         if (jClass.initState() != JClass.InitState.INITIALIZED)
             jClass.tryInitialize(thread);
         var stack = thread.currentFrame().opStack();

@@ -4,7 +4,7 @@ import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.FieldRef;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class PUTFIELD extends Instruction {
 
@@ -15,15 +15,11 @@ public class PUTFIELD extends Instruction {
 
         // log
         System.err.println(fieldRef.name());
+        fieldRef.resolve(frame.jClass());
 
-        try {
-            fieldRef.resolve(frame.jClass());
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
         var stack = frame.opStack();
         var field = fieldRef.info();
-        var slots = VJVM.heap().slots();
+        var slots = VMContext.heap().slots();
         if (fieldRef.size() == 1) {
             var value = stack.popInt();
             var ref = stack.popAddress();

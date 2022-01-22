@@ -2,7 +2,7 @@ package vjvm.utils;
 
 import vjvm.runtime.*;
 import vjvm.runtime.classdata.MethodInfo;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class InvokeUtil {
             s.pushInt(1);
         });
         hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
-            s -> s.pushAddress(VJVM.heap().internString(s.popAddress())));
+            s -> s.pushAddress(VMContext.heap().internString(s.popAddress())));
         hackTable.put(Triple.of("cases/TestUtil", "reach", "(I)V"), s -> {
             System.out.println(s.popInt());
         });

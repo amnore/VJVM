@@ -3,7 +3,7 @@ package vjvm.interpreter.instruction.references;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 public class CHECKCAST extends Instruction {
     @Override
@@ -16,13 +16,11 @@ public class CHECKCAST extends Instruction {
             stack.pushAddress(obj);
             return;
         }
-        try {
-            classRef.resolve(frame.jClass());
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+
+        classRef.resolve(frame.jClass());
+
         var jClass = classRef.jClass();
-        var objClass = VJVM.heap().jClass(VJVM.heap().slots().int_(obj - 1));
+        var objClass = VMContext.heap().jClass(VMContext.heap().slots().int_(obj - 1));
         System.err.println(jClass.thisClass().name());
         System.err.println(objClass.thisClass().name());
         if (!objClass.castableTo(jClass))

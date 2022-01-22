@@ -9,7 +9,7 @@ import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.attribute.Attribute;
 import vjvm.runtime.classdata.constant.ClassRef;
-import vjvm.vm.VJVM;
+import vjvm.vm.VMContext;
 
 import static vjvm.classfiledefs.FieldDescriptors.*;
 
@@ -26,15 +26,11 @@ public class ArrayUtil {
         // for primitive types
         if (!FieldDescriptors.reference(componentType))
             return JClass.primitiveClass(componentType);
-        try {
-            return arrayClass.classLoader().loadClass(componentType);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+        return arrayClass.classLoader().loadClass(componentType);
     }
 
     public static int length(int arrayRef) {
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(arrayRef - 1));
         assert jClass.array();
@@ -45,7 +41,7 @@ public class ArrayUtil {
         // allocate array
         var objSize = arrayClass.instanceSize();
         var arrSize = lengthInSlots(arrayClass.name().substring(1), length);
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         var slots = heap.slots();
         var ret = heap.allocate(objSize + arrSize);
 
@@ -64,15 +60,11 @@ public class ArrayUtil {
         var componentType = arrayType.substring(1);
 
         JClass componentClass;
-        try {
-            // if the component is of primitive type
-            if (!FieldDescriptors.reference(componentType))
-                componentClass = JClass.primitiveClass(componentType);
-            else
-                componentClass = classLoader.loadClass(componentType);
-        } catch (ClassNotFoundException e) {
-            throw new Error(e);
-        }
+        // if the component is of primitive type
+        if (!FieldDescriptors.reference(componentType))
+            componentClass = JClass.primitiveClass(componentType);
+        else
+            componentClass = classLoader.loadClass(componentType);
 
         // for reference types, the accessibility of array class is the same as element type, see spec. 5.3.3.2
         var accessFlags = (short) (ClassAccessFlags.ACC_FINAL | (FieldDescriptors.reference(componentType)
@@ -128,7 +120,7 @@ public class ArrayUtil {
     }
 
     public static char getChar(int array, int index) {
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(array - 1));
         assert jClass.array();
@@ -136,7 +128,7 @@ public class ArrayUtil {
     }
 
     public static void setChar(int array, int index, char value) {
-        var heap = VJVM.heap();
+        var heap = VMContext.heap();
         var slots = heap.slots();
         var jClass = heap.jClass(slots.int_(array - 1));
         assert jClass.array();

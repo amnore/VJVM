@@ -5,5 +5,5 @@ import lombok.Getter;
 
 @Getter
 public abstract class ResolvableConstant extends Constant {
-    public abstract void resolve(JClass jClass) throws ClassNotFoundException;
+    public abstract void resolve(JClass jClass);
 }

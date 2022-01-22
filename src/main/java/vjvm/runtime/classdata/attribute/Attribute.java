@@ -41,11 +41,7 @@ public class Attribute {
                         var catchClassRef =
                             (ClassRef) (catchType == 0 ? null : constantPool.constant(catchType));
                         if (catchClassRef != null) {
-                            try {
-                                catchClassRef.resolve(constantPool.jClass());
-                            } catch (ClassNotFoundException e) {
-                                throw new Error(e);
-                            }
+                            catchClassRef.resolve(constantPool.jClass());
                         }
                         exceptionTable[i] = new Code.ExceptionHandler(
                             startPC, endPC, handlerPC, catchClassRef == null ? null : catchClassRef.jClass());
