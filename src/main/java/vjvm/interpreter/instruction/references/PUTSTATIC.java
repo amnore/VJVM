@@ -14,8 +14,10 @@ public class PUTSTATIC extends Instruction {
         var fieldRef = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
 
         var jClass = fieldRef.jClass();
-        if (jClass.initState() != JClass.InitState.INITIALIZED)
-            jClass.tryInitialize(thread);
+        if (jClass.initState() != JClass.InitState.INITIALIZED) {
+            jClass.initialize(thread);
+            assert jClass.initState() == JClass.InitState.INITIALIZED;
+        }
         var slots = jClass.staticFields();
         var field = fieldRef.info();
         var stack = frame.opStack();

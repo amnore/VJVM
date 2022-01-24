@@ -47,7 +47,7 @@ public class MethodRef extends ResolvableConstant {
         if (jClass.interface_() ^ interfaceMethod)
             throw new IncompatibleClassChangeError();
         // ignore signature polymorphic methods
-        info = jClass.findMethod(name, descriptor);
+        info = jClass.findMethod(name, descriptor, false);
         if (info == null)
             throw new NoSuchMethodError();
         if (!info.accessibleTo(thisClass(), jClass))

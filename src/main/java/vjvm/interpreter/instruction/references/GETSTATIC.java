@@ -18,9 +18,9 @@ public class GETSTATIC extends Instruction {
         var ref = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
         field = ref.info();
         jClass = ref.classRef().jClass();
+        jClass.initialize(thread);
+        assert jClass.initState() == JClass.InitState.INITIALIZED;
 
-        if (jClass.initState() != JClass.InitState.INITIALIZED)
-            jClass.tryInitialize(thread);
         if (field.size() == 2)
             stack.pushLong(jClass.staticFields().long_(field.offset()));
         else

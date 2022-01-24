@@ -27,7 +27,7 @@ public class INVOKEINTERFACE extends Instruction {
             var stack = frame.opStack();
             var obj = stack.slots().addressAt(stack.top() - methodRef.argc() - 1);
             var objClass = heap.jClass(heap.slots().int_(obj - 1));
-            method = objClass.findMethod(methodRef.name(), methodRef.descriptor());
+            method = objClass.findMethod(methodRef.name(), methodRef.descriptor(), false);
         }
         InvokeUtil.invokeMethod(method, thread);
     }

@@ -16,7 +16,6 @@ import vjvm.runtime.JThread;
 import vjvm.runtime.Slots;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
-import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.utils.InvokeUtil;
 
 import static vjvm.classfiledefs.ClassAccessFlags.ACC_FINAL;
@@ -33,13 +32,11 @@ public class VMContext {
     private final JHeap heap;
     @Getter
     private final JClassLoader userLoader;
-
     private static final int heapSize = 1024;
 
     VMContext(String userClassPath) {
         interpreter = new JInterpreter();
         heap = new JHeap(heapSize, this);
-        initPrimitiveClass();
 
         bootstrapLoader = new JClassLoader(
             null,
@@ -52,16 +49,6 @@ public class VMContext {
             ClassSearchPath.constructSearchPath(userClassPath),
             this
         );
-
-        var initThread = new JThread(this);
-        threads.add(initThread);
-
-        // hack: string
-        var strClass = bootstrapLoader.loadClass("java/lang/String");
-        strClass.tryInitialize(initThread);
-        // hack: Class
-        var classClass = bootstrapLoader.loadClass("java/lang/Class");
-        classClass.tryInitialize(initThread);
     }
 
     public JClass primitiveClass(String name) {
@@ -70,7 +57,7 @@ public class VMContext {
         return jClass;
     }
 
-    private void initPrimitiveClass() {
+    private void initPrimitiveClass(JThread thread) {
         var names = new Pair[] {
             Pair.of("boolean", "Z"),
             Pair.of("byte", "B"),
@@ -83,37 +70,41 @@ public class VMContext {
         };
 
         for (var c : names) {
-            var l = (String)c.getLeft();
-            var r = (String)c.getRight();
-            var class_ = new JClass(
-                null,
-                (short) 0,
-                (short) 0,
+            var name = (String)c.getLeft();
+            var signature = (String)c.getRight();
+            var cls = new JClass(
                 null,
                 (short) (ACC_FINAL|ACC_PUBLIC),
-                r,
+                signature,
                 null,
                 new String[0],
                 new FieldInfo[0],
                 new MethodInfo[0],
-                null,
                 this
             );
 
-            primitiveClasses.put(r, class_);
-            primitiveClasses.put(l, class_);
+            primitiveClasses.put(signature, cls);
+            primitiveClasses.put(name, cls);
         }
 
         for (var c : primitiveClasses.values())
-            c.initState(JClass.InitState.INITIALIZED);
+            c.initialize(thread);
     }
 
     void run(String entryClass) {
-        var initThread = threads.get(0);
-        var initClass = userLoader.loadClass(entryClass.replace('.', '/'));
-        initClass.tryInitialize(initThread);
+        var initThread = new JThread(this);
+        threads.add(initThread);
+        initPrimitiveClass(initThread);
 
-        var mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V");
+        var stringClass = bootstrapLoader.loadClass("java/lang/String");
+        stringClass.initialize(initThread);
+        assert stringClass.initState() == JClass.InitState.INITIALIZED;
+
+        var initClass = userLoader.loadClass(entryClass.replace('.', '/'));
+        initClass.initialize(initThread);
+        assert initClass.initState() == JClass.InitState.INITIALIZED;
+
+        var mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V", true);
         assert mainMethod.jClass() == initClass;
         InvokeUtil.invokeMethodWithArgs(mainMethod, initThread, new Slots(1));
         interpreter.run(initThread);

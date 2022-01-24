@@ -13,8 +13,9 @@ public class NEW extends Instruction {
         var classRef = (ClassRef) frame.dynLink().constant(thread.pc().ushort());
 
         var jClass = classRef.jClass();
-        if (jClass.initState() != JClass.InitState.INITIALIZED)
-            jClass.tryInitialize(thread);
+        jClass.initialize(thread);
+        assert jClass.initState() == JClass.InitState.INITIALIZED;
+
         frame.opStack().pushAddress(jClass.createInstance());
     }
 

@@ -5,8 +5,8 @@ import vjvm.utils.StringUtil;
 import vjvm.vm.VMContext;
 
 public class StringConstant extends ValueConstant {
-    int strAddr;
-    private VMContext context;
+    private int strAddr = 0;
+    private final VMContext context;
 
     public StringConstant(String value, VMContext ctx) {
         super(value);
@@ -19,7 +19,7 @@ public class StringConstant extends ValueConstant {
 
     @Override
     public Integer value() {
-        return strAddr == 0 ? (strAddr = context.heap().internString(StringUtil.createString((String) value, context)))
-                : strAddr;
+        return strAddr != 0 ? strAddr :
+            (strAddr = context.heap().internString(StringUtil.createString((String) value, context)));
     }
 }

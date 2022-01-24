@@ -4,6 +4,7 @@ import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.classloader.searchpath.ClassSearchPath;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JClass.InitState;
+import vjvm.runtime.JThread;
 import vjvm.utils.ArrayUtil;
 import vjvm.vm.VMContext;
 
@@ -39,9 +40,8 @@ public class JClassLoader implements Closeable {
     private JClass defineNonarrayClass(String name, InputStream data) {
         var ret = new JClass(new DataInputStream(data), this);
 
-        // add to loaded class
+        // add to loaded classes
         definedClass.put(name, ret);
-        ret.initState(InitState.LOADED);
         return ret;
     }
 
@@ -49,9 +49,7 @@ public class JClassLoader implements Closeable {
         var ret = ArrayUtil.createArrayClass(name, this);
 
         definedClass.put(name, ret);
-        // arrays doesn't need init
-        ret.tryPrepare();
-        ret.initState(InitState.INITIALIZED);
+        ret.prepare();
         return ret;
     }
 

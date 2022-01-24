@@ -9,7 +9,6 @@ import vjvm.runtime.JHeap;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.attribute.Attribute;
-import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.vm.VMContext;
 
 import static vjvm.classfiledefs.FieldDescriptors.*;
@@ -52,8 +51,6 @@ public class ArrayUtil {
     }
 
     public static JClass createArrayClass(String arrayType, JClassLoader classLoader) {
-        short minorVersion = 0;
-        short majorVersion = 0;
         var componentType = arrayType.substring(1);
 
         JClass componentClass;
@@ -75,15 +72,11 @@ public class ArrayUtil {
         var lengthField = fields[0];
 
         // there should be a clone() method, but I don't know how to generate it
+        // TODO: implement clone() as native method
         var methods = new MethodInfo[0];
-
-        var attributes = new Attribute[0];
 
         return new JClass(
             classLoader,
-            minorVersion,
-            majorVersion,
-            null,
             accessFlags,
             arrayType,
             "java/lang/Object",
@@ -91,7 +84,6 @@ public class ArrayUtil {
             new String[]{"java/lang/Cloneable", "java/io/Serializable"},
             fields,
             methods,
-            attributes,
             classLoader.context()
         );
     }

@@ -44,9 +44,10 @@ public class ConstantPool {
         }
     }
 
-    public ConstantPool(Constant[] constants) {
+    public ConstantPool(Constant[] constants, JClass jClass) {
         this.count = constants.length;
         this.constants = constants;
+        this.jClass = jClass;
     }
 
     /**

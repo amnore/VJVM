@@ -20,9 +20,9 @@ import vjvm.runtime.JThread;
 import vjvm.vm.VMContext;
 
 public class JInterpreter {
-    private final Instruction[] dispatchTable;
+    private static final Instruction[] dispatchTable;
 
-    public JInterpreter() {
+    static {
         // @formatter:off
         dispatchTable = new Instruction[]{
 /* 0x00 */  new NOP(), new ACONST_NULL(), new ICONST_X(-1), new ICONST_X(0),
@@ -103,30 +103,22 @@ public class JInterpreter {
             if (dispatchTable[opcode] == null)
                 throw new Error(String.format("Unimplemented: %d", opcode));
 
-
-            // print debug info
-            System.err.println("method: " + thread.currentFrame().jClass().thisClass().name() + ':' + thread.currentFrame().methodInfo().name() + ';' + thread.currentFrame().methodInfo().descriptor());
-            System.err.println(String.format("opcode: %s(%d)", dispatchTable[opcode].getClass().getSimpleName(), opcode));
-            System.err.println("local: " + thread.currentFrame().localVars().toString());
-            System.err.println("stack: " + thread.currentFrame().opStack().toString());
-            System.err.println();
-
             dispatchTable[opcode].fetchAndRun(thread);
 
             if (thread.hasException())
-                unwind(thread);
+                unwind(thread, count);
             else if (!thread.empty())
                 thread.pc().update();
         }
     }
 
-    public void unwind(JThread thread) {
+    public void unwind(JThread thread, int lowestFrame) {
         var exception = thread.exception();
         var heap = thread.context().heap();
         var excClass = heap.jClass(heap.slots().int_(exception - 1));
 
         // unwind stack
-        while (!thread.empty()) {
+        while (thread.frameCount() >= lowestFrame) {
             var frame = thread.currentFrame();
             var method = frame.methodInfo();
             var stack = frame.opStack();

@@ -16,9 +16,9 @@ public class ANEWARRAY extends Instruction {
         var ref = (ClassRef) frame.dynLink().constant(thread.pc().ushort());
 
         JClass arrayClass = ref.jClass().classLoader().loadClass("[L" + ref.name() + ';');
+        arrayClass.initialize(thread);
+        assert arrayClass.initState() == JClass.InitState.INITIALIZED;
 
-        if (arrayClass.instanceSize() != JClass.InitState.INITIALIZED)
-            arrayClass.tryInitialize(thread);
         var arr = ArrayUtil.newInstance(arrayClass, count, thread.context().heap());
         stack.pushAddress(arr);
     }

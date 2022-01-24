@@ -1,10 +1,8 @@
 package vjvm.runtime;
 
 import lombok.SneakyThrows;
-import org.w3c.dom.Attr;
 import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.classloader.JClassLoader;
-import vjvm.classloader.JClassNotFoundException;
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
@@ -13,19 +11,17 @@ import vjvm.runtime.classdata.attribute.ConstantValue;
 import vjvm.runtime.classdata.attribute.NestHost;
 import vjvm.runtime.classdata.attribute.NestMember;
 import vjvm.runtime.classdata.constant.ClassRef;
+import vjvm.runtime.classdata.constant.Constant;
 import vjvm.utils.ArrayUtil;
 import vjvm.utils.InvokeUtil;
 import vjvm.vm.VMContext;
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.DataInput;
-import java.io.IOException;
 import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static vjvm.classfiledefs.ClassAccessFlags.*;
 import static vjvm.classfiledefs.FieldDescriptors.*;
@@ -33,47 +29,48 @@ import static vjvm.classfiledefs.FieldDescriptors.*;
 public class JClass {
     // inititlized with constructor
     @Getter
-    protected JClassLoader classLoader;
+    private final JClassLoader classLoader;
     @Getter
-    protected String packageName;
+    private final String packageName;
     @Getter
-    protected short minorVersion;
+    private final short minorVersion;
     @Getter
-    protected short majorVersion;
+    private final short majorVersion;
     @Getter
-    protected ConstantPool constantPool;
+    private final ConstantPool constantPool;
     @Getter
-    protected short accessFlags;
+    private final short accessFlags;
     @Getter
-    protected ClassRef thisClass;
+    private final ClassRef thisClass;
     @Getter
-    protected ClassRef superClass;
-    protected ClassRef[] interfaces;
-    protected FieldInfo[] fields;
-    protected MethodInfo[] methods;
-    protected Attribute[] attributes;
+    private final ClassRef superClass;
+    private final ClassRef[] interfaces;
+    private final FieldInfo[] fields;
+    private final MethodInfo[] methods;
+    private final Attribute[] attributes;
     @Getter
-    protected int methodAreaIndex;
+    private final int methodAreaIndex;
+    @Getter
+    private final VMContext context;
 
     // initialized with prepare()
     @Getter
-    protected Slots staticFields;
-    protected ArrayList<MethodInfo> vtable;
+    private Slots staticFields;
+    private ArrayList<MethodInfo> vtable;
+
     // size of instance object
     @Getter
-    protected int instanceSize;
+    private int instanceSize;
 
     @Getter
-    @Setter
-    protected int initState;
+    private int initState = InitState.LOADED;
+
     // the thread calling the initialize method
     private JThread initThread;
-    @Getter
-    private VMContext context;
+
     private JClass nestHost;
 
-    protected JClass() {
-    }
+    private int classObject = 0;
 
     // construct from data
     @SneakyThrows
@@ -87,6 +84,7 @@ public class JClass {
             throw new InvalidClassException(String.format(
                 "Wrong magic number, expected: 0xcafebabe, got: %x", magic));
         }
+
         // parse data
         // skip class version check
         minorVersion = dataInput.readShort();
@@ -94,30 +92,32 @@ public class JClass {
 
         constantPool = new ConstantPool(dataInput, this);
         accessFlags = dataInput.readShort();
-        int thisIndex = dataInput.readUnsignedShort();
-        thisClass = (ClassRef) constantPool.constant(thisIndex);
-        String name = thisClass.name();
-        packageName = name.substring(0, name.lastIndexOf('/'));
-        int superIndex = dataInput.readUnsignedShort();
-        if (superIndex != 0)
-            superClass = (ClassRef) constantPool.constant(superIndex);
-        int interfacesCount = dataInput.readUnsignedShort();
+        thisClass = (ClassRef) constantPool.constant(dataInput.readUnsignedShort());
+        packageName = name().substring(0, name().lastIndexOf('/'));
+
+        var superIndex = dataInput.readUnsignedShort();
+        superClass = superIndex == 0 ? null : (ClassRef) constantPool.constant(superIndex);
+
+        var interfacesCount = dataInput.readUnsignedShort();
         interfaces = new ClassRef[interfacesCount];
-        for (int i = 0; i < interfacesCount; ++i) {
-            int interfaceIndex = dataInput.readUnsignedShort();
+        for (var i = 0; i < interfacesCount; ++i) {
+            var interfaceIndex = dataInput.readUnsignedShort();
             interfaces[i] = (ClassRef) constantPool.constant(interfaceIndex);
         }
-        int fieldsCount = dataInput.readUnsignedShort();
+
+        var fieldsCount = dataInput.readUnsignedShort();
         fields = new FieldInfo[fieldsCount];
-        for (int i = 0; i < fieldsCount; ++i)
+        for (var i = 0; i < fieldsCount; ++i)
             fields[i] = new FieldInfo(dataInput, this);
-        int methodsCount = dataInput.readUnsignedShort();
+
+        var methodsCount = dataInput.readUnsignedShort();
         methods = new MethodInfo[methodsCount];
-        for (int i = 0; i < methodsCount; ++i)
+        for (var i = 0; i < methodsCount; ++i)
             methods[i] = new MethodInfo(dataInput, this);
-        int attributesCount = dataInput.readUnsignedShort();
+
+        var attributesCount = dataInput.readUnsignedShort();
         attributes = new Attribute[attributesCount];
-        for (int i = 0; i < attributesCount; ++i)
+        for (var i = 0; i < attributesCount; ++i)
             attributes[i] = Attribute.constructFromData(dataInput, constantPool);
 
         // Spec. 5.3.3, 5.3.4: resolve super class and interfaces
@@ -132,8 +132,48 @@ public class JClass {
         methodAreaIndex = context.heap().addJClass(this);
     }
 
-    public void tryVerify() {
-        // not verifying
+    // create a class with all info provided, used to create array and primitive classes.
+    public JClass(
+        JClassLoader classLoader,
+        short accessFlags,
+        String name,
+        String superClassName,
+        String[] interfaceNames,
+        FieldInfo[] fields,
+        MethodInfo[] methods,
+        VMContext context) {
+        this.context = context;
+        this.classLoader = classLoader;
+        this.minorVersion = this.majorVersion = 0;
+        this.constantPool = new ConstantPool(new Constant[0], this);
+        this.accessFlags = accessFlags;
+        this.thisClass = new ClassRef(this, name);
+
+        // arrays and primitive classes don't have a package
+        this.packageName = name().charAt(0) == DESC_reference ? name().substring(0, name().lastIndexOf('/')) : null;
+        this.superClass = superClassName == null ? null : new ClassRef(this, superClassName);
+        this.interfaces = Arrays.stream(interfaceNames)
+            .map(n -> new ClassRef(this, n)).toArray(ClassRef[]::new);
+
+        this.fields = fields;
+        for (var f : fields)
+            f.jClass(this);
+        this.methods = methods;
+        for (var m : methods)
+            m.jClass(this);
+        this.attributes = new Attribute[0];
+
+        thisClass.resolve();
+        if (superClass != null)
+            superClass.resolve();
+        for (var i : interfaces)
+            i.resolve();
+
+        methodAreaIndex = this.context.heap().addJClass(this);
+    }
+
+    public void verify() {
+        // skip
         initState = InitState.VERIFIED;
     }
 
@@ -141,16 +181,16 @@ public class JClass {
      * Prepares this class for use. See spec. 5.4.2
      * Invoking this method when the class has been prepared has no effect.
      */
-    public void tryPrepare() {
+    public void prepare() {
         if (initState >= InitState.PREPARED)
             return;
         // first verify
-        tryVerify();
+        verify();
         // prepare super classes and super interfaces
         if (superClass != null)
-            superClass.jClass().tryPrepare();
+            superClass.jClass().prepare();
         for (var i : interfaces)
-            i.jClass().tryPrepare();
+            i.jClass().prepare();
         initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
@@ -228,11 +268,12 @@ public class JClass {
      * Invoking this method when the class has been initialized has no effect.
      * The steps correspond to that specified in spec. 5.5.
      *
-     * @param thread the thread at which to execute initialization method
      */
-    public void tryInitialize(JThread thread) {
+    public void initialize(JThread thread) {
+        assert initState != InitState.ERROR;
+
         // prepare first
-        tryPrepare();
+        prepare();
 
         // step1: there is no LC
 
@@ -245,7 +286,8 @@ public class JClass {
             return;
 
         // step4
-        if (initState == InitState.INITIALIZED) return;
+        if (initState == InitState.INITIALIZED)
+            return;
 
         // step5: not checking
 
@@ -253,22 +295,33 @@ public class JClass {
         initState = InitState.INITIALIZING;
         initThread = thread;
 
-        // step7
-        if (superClass != null)
-            superClass.jClass().tryInitialize(thread);
-        for (var i : interfaces)
-            i.jClass().tryInitialize(thread);
+        // additional: create a class object in the heap to point to this class
+        JClass classClass = context.bootstrapLoader().loadClass("java/lang/Class");
+        classObject = classClass.createInstance();
+        var slots = context.heap().slots();
+        slots.int_(classObject + classClass.instanceSize() - 1, methodAreaIndex);
 
-        // step8: not doing
+        // step7
+        if (superClass != null) {
+            superClass.jClass().initialize(thread);
+            if (superClass.jClass().initState == InitState.ERROR) {
+                initState = InitState.ERROR;
+                return;
+            }
+        }
+
+        for (var i : interfaces) {
+            i.jClass().initialize(thread);
+            if (i.jClass().initState == InitState.ERROR) {
+                initState = InitState.ERROR;
+                return;
+            }
+        }
+
+        // step8: skip
 
         // step9
-        // find <clinit>
-        MethodInfo clinit = null;
-        for (var i : methods)
-            if (i.name().equals("<clinit>") && i.descriptor().equals("()V")) {
-                clinit = i;
-                break;
-            }
+        MethodInfo clinit = findMethod("<clinit>", "()V", true);
         if (clinit != null) {
             InvokeUtil.invokeMethodWithArgs(clinit, thread, null);
             context.interpreter().run(thread);
@@ -277,7 +330,7 @@ public class JClass {
         // step10
         initState = InitState.INITIALIZED;
 
-        // step11,12: not doing
+        // step11,12: skip
 
         // debug
         System.err.println(this);
@@ -295,7 +348,7 @@ public class JClass {
     }
 
     /**
-     * Finds a field recursively. This is used to resolve field references. See spec. 5.4.3.2
+     * Find a field recursively. This is used to resolve field references. See spec. 5.4.3.2
      *
      * @param name       name of the field to find
      * @param descriptor descriptor of the field to find
@@ -305,6 +358,7 @@ public class JClass {
         for (var field : fields)
             if (field.name().equals(name) && field.descriptor().equals(descriptor))
                 return field;
+
         // find in super interfaces
         for (var si : interfaces) {
             // according to spec. 5.3.5.3, the reference to super interfaces have already been resolved.
@@ -312,28 +366,36 @@ public class JClass {
             if (result != null)
                 return result;
         }
+
         // then find in super class
         return superClass == null ? null : superClass.jClass().findField(name, descriptor);
     }
 
     /**
-     * Similar to findField, but find in super classes first. See spec. 5.4.3.3
+     * Similar to findField, but find in super classes before interfaces. See spec. 5.4.3.3
      */
-    public MethodInfo findMethod(String name, String descriptor) {
+    public MethodInfo findMethod(String name, String descriptor, boolean thisClassOnly) {
         for (var method : methods)
             if (method.name().equals(name) && method.descriptor().equals(descriptor))
                 return method;
+
+        if (thisClassOnly) {
+            return null;
+        }
+
         if (superClass != null) {
-            var result = superClass.jClass().findMethod(name, descriptor);
+            var result = superClass.jClass().findMethod(name, descriptor, false);
             if (result != null)
                 return result;
         }
+
         // Using the rules from JDK7 instead of JDK8
         for (var si : interfaces) {
-            var result = si.jClass().findMethod(name, descriptor);
+            var result = si.jClass().findMethod(name, descriptor, false);
             if (result != null)
                 return result;
         }
+
         return null;
     }
 
@@ -456,6 +518,7 @@ public class JClass {
     public int createInstance() {
         assert initState == InitState.INITIALIZED;
         assert !array();
+
         var heap = context.heap();
         int addr = heap.allocate(instanceSize);
 
@@ -464,80 +527,13 @@ public class JClass {
         return addr;
     }
 
-    private int classObject = 0;
-
-    // create a class with all info provided, used to create array and primitive classes.
-    public JClass(
-        JClassLoader classLoader,
-        short minorVersion,
-        short majorVersion,
-        ConstantPool constantPool,
-        short accessFlags,
-        String name,
-        String superClassName,
-        String[] interfaceNames,
-        FieldInfo[] fields,
-        MethodInfo[] methods,
-        Attribute[] attributes,
-        VMContext context) {
-        this.context = context;
-
-        this.classLoader = classLoader;
-        this.minorVersion = minorVersion;
-        this.majorVersion = majorVersion;
-
-        this.constantPool = constantPool;
-        // set class reference in constant pool
-        if (constantPool != null)
-            constantPool.jClass(this);
-
-        this.accessFlags = accessFlags;
-
-        this.thisClass = new ClassRef(this, name);
-        // arrays and primitive classes don't have a package
-        this.packageName = name().charAt(0) == DESC_reference ? name().substring(0, name().lastIndexOf('/')) : null;
-
-        if (superClassName != null){
-            this.superClass = new ClassRef(this, superClassName);
-        }
-
-        this.interfaces = Arrays.stream(interfaceNames)
-            .map(n -> new ClassRef(this, n)).toArray(ClassRef[]::new);
-
-        this.fields = fields;
-        for (var f : fields)
-            f.jClass(this);
-        this.methods = methods;
-        for (var m : methods)
-            m.jClass(this);
-        this.attributes = attributes;
-
-        thisClass.resolve();
-        if (superClass != null)
-            superClass.resolve();
-        for (var intr : interfaces)
-            intr.resolve();
-
-        methodAreaIndex = this.context.heap().addJClass(this);
-    }
-
     /**
      * Get the class object associated with this class.
      *
      * @return an address into the heap slots which points to the class object
      */
     public int classObject() {
-        // if the class object has already been initialized
-        if (classObject != 0) return classObject;
-        JClass classClass;
-        try {
-            classClass = context.bootstrapLoader().loadClass("java/lang/Class");
-        } catch (Exception e) {
-            throw new Error(e);
-        }
-        classObject = classClass.createInstance();
-        var slots = context.heap().slots();
-        slots.int_(classObject + classClass.instanceSize() - 1, methodAreaIndex);
+        assert initState == InitState.INITIALIZED;
         return classObject;
     }
 
@@ -575,5 +571,6 @@ public class JClass {
         public static final int PREPARED = 4;
         public static final int INITIALIZING = 5;
         public static final int INITIALIZED = 6;
+        public static final int ERROR = 7;
     }
 }

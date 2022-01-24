@@ -1,6 +1,7 @@
 package vjvm.utils;
 
 import vjvm.runtime.JClass;
+import vjvm.runtime.JThread;
 import vjvm.vm.VMContext;
 
 public class StringUtil {
