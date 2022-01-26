@@ -16,13 +16,15 @@ public class INVOKESPECIAL extends Instruction {
 
         JClass targetClass;
         JClass refClass = methodRef.jClass();
-        if (!methodRef.name().equals("<init>") && !refClass.interface_()
-            && currentClass.subClassOf(refClass) && refClass.super_())
-            targetClass = currentClass.superClass().jClass();
-        else targetClass = methodRef.jClass();
-//        var method = targetClass.findMethod(methodRef.name(), methodRef.descriptor());
-        var args = frame.stack().popSlots(methodRef.argc() + 1);
-        var method = targetClass.vtableMethod(methodRef.info().vtableIndex());
+        if (!methodRef.value().name().equals("<init>") && !refClass.interface_()
+            && currentClass.subClassOf(refClass) && refClass.super_()) {
+            targetClass = currentClass.superClass().value();
+        } else {
+            targetClass = methodRef.jClass();
+        }
+
+        var method = targetClass.vtableMethod(methodRef.value().vtableIndex());
+        var args = frame.stack().popSlots(method.argc() + 1);
         JInterpreter.invokeMethodWithArgs(method, thread, args);
     }
 

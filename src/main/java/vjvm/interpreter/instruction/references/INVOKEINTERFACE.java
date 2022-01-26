@@ -13,20 +13,18 @@ public class INVOKEINTERFACE extends Instruction {
         var frame = thread.top();
         var pc = thread.pc();
         var methodRef = (MethodRef) frame.link().constant(pc.ushort());
-        var argc = methodRef.argc();
+        var argc = methodRef.value().argc();
 
         // skip count and trailing zero
         pc.short_();
 
         // select the method to call, see spec. 5.4.6
-        MethodInfo method;
-        var args = frame.stack().popSlots(methodRef.argc() + 1);
-        if (methodRef.info().private_())
-            method = methodRef.info();
-        else {
+        MethodInfo method = methodRef.value();
+        var args = frame.stack().popSlots(argc + 1);
+        if (!method.private_()) {
             var obj = args.address(0);
             var objClass = thread.context().heap().get(obj).type();
-            method = objClass.findMethod(methodRef.name(), methodRef.descriptor(), false);
+            method = objClass.findMethod(method.name(), method.descriptor(), false);
         }
 
         JInterpreter.invokeMethodWithArgs(method, thread, args);

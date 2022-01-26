@@ -154,7 +154,7 @@ public class JInterpreter {
     public static void invokeMethodWithArgs(MethodInfo method, JThread thread, Slots args) {
         assert args.size() == method.argc() + (method.static_() ? 0 : 1);
 
-        var t = Triple.of(method.jClass().thisClass().name(), method.name(), method.descriptor());
+        var t = Triple.of(method.jClass().name(), method.name(), method.descriptor());
         var m = hackTable.get(t);
         if (m != null) {
             var ret = m.apply(thread, args);

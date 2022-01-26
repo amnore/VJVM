@@ -13,9 +13,9 @@ public class PUTFIELD extends Instruction {
         var fieldRef = (FieldRef) frame.link().constant(thread.pc().ushort());
 
         var stack = frame.stack();
-        var field = fieldRef.info();
+        var field = fieldRef.value();
         var heap = thread.context().heap();
-        if (fieldRef.size() == 1) {
+        if (fieldRef.value().size() == 1) {
             var value = stack.popInt();
             var obj = heap.get(stack.popAddress());
 

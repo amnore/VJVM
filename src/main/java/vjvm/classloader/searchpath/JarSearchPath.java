@@ -1,7 +1,5 @@
 package vjvm.classloader.searchpath;
 
-import lombok.val;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarFile;

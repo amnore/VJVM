@@ -16,8 +16,8 @@ public class GETSTATIC extends Instruction {
         JClass jClass;
 
         var ref = (FieldRef) frame.link().constant(thread.pc().ushort());
-        field = ref.info();
-        jClass = ref.classRef().jClass();
+        field = ref.value();
+        jClass = field.jClass();
         jClass.initialize(thread);
         assert jClass.initState() == JClass.InitState.INITIALIZED;
 

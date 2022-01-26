@@ -13,9 +13,9 @@ public class ANEWARRAY extends Instruction {
         var frame = thread.top();
         var stack = frame.stack();
         var count = stack.popInt();
-        var ref = (ClassRef) frame.link().constant(thread.pc().ushort());
+        var jClass = ((ClassRef) frame.link().constant(thread.pc().ushort())).value();
 
-        JClass arrayClass = ref.jClass().classLoader().loadClass("[L" + ref.name() + ';');
+        JClass arrayClass = jClass.classLoader().loadClass("[L" + jClass.name() + ';');
         arrayClass.initialize(thread);
         assert arrayClass.initState() == JClass.InitState.INITIALIZED;
 

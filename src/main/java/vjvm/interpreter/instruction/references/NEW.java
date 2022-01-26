@@ -13,7 +13,7 @@ public class NEW extends Instruction {
         var frame = thread.top();
         var classRef = (ClassRef) frame.link().constant(thread.pc().ushort());
 
-        var jClass = classRef.jClass();
+        var jClass = classRef.value();
         jClass.initialize(thread);
         assert jClass.initState() == JClass.InitState.INITIALIZED;
 

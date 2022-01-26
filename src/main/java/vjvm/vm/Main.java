@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 
 import static picocli.CommandLine.*;
 
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @Command(name = "vjvm", mixinStandardHelpOptions = true, version = "vjvm 0.0.1", description = "A toy JVM written in java")
 public class Main implements Callable<Integer> {
     @Option(names = { "-cp",

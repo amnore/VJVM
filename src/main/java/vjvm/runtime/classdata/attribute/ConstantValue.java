@@ -1,11 +1,9 @@
 package vjvm.runtime.classdata.attribute;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import vjvm.runtime.classdata.ConstantPool;
-import vjvm.runtime.classdata.constant.ValueConstant;
 
 import java.io.DataInput;
 
@@ -17,7 +15,6 @@ public class ConstantValue extends Attribute {
     @SneakyThrows
     public ConstantValue(DataInput input, ConstantPool constantPool) {
         int valueIndex = input.readUnsignedShort();
-        this.value = ((ValueConstant) constantPool.constant(valueIndex))
-            .value(constantPool.context());
+        this.value = constantPool.constant(valueIndex).value();
     }
 }

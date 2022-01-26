@@ -16,7 +16,7 @@ public class CHECKCAST extends Instruction {
             return;
         }
 
-        var jClass = classRef.jClass();
+        var jClass = classRef.value();
         var objClass = thread.context().heap().get(obj).type();
         if (!objClass.castableTo(jClass))
             throw new ClassCastException();

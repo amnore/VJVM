@@ -12,20 +12,21 @@ public class PUTSTATIC extends Instruction {
     public void fetchAndRun(JThread thread) {
         var frame = thread.top();
         var fieldRef = (FieldRef) frame.link().constant(thread.pc().ushort());
+        var jClass = fieldRef.value().jClass();
 
-        var jClass = fieldRef.jClass();
         if (jClass.initState() != JClass.InitState.INITIALIZED) {
             jClass.initialize(thread);
             assert jClass.initState() == JClass.InitState.INITIALIZED;
         }
+
         var slots = jClass.staticFields();
-        var field = fieldRef.info();
+        var field = fieldRef.value();
         var stack = frame.stack();
-        if (fieldRef.size() == 2)
+        if (field.size() == 2)
             slots.long_(field.offset(), stack.popLong());
         else {
             var value = stack.popInt();
-            if (fieldRef.descriptor().charAt(0) == FieldDescriptors.DESC_boolean)
+            if (field.descriptor().charAt(0) == FieldDescriptors.DESC_boolean)
                 value &= 1;
             slots.int_(field.offset(), value);
         }

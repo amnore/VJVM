@@ -1,7 +1,6 @@
 package vjvm.runtime.classdata.attribute;
 
 import lombok.SneakyThrows;
-import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.constant.ClassRef;
 

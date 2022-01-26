@@ -1,7 +1,6 @@
 package vjvm.runtime;
 
 import lombok.Getter;
-import vjvm.vm.VMContext;
 
 public class OperandStack {
     private final Slots slots;

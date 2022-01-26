@@ -1,26 +1,30 @@
 package vjvm.runtime.classdata.constant;
 
+import lombok.SneakyThrows;
+import vjvm.runtime.JClass;
 import vjvm.runtime.object.StringObject;
-import vjvm.vm.VMContext;
 
-public class StringConstant extends ValueConstant {
-    private int addr = 0;
+import java.io.DataInput;
 
-    public StringConstant(String value) {
-        super(value);
-    }
+public class StringConstant extends Constant {
+    private int address = 0;
 
-    public String string() {
-        return (String) value;
+    private final int stringIndex;
+    private final JClass thisClass;
+
+    @SneakyThrows
+    StringConstant(DataInput input, JClass thisClass) {
+        stringIndex = input.readUnsignedShort();
+        this.thisClass = thisClass;
     }
 
     @Override
-    public Integer value(VMContext context) {
-        assert context != null;
-
-        if (addr == 0) {
-            addr = context.heap().intern(new StringObject((String) value, context));
+    public Integer value() {
+        if (address == 0) {
+            var value = ((UTF8Constant)thisClass.constantPool().constant(stringIndex)).value();
+            var ctx = thisClass.context();
+            address = ctx.heap().intern(new StringObject(value, ctx));
         }
-        return addr;
+        return address;
     }
 }

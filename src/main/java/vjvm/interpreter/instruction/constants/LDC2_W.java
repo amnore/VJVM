@@ -2,7 +2,6 @@ package vjvm.interpreter.instruction.constants;
 
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
-import vjvm.runtime.classdata.constant.ValueConstant;
 
 public class LDC2_W extends Instruction {
 
@@ -11,7 +10,7 @@ public class LDC2_W extends Instruction {
         var frame = thread.top();
         var stack = frame.stack();
         var index = thread.pc().ushort();
-        var value = ((ValueConstant) frame.link().constant(index)).value(thread.context());
+        var value = frame.link().constant(index).value();
 
         // only long and double are supported
         if (value instanceof Long)

@@ -3,7 +3,6 @@ package vjvm.interpreter.instruction.constants;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
-import vjvm.runtime.classdata.constant.ValueConstant;
 
 public class LDC extends Instruction {
 
@@ -14,9 +13,9 @@ public class LDC extends Instruction {
         var index = thread.pc().ubyte();
         var constant = frame.link().constant(index);
         if (constant instanceof ClassRef) {
-            stack.pushAddress(((ClassRef) constant).jClass().classObject().address());
+            stack.pushAddress(((ClassRef) constant).value().classObject().address());
         } else {
-            var value = ((ValueConstant) frame.link().constant(index)).value(thread.context());
+            var value = frame.link().constant(index).value();
             if (value instanceof Integer)
                 stack.pushInt((Integer) value);
             else if (value instanceof Float)

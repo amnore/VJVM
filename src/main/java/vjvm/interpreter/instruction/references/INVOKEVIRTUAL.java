@@ -14,14 +14,12 @@ public class INVOKEVIRTUAL extends Instruction {
         var methodRef = (MethodRef) frame.link().constant(thread.pc().ushort());
 
         // select the method to call, see spec. 5.4.6
-        MethodInfo method;
-        var args = frame.stack().popSlots(methodRef.argc() + 1);
-        if (methodRef.info().private_())
-            method = methodRef.info();
-        else {
+        MethodInfo method = methodRef.value();
+        var args = frame.stack().popSlots(method.argc() + 1);
+        if (!method.private_()) {
             var obj = args.address(0);
             var objClass = thread.context().heap().get(obj).type();
-            method = objClass.vtableMethod(methodRef.info().vtableIndex());
+            method = objClass.vtableMethod(methodRef.value().vtableIndex());
         }
 
         JInterpreter.invokeMethodWithArgs(method, thread, args);

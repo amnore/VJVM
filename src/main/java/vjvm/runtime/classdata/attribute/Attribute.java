@@ -2,13 +2,9 @@ package vjvm.runtime.classdata.attribute;
 
 import lombok.SneakyThrows;
 import vjvm.runtime.classdata.ConstantPool;
-import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.runtime.classdata.constant.UTF8Constant;
-import vjvm.runtime.classdata.constant.ValueConstant;
-import lombok.val;
 
 import java.io.DataInput;
-import java.io.IOException;
 
 import static vjvm.classfiledefs.AttributeTags.*;
 

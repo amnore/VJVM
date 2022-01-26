@@ -22,6 +22,7 @@ public class FieldInfo {
     private final String descriptor;
     private final Attribute[] attributes;
     @Setter
+    @Getter
     private JClass jClass;
 
     // Offset of this field in slots

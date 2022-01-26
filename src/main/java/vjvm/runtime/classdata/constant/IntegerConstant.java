@@ -1,15 +1,19 @@
 package vjvm.runtime.classdata.constant;
 
-import vjvm.runtime.JThread;
-import vjvm.vm.VMContext;
+import lombok.SneakyThrows;
 
-public class IntegerConstant extends ValueConstant {
-    public IntegerConstant(Integer value) {
-        super(value);
+import java.io.DataInput;
+
+public class IntegerConstant extends Constant {
+    private final int value;
+
+    @SneakyThrows
+    IntegerConstant(DataInput input) {
+        value = input.readInt();
     }
 
     @Override
-    public Integer value(VMContext context) {
-        return (Integer) value;
+    public Integer value() {
+        return value;
     }
 }

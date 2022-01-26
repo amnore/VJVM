@@ -13,19 +13,19 @@ public class MULTIANEWARRAY extends Instruction {
     @Override
     public void fetchAndRun(JThread thread) {
         var frame = thread.top();
-        var arrClassRef = (ClassRef) frame.link().constant(thread.pc().ushort());
+        var arrClass = ((ClassRef) frame.link().constant(thread.pc().ushort())).value();
         var dimensions = thread.pc().ubyte();
         assert dimensions >= 1;
-        assert arrClassRef.name().lastIndexOf("[") >= dimensions - 1;
+        assert arrClass.name().lastIndexOf("[") >= dimensions - 1;
         var stack = frame.stack();
         var dimArr = new int[dimensions + 1];
         for (int i = 1; i <= dimensions; ++i)
             dimArr[i] = stack.popInt();
 
         var arrClasses = new JClass[dimensions + 1];
-        arrClasses[dimensions] = arrClassRef.jClass();
+        arrClasses[dimensions] = arrClass;
         for (int i = dimensions - 1; i >= 0; --i) {
-            var name = arrClasses[i + 1].thisClass().name().substring(1);
+            var name = arrClasses[i + 1].name().substring(1);
             if (!FieldDescriptors.reference(name))
                 break;
             // if the component type is primitive type

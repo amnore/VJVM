@@ -1,15 +1,19 @@
 package vjvm.runtime.classdata.constant;
 
-import vjvm.runtime.JThread;
-import vjvm.vm.VMContext;
+import lombok.SneakyThrows;
 
-public class DoubleConstant extends ValueConstant {
-    public DoubleConstant(Double value) {
-        super(value);
+import java.io.DataInput;
+
+public class DoubleConstant extends Constant {
+    private final double value;
+
+    @SneakyThrows
+    public DoubleConstant(DataInput input) {
+        value = input.readDouble();
     }
 
     @Override
-    public Double value(VMContext context) {
-        return (Double) value;
+    public Double value() {
+        return value;
     }
 }

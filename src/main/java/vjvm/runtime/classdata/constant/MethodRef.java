@@ -1,38 +1,31 @@
 package vjvm.runtime.classdata.constant;
 
-import vjvm.classfiledefs.MethodDescriptors;
+import lombok.SneakyThrows;
 import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.MethodInfo;
-import lombok.Getter;
 
-@Getter
-public class MethodRef extends ResolvableConstant {
-    private final ClassRef classRef;
-    private final String name;
-    private final String descriptor;
-    private final boolean interfaceMethod;
+import java.io.DataInput;
 
-    private MethodInfo info;
+public class MethodRef extends Constant {
+    private final int classIndex;
+    private final int nameAndTypeIndex;
+    private final JClass self;
+    private final boolean interface_;
+
     private JClass jClass;
+    private MethodInfo method;
 
-    public MethodRef(ClassRef classRef, String name, String descriptor, boolean interfaceMethod, JClass thisClass) {
-        super(thisClass);
-        this.classRef = classRef;
-        this.name = name;
-        this.descriptor = descriptor;
-        this.interfaceMethod = interfaceMethod;
+    @SneakyThrows
+    MethodRef(DataInput input, JClass self, boolean interface_) {
+        classIndex = input.readUnsignedShort();
+        nameAndTypeIndex = input.readUnsignedShort();
+        this.self = self;
+        this.interface_ = interface_;
     }
 
-    public  MethodInfo info() {
-        if (info == null) {
-            resolve();
-        }
-        return info;
-    }
-
-    public  JClass jClass() {
+    public JClass jClass() {
         if (jClass == null) {
-            resolve();
+            jClass = ((ClassRef)self.constantPool().constant(classIndex)).value();
         }
         return jClass;
     }
@@ -41,27 +34,26 @@ public class MethodRef extends ResolvableConstant {
      * Resolve the referenced method. See spec. 5.4.3.3, 5.4.3.4.
      */
     @Override
-    public void resolve() {
-        classRef.resolve();
-        jClass = classRef.jClass();
-        if (jClass.interface_() ^ interfaceMethod)
+    public MethodInfo value() {
+        if (method != null) {
+            return method;
+        }
+
+        var pair = ((NameAndTypeConstant) self.constantPool()
+            .constant(nameAndTypeIndex)).value();
+
+        if (jClass().interface_() ^ interface_)
             throw new IncompatibleClassChangeError();
+
         // ignore signature polymorphic methods
-        info = jClass.findMethod(name, descriptor, false);
-        if (info == null)
+        method = jClass().findMethod(pair.getLeft(), pair.getRight(), false);
+        if (method == null) {
             throw new NoSuchMethodError();
-        if (!info.accessibleTo(thisClass(), jClass))
+        }
+        if (!method.accessibleTo(self, jClass())) {
             throw new IllegalAccessError();
-    }
+        }
 
-    public int argc() {
-        return MethodDescriptors.argc(descriptor);
-    }
-
-    @Override
-    public String toString() {
-        return "MethodRef{" + "name='" + name + '\'' +
-            ", descriptor='" + descriptor + '\'' +
-            '}';
+        return method;
     }
 }

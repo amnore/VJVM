@@ -1,15 +1,19 @@
 package vjvm.runtime.classdata.constant;
 
-import vjvm.runtime.JThread;
-import vjvm.vm.VMContext;
+import lombok.SneakyThrows;
 
-public class LongConstant extends ValueConstant {
-    public LongConstant(Long value) {
-        super(value);
+import java.io.DataInput;
+
+public class LongConstant extends Constant {
+    private final long value;
+
+    @SneakyThrows
+    LongConstant(DataInput input) {
+        value = input.readLong();
     }
 
     @Override
-    public Long value(VMContext context) {
-        return (Long) value;
+    public Long value() {
+        return value;
     }
 }

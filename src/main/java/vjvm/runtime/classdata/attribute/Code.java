@@ -53,7 +53,7 @@ public class Code extends Attribute {
         private final ClassRef catchType;
 
         public JClass catchType() {
-            return catchType.jClass();
+            return catchType.value();
         }
     }
 }

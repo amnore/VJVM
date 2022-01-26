@@ -12,11 +12,13 @@ public class INVOKESTATIC extends Instruction {
     public void fetchAndRun(JThread thread) {
         var frame = thread.top();
         var methodRef = (MethodRef) frame.link().constant(thread.pc().ushort());
-        methodRef.jClass().initialize(thread);
-        assert methodRef.jClass().initState() == JClass.InitState.INITIALIZED;
+        var jClass=methodRef.jClass();
+        jClass.initialize(thread);
+        assert jClass.initState() == JClass.InitState.INITIALIZED;
 
-        var args = frame.stack().popSlots(methodRef.argc());
-        JInterpreter.invokeMethodWithArgs(methodRef.info(), thread, args);
+        var method = methodRef.value();
+        var args = frame.stack().popSlots(method.argc());
+        JInterpreter.invokeMethodWithArgs(method, thread, args);
     }
 
 }

@@ -1,15 +1,19 @@
 package vjvm.runtime.classdata.constant;
 
-import vjvm.runtime.JThread;
-import vjvm.vm.VMContext;
+import lombok.SneakyThrows;
 
-public class FloatConstant extends ValueConstant {
-    public FloatConstant(Float value) {
-        super(value);
+import java.io.DataInput;
+
+public class FloatConstant extends Constant {
+    private final float value;
+
+    @SneakyThrows
+    FloatConstant(DataInput input) {
+        value = input.readFloat();
     }
 
     @Override
-    public Float value(VMContext context) {
-        return (Float) value;
+    public Float value() {
+        return value;
     }
 }

@@ -17,7 +17,7 @@ public class GETFIELD extends Instruction {
         if (obj == 0)
             throw new NullPointerException();
         FieldInfo field;
-        field = ref.info();
+        field = ref.value();
 
         var slots = thread.context().heap().get(obj).data();
         if (field.size() == 2)

@@ -17,7 +17,7 @@ public class INSTANCEOF extends Instruction {
             return;
         }
 
-        var jClass = classRef.jClass();
+        var jClass = classRef.value();
         var objClass = thread.context().heap().get(obj).type();
         stack.pushInt(objClass.castableTo(jClass) ? 1 : 0);
     }

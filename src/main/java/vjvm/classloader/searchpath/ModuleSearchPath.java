@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReader;
-import java.lang.module.ModuleReference;
 
 public class ModuleSearchPath extends ClassSearchPath {
     private final ModuleReader[] allModules;

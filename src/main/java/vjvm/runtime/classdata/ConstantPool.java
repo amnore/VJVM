@@ -1,14 +1,13 @@
 package vjvm.runtime.classdata;
 
+import lombok.SneakyThrows;
 import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.constant.Constant;
-import vjvm.runtime.classdata.constant.UnevaluatedConstant;
 import vjvm.vm.VMContext;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.DataInput;
-import java.io.IOException;
 
 public class ConstantPool {
     @Getter
@@ -25,22 +24,15 @@ public class ConstantPool {
      * @param dataInput stream of data, contents of this constant pool will be read from stream
      * @param jClass    the class this pool belongs to
      */
+    @SneakyThrows
     public ConstantPool(DataInput dataInput, JClass jClass) {
         this.jClass = jClass;
-        try {
-            this.count = dataInput.readUnsignedShort();
-            constants = new Constant[count];
-            for (int i = 1; i < count; ) {
-                var r = Constant.construntFromData(dataInput);
-                constants[i] = r.getLeft();
-                i += r.getRight();
-            }
-            // eval unevaluated constants
-            for (int i = 1; i < count; ++i)
-                if (constants[i] instanceof UnevaluatedConstant)
-                    constants[i] = ((UnevaluatedConstant) constants[i]).evaluate(this);
-        } catch (IOException e) {
-            throw new ClassFormatError();
+        this.count = dataInput.readUnsignedShort();
+        constants = new Constant[count];
+        for (int i = 1; i < count; ) {
+            var r = Constant.construntFromData(dataInput, jClass);
+            constants[i] = r.getLeft();
+            i += r.getRight();
         }
     }
 

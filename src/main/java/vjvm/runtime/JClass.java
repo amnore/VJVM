@@ -116,13 +116,7 @@ public class JClass {
             attributes[i] = Attribute.constructFromData(dataInput, constantPool);
 
         // Spec. 5.3.3, 5.3.4: resolve super class and interfaces
-        thisClass.resolve();
-        if (superClass != null) {
-            superClass.resolve();
-        }
-        for (var i: interfaces) {
-            i.resolve();
-        }
+        // These are delayed to preparation stage
     }
 
     // create a class with all info provided, used to create array and primitive classes.
@@ -138,13 +132,13 @@ public class JClass {
         this.minorVersion = this.majorVersion = 0;
         this.constantPool = new ConstantPool(new Constant[0], this);
         this.accessFlags = accessFlags;
-        this.thisClass = new ClassRef(this, name);
+        this.thisClass = new ClassRef(name, this);
 
         // arrays and primitive classes don't have a package
         this.packageName = name().charAt(0) == DESC_reference ? name().substring(0, name().lastIndexOf('/')) : null;
-        this.superClass = superClassName == null ? null : new ClassRef(this, superClassName);
+        this.superClass = superClassName == null ? null : new ClassRef(superClassName, this);
         this.interfaces = Arrays.stream(interfaceNames)
-            .map(n -> new ClassRef(this, n)).toArray(ClassRef[]::new);
+            .map(n -> new ClassRef(n, this)).toArray(ClassRef[]::new);
 
         this.fields = fields;
         for (var f : fields)
@@ -153,12 +147,6 @@ public class JClass {
         for (var m : methods)
             m.jClass(this);
         this.attributes = new Attribute[0];
-
-        thisClass.resolve();
-        if (superClass != null)
-            superClass.resolve();
-        for (var i : interfaces)
-            i.resolve();
     }
 
     public void verify() {
@@ -177,9 +165,9 @@ public class JClass {
         verify();
         // prepare super classes and super interfaces
         if (superClass != null)
-            superClass.jClass().prepare();
+            superClass.value().prepare();
         for (var i : interfaces)
-            i.jClass().prepare();
+            i.value().prepare();
         initState = InitState.PREPARING;
         // create static fields
         int staticSize = 0;
@@ -211,7 +199,7 @@ public class JClass {
         }
 
         // init instance fields
-        instanceSize = superClass == null ? 0 : superClass.jClass().instanceSize;
+        instanceSize = superClass == null ? 0 : superClass.value().instanceSize;
         for (var field : fields) {
             if (field.static_())
                 continue;
@@ -222,7 +210,7 @@ public class JClass {
         // init vtable
         // copy super's vtable
         if (superClass != null)
-            vtable = new ArrayList<>(superClass.jClass().vtable);
+            vtable = new ArrayList<>(superClass.value().vtable);
         else vtable = new ArrayList<>();
         // insert or override for each method, see spec. 5.4.5
         // transitive overriding is not considered
@@ -298,16 +286,16 @@ public class JClass {
 
         // step7
         if (superClass != null) {
-            superClass.jClass().initialize(thread);
-            if (superClass.jClass().initState == InitState.ERROR) {
+            superClass.value().initialize(thread);
+            if (superClass.value().initState == InitState.ERROR) {
                 initState = InitState.ERROR;
                 return;
             }
         }
 
         for (var i : interfaces) {
-            i.jClass().initialize(thread);
-            if (i.jClass().initState == InitState.ERROR) {
+            i.value().initialize(thread);
+            if (i.value().initState == InitState.ERROR) {
                 initState = InitState.ERROR;
                 return;
             }
@@ -354,13 +342,13 @@ public class JClass {
         // find in super interfaces
         for (var si : interfaces) {
             // according to spec. 5.3.5.3, the reference to super interfaces have already been resolved.
-            var result = si.jClass().findField(name, descriptor);
+            var result = si.value().findField(name, descriptor);
             if (result != null)
                 return result;
         }
 
         // then find in super class
-        return superClass == null ? null : superClass.jClass().findField(name, descriptor);
+        return superClass == null ? null : superClass.value().findField(name, descriptor);
     }
 
     /**
@@ -376,14 +364,14 @@ public class JClass {
         }
 
         if (superClass != null) {
-            var result = superClass.jClass().findMethod(name, descriptor, false);
+            var result = superClass.value().findMethod(name, descriptor, false);
             if (result != null)
                 return result;
         }
 
         // Using the rules from JDK7 instead of JDK8
         for (var si : interfaces) {
-            var result = si.jClass().findMethod(name, descriptor, false);
+            var result = si.value().findMethod(name, descriptor, false);
             if (result != null)
                 return result;
         }
@@ -427,10 +415,10 @@ public class JClass {
         if (this == other) return true;
 
         // check for super class and super interfaces
-        if (superClass != null && superClass.jClass().castableTo(other))
+        if (superClass != null && superClass.value().castableTo(other))
             return true;
         for (var i : interfaces)
-            if (i.jClass().castableTo(other))
+            if (i.value().castableTo(other))
                 return true;
 
         // check for array cast
@@ -448,7 +436,7 @@ public class JClass {
      */
     public boolean subClassOf(JClass other) {
         return superClass != null
-            && (superClass.jClass() == other || superClass.jClass().subClassOf(other));
+            && (superClass.value() == other || superClass.value().subClassOf(other));
     }
 
     public boolean accessibleTo(JClass other) {
@@ -497,7 +485,7 @@ public class JClass {
     }
 
     public boolean array() {
-        return thisClass.name().charAt(0) == '[';
+        return name().charAt(0) == '[';
     }
 
     public String name() {
@@ -525,7 +513,7 @@ public class JClass {
 
         JClass host;
         try {
-            host = attr.hostClass().jClass();
+            host = attr.hostClass().value();
         } catch (Exception e) {
             return nestHost = this;
         }

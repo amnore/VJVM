@@ -1,7 +1,5 @@
 package vjvm.classloader.searchpath;
 
-import lombok.val;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +17,8 @@ public class WildcardSearchPath extends ClassSearchPath {
             var name = fileName.getName();
             return name.endsWith(".jar") || name.endsWith(".JAR");
         });
-        jars = Arrays.stream(files).map(file -> {
+        jars = files == null ? new JarFile[0]
+            : Arrays.stream(files).map(file -> {
             try {
                 return new JarFile(file);
             } catch (IOException e) {
