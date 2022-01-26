@@ -18,11 +18,9 @@ public class Main implements Callable<Integer> {
     @Parameters(index = "1..*")
     private String[] args = {};
 
-    private VMContext vmContext;
-
     @Override
     public Integer call() {
-        vmContext = new VMContext(userClassPath);
+        VMContext vmContext = new VMContext(userClassPath);
         vmContext.run(entryClass);
         return 0;
     }

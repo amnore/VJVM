@@ -19,7 +19,7 @@ public class StringConstant extends ValueConstant {
         assert context != null;
 
         if (addr == 0) {
-            addr = new StringObject((String) value, context).intern();
+            addr = context.heap().intern(new StringObject((String) value, context));
         }
         return addr;
     }

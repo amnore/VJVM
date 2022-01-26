@@ -7,8 +7,8 @@ public class STORE2S extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        frame.localVars().long_(thread.pc().ubyte(), frame.opStack().popLong());
+        var frame = thread.top();
+        frame.vars().long_(thread.pc().ubyte(), frame.stack().popLong());
     }
 
 }

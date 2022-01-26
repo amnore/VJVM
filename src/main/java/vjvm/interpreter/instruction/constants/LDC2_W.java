@@ -8,10 +8,10 @@ public class LDC2_W extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var stack = frame.opStack();
+        var frame = thread.top();
+        var stack = frame.stack();
         var index = thread.pc().ushort();
-        var value = ((ValueConstant) frame.dynLink().constant(index)).value(thread.context());
+        var value = ((ValueConstant) frame.link().constant(index)).value(thread.context());
 
         // only long and double are supported
         if (value instanceof Long)

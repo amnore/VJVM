@@ -3,6 +3,7 @@ package vjvm.runtime;
 import lombok.SneakyThrows;
 import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.classloader.JClassLoader;
+import vjvm.interpreter.JInterpreter;
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
@@ -13,12 +14,9 @@ import vjvm.runtime.classdata.attribute.NestMember;
 import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.runtime.classdata.constant.Constant;
 import vjvm.runtime.object.ClassObject;
-import vjvm.utils.ArrayUtil;
-import vjvm.utils.InvokeUtil;
 import vjvm.vm.VMContext;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
-import vjvm.vm.VMGlobalObject;
 
 import java.io.DataInput;
 import java.io.InvalidClassException;
@@ -320,7 +318,7 @@ public class JClass {
         // step9
         MethodInfo clinit = findMethod("<clinit>", "()V", true);
         if (clinit != null) {
-            InvokeUtil.invokeMethodWithArgs(clinit, thread, null);
+            JInterpreter.invokeMethodWithArgs(clinit, thread, new Slots(0));
             context().interpreter().run(thread);
         }
 
@@ -328,9 +326,6 @@ public class JClass {
         initState = InitState.INITIALIZED;
 
         // step11,12: skip
-
-        // debug
-        System.err.println(this);
     }
 
     @Override
@@ -440,8 +435,7 @@ public class JClass {
 
         // check for array cast
         if (this.array() && other.array())
-            return ArrayUtil.componentClass(this, context()).castableTo(
-                ArrayUtil.componentClass(other, context()));
+            return this.component().castableTo(other.component());
         return false;
     }
 
@@ -460,9 +454,7 @@ public class JClass {
     public boolean accessibleTo(JClass other) {
         // The accessibility of an array class is the same as its component type. See spec. 5.3.3.2
         if (array()) {
-            var elem = ArrayUtil.componentClass(this, context());
-            // workaround: element is primitive type
-            if (elem == null) return true;
+            var elem = this.component();
             return elem.accessibleTo(other);
         }
         return public_() || runtimePackage().equals(other.runtimePackage());
@@ -550,6 +542,15 @@ public class JClass {
 
     public VMContext context() {
         return classLoader.context();
+    }
+
+    private JClass component() {
+        assert array();
+
+        var componentType = name().substring(1);
+        if (!reference(componentType))
+            return context().primitiveClass(componentType);
+        return classLoader.loadClass(componentType);
     }
 
     public static class InitState {

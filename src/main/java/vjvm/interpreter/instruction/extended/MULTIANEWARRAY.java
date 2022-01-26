@@ -12,12 +12,12 @@ public class MULTIANEWARRAY extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var arrClassRef = (ClassRef) frame.dynLink().constant(thread.pc().ushort());
+        var frame = thread.top();
+        var arrClassRef = (ClassRef) frame.link().constant(thread.pc().ushort());
         var dimensions = thread.pc().ubyte();
         assert dimensions >= 1;
         assert arrClassRef.name().lastIndexOf("[") >= dimensions - 1;
-        var stack = frame.opStack();
+        var stack = frame.stack();
         var dimArr = new int[dimensions + 1];
         for (int i = 1; i <= dimensions; ++i)
             dimArr[i] = stack.popInt();

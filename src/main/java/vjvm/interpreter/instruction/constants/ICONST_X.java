@@ -10,7 +10,7 @@ public class ICONST_X extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        thread.currentFrame().opStack().pushInt(value);
+        thread.top().stack().pushInt(value);
     }
 
 }

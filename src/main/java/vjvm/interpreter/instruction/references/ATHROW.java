@@ -7,14 +7,10 @@ import vjvm.runtime.object.JObject;
 public class ATHROW extends Instruction {
     @Override
     public void fetchAndRun(JThread thread) {
-        var obj = thread.currentFrame().opStack().popAddress();
+        var ctx = thread.context();
+        var addr = thread.top().stack().popAddress();
 
-        // if the reference is null, throw an NullPointerException instead
-        if (obj == 0) {
-            var nptrClass = thread.context().bootstrapLoader().loadClass("java/lang/NullPointerException");
-            obj = new JObject(nptrClass).address();
-        }
-
-        thread.throwException(obj);
+        thread.throw_(addr == 0 ? ctx.heap().get(addr):
+            new JObject(ctx.bootstrapLoader().loadClass("java/lang/NullPointerException")));
     }
 }

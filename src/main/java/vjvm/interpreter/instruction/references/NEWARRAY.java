@@ -19,7 +19,7 @@ public class NEWARRAY extends Instruction {
         jClass.initialize(thread);
         assert jClass.initState() == JClass.InitState.INITIALIZED;
 
-        var stack = thread.currentFrame().opStack();
+        var stack = thread.top().stack();
         var arr = new ArrayObject(jClass, stack.popInt());
         stack.pushAddress(arr.address());
     }

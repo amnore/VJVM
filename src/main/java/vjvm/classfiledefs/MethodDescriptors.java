@@ -7,7 +7,7 @@ import static vjvm.classfiledefs.FieldDescriptors.DESC_reference;
 public class MethodDescriptors {
     public static int argc(String descriptor) {
         assert descriptor.startsWith("(");
-        var isParsingClass = false;
+
         var argc = 0;
         for (int i = 1; i < descriptor.length(); ) {
             if (descriptor.charAt(i) == ')') break;
@@ -20,5 +20,13 @@ public class MethodDescriptors {
             else ++i;
         }
         return argc;
+    }
+
+    public static char returnType(String descriptor) {
+        assert descriptor.startsWith("(");
+
+        var i = descriptor.indexOf(')') + 1;
+        assert i < descriptor.length();
+        return descriptor.charAt(i);
     }
 }

@@ -16,7 +16,6 @@ import vjvm.runtime.JThread;
 import vjvm.runtime.Slots;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
-import vjvm.utils.InvokeUtil;
 
 import static vjvm.classfiledefs.ClassAccessFlags.ACC_FINAL;
 import static vjvm.classfiledefs.ClassAccessFlags.ACC_PUBLIC;
@@ -105,7 +104,7 @@ public class VMContext {
 
         var mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V", true);
         assert mainMethod.jClass() == initClass;
-        InvokeUtil.invokeMethodWithArgs(mainMethod, initThread, new Slots(1));
+        JInterpreter.invokeMethodWithArgs(mainMethod, initThread, new Slots(1));
         interpreter.run(initThread);
     }
 }

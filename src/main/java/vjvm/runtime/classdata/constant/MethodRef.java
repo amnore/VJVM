@@ -60,10 +60,8 @@ public class MethodRef extends ResolvableConstant {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("MethodRef{");
-        sb.append("name='").append(name).append('\'');
-        sb.append(", descriptor='").append(descriptor).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return "MethodRef{" + "name='" + name + '\'' +
+            ", descriptor='" + descriptor + '\'' +
+            '}';
     }
 }

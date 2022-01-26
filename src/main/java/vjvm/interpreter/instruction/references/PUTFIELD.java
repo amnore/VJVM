@@ -9,13 +9,10 @@ public class PUTFIELD extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var fieldRef = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
+        var frame = thread.top();
+        var fieldRef = (FieldRef) frame.link().constant(thread.pc().ushort());
 
-        // log
-        System.err.println(fieldRef.name());
-
-        var stack = frame.opStack();
+        var stack = frame.stack();
         var field = fieldRef.info();
         var heap = thread.context().heap();
         if (fieldRef.size() == 1) {

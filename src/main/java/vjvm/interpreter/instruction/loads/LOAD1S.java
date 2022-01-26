@@ -7,8 +7,8 @@ public class LOAD1S extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        frame.opStack().pushInt(frame.localVars().int_(thread.pc().ubyte()));
+        var frame = thread.top();
+        frame.stack().pushInt(frame.vars().int_(thread.pc().ubyte()));
     }
 
 }

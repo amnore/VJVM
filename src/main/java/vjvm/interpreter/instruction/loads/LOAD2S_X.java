@@ -10,8 +10,8 @@ public class LOAD2S_X extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        frame.opStack().pushLong(frame.localVars().long_(index));
+        var frame = thread.top();
+        frame.stack().pushLong(frame.vars().long_(index));
     }
 
 }

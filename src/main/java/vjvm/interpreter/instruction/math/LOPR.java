@@ -3,7 +3,6 @@ package vjvm.interpreter.instruction.math;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import lombok.AllArgsConstructor;
-import lombok.val;
 
 import java.util.function.LongBinaryOperator;
 
@@ -13,7 +12,7 @@ public class LOPR extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var stack = thread.currentFrame().opStack();
+        var stack = thread.top().stack();
         var right = stack.popLong();
         var left = stack.popLong();
         stack.pushLong(opr.applyAsLong(left, right));

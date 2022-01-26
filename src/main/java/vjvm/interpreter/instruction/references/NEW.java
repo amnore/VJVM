@@ -10,15 +10,15 @@ public class NEW extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var classRef = (ClassRef) frame.dynLink().constant(thread.pc().ushort());
+        var frame = thread.top();
+        var classRef = (ClassRef) frame.link().constant(thread.pc().ushort());
 
         var jClass = classRef.jClass();
         jClass.initialize(thread);
         assert jClass.initState() == JClass.InitState.INITIALIZED;
 
         var obj = new JObject(jClass);
-        frame.opStack().pushAddress(obj.address());
+        frame.stack().pushAddress(obj.address());
     }
 
 }

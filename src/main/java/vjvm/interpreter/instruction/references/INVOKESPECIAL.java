@@ -1,25 +1,17 @@
 package vjvm.interpreter.instruction.references;
 
+import vjvm.interpreter.JInterpreter;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.MethodRef;
-import vjvm.utils.InvokeUtil;
-import vjvm.vm.VMContext;
 
 public class INVOKESPECIAL extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var methodRef = (MethodRef) frame.dynLink().constant(thread.pc().ushort());
-
-        // log
-        System.err.println(methodRef.name());
-
-        var heap = thread.context().heap();
-        var opSlots = frame.opStack().slots();
-        var argc = methodRef.argc();
+        var frame = thread.top();
+        var methodRef = (MethodRef) frame.link().constant(thread.pc().ushort());
         var currentClass = frame.jClass();
 
         JClass targetClass;
@@ -29,8 +21,9 @@ public class INVOKESPECIAL extends Instruction {
             targetClass = currentClass.superClass().jClass();
         else targetClass = methodRef.jClass();
 //        var method = targetClass.findMethod(methodRef.name(), methodRef.descriptor());
+        var args = frame.stack().popSlots(methodRef.argc() + 1);
         var method = targetClass.vtableMethod(methodRef.info().vtableIndex());
-        InvokeUtil.invokeMethod(method, thread);
+        JInterpreter.invokeMethodWithArgs(method, thread, args);
     }
 
 }

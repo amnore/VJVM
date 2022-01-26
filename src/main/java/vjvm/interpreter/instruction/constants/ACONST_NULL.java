@@ -2,13 +2,12 @@ package vjvm.interpreter.instruction.constants;
 
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
-import lombok.val;
 
 public class ACONST_NULL extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var opStack = thread.currentFrame().opStack();
+        var opStack = thread.top().stack();
         opStack.pushAddress(0);
     }
 

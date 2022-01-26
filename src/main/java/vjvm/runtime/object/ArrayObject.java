@@ -3,11 +3,8 @@ package vjvm.runtime.object;
 import lombok.Getter;
 import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.runtime.JClass;
-import vjvm.runtime.Slots;
-import vjvm.utils.ArrayUtil;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class ArrayObject extends JObject {
     private final ByteBuffer elements;
@@ -17,7 +14,7 @@ public class ArrayObject extends JObject {
     public ArrayObject(JClass jClass, int length) {
         super(jClass);
 
-        var elemSize = FieldDescriptors.size(ArrayUtil.componentType(type().name()));
+        var elemSize = FieldDescriptors.size(type().name().substring(1));
         elements = ByteBuffer.allocate(elemSize * length);
         this.length = length;
         data().address(jClass.findField("length", "I").offset(), length);

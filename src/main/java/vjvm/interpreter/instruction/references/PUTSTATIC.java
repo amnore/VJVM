@@ -10,8 +10,8 @@ public class PUTSTATIC extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var fieldRef = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
+        var frame = thread.top();
+        var fieldRef = (FieldRef) frame.link().constant(thread.pc().ushort());
 
         var jClass = fieldRef.jClass();
         if (jClass.initState() != JClass.InitState.INITIALIZED) {
@@ -20,7 +20,7 @@ public class PUTSTATIC extends Instruction {
         }
         var slots = jClass.staticFields();
         var field = fieldRef.info();
-        var stack = frame.opStack();
+        var stack = frame.stack();
         if (fieldRef.size() == 2)
             slots.long_(field.offset(), stack.popLong());
         else {

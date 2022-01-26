@@ -10,17 +10,17 @@ public class RawMethodRef extends UnevaluatedConstant {
 
     @Override
     public MethodRef evaluate(ConstantPool constantPool) {
-        var cr = constantPool.constant(classIndex);
-        if (cr instanceof UnevaluatedConstant) {
-            cr = ((UnevaluatedConstant) cr).evaluate(constantPool);
-            constantPool.constant(classIndex, cr);
+        var ref = constantPool.constant(classIndex);
+        if (ref instanceof UnevaluatedConstant) {
+            ref = ((UnevaluatedConstant) ref).evaluate(constantPool);
+            constantPool.constant(classIndex, ref);
         }
-        var nt = constantPool.constant(nameAndTypeIndex);
-        if (nt instanceof UnevaluatedConstant) {
-            nt = ((UnevaluatedConstant) nt).evaluate(constantPool);
-            constantPool.constant(nameAndTypeIndex, nt);
+        var nameAndType = constantPool.constant(nameAndTypeIndex);
+        if (nameAndType instanceof UnevaluatedConstant) {
+            nameAndType = ((UnevaluatedConstant) nameAndType).evaluate(constantPool);
+            constantPool.constant(nameAndTypeIndex, nameAndType);
         }
-        return new MethodRef((ClassRef) cr, ((NameAndTypeConstant) nt).name(),
-            ((NameAndTypeConstant) nt).descriptor(), false, constantPool.jClass());
+        return new MethodRef((ClassRef) ref, ((NameAndTypeConstant) nameAndType).name(),
+            ((NameAndTypeConstant) nameAndType).descriptor(), false, constantPool.jClass());
     }
 }

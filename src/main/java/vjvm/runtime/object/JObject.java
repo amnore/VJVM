@@ -9,7 +9,7 @@ import vjvm.vm.VMContext;
 public class JObject {
     private final JClass type;
     private final Slots data;
-    private int address;
+    private final int address;
 
     public JObject(JClass jClass) {
         assert jClass.initState() == JClass.InitState.INITIALIZED;

@@ -1,5 +1,7 @@
 package vjvm.interpreter;
 
+import org.apache.commons.lang3.tuple.Triple;
+import vjvm.classfiledefs.MethodDescriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.interpreter.instruction.comparisons.*;
 import vjvm.interpreter.instruction.constants.*;
@@ -16,11 +18,23 @@ import vjvm.interpreter.instruction.math.*;
 import vjvm.interpreter.instruction.references.*;
 import vjvm.interpreter.instruction.stack.*;
 import vjvm.interpreter.instruction.stores.*;
+import vjvm.runtime.JFrame;
 import vjvm.runtime.JThread;
-import vjvm.vm.VMContext;
+import vjvm.runtime.Slots;
+import vjvm.runtime.classdata.MethodInfo;
+import vjvm.runtime.object.ArrayObject;
+import vjvm.runtime.object.StringObject;
+
+import java.util.HashMap;
+import java.util.function.BiFunction;
+
+import static vjvm.classfiledefs.FieldDescriptors.*;
 
 public class JInterpreter {
     private static final Instruction[] dispatchTable;
+
+    // (ClassName, MethodName, MethodDescriptor) -> HackFunction
+    public static HashMap<Triple<String, String, String>, BiFunction<JThread, Slots, Object>> hackTable = new HashMap<>();
 
     static {
         // @formatter:off
@@ -91,54 +105,150 @@ public class JInterpreter {
 /* 0xfc */  null, null, null, null,
         };
         // @formatter:on
+
+        hackTable.put(Triple.of("java/lang/Object", "registerNatives", "()V"), (t, a) -> null);
+        hackTable.put(Triple.of("java/lang/Class", "registerNatives", "()V"), (t, a) -> null);
+        hackTable.put(Triple.of("java/lang/Class", "desiredAssertionStatus0", "(Ljava/lang/Class;)Z"), (t, a) -> true);
+        hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
+            (t, a) -> {
+                var h = t.context().heap();
+                var s = (StringObject) t.context().heap().get(a.address(0));
+                return h.intern(s);
+            });
+        hackTable.put(Triple.of("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"), (t, a) -> a.address(0));
+        hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"), (t, a) -> {
+            var c = t.context();
+            var str = (StringObject) c.heap().get(a.address(0));
+            return c.primitiveClass(str.value()).classObject().address();
+        });
+        hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), (t, a) -> a.int_(0));
+        hackTable.put(Triple.of("java/lang/Double", "doubleToRawLongBits", "(D)J"), (t, a) -> a.long_(0));
+        hackTable.put(Triple.of("java/lang/Double", "longBitsToDouble", "(J)D"), (t, a) -> a.double_(0));
+        hackTable.put(Triple.of("java/lang/System", "registerNatives", "()V"), (t, a) -> null);
+        hackTable.put(Triple.of("java/lang/StrictMath", "sin", "(D)D"), (t, a) -> Math.sin(a.double_(0)));
+        hackTable.put(Triple.of("java/lang/StrictMath", "exp", "(D)D"), (t, a) -> Math.exp(a.double_(0)));
+        hackTable.put(Triple.of("java/lang/StrictMath", "pow", "(DD)D"), (t, a) -> Math.pow(a.double_(0), a.double_(2)));
+        hackTable.put(Triple.of("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"), (t, a) -> {
+            // only support char[], no checks
+            var heap = t.context().heap();
+            var src = (ArrayObject) heap.get(a.address(0));
+            var srcPos = a.int_(1);
+            var dest = (ArrayObject) heap.get(a.address(2));
+            var destPos = a.address(3);
+            var length = a.int_(4);
+
+            for (int i = 0; i < length; ++i) {
+                dest.char_(destPos + 1, src.char_(srcPos + i));
+            }
+            return null;
+        });
+    }
+
+    /**
+     * Invoke a method when there is no frames in a thread.
+     *
+     * @param method the method to call
+     * @param thread the thread to run
+     * @param args   the supplied arguments, index begins at 0, can be null if the method has no arguments
+     */
+    public static void invokeMethodWithArgs(MethodInfo method, JThread thread, Slots args) {
+        assert args.size() == method.argc() + (method.static_() ? 0 : 1);
+
+        var t = Triple.of(method.jClass().thisClass().name(), method.name(), method.descriptor());
+        var m = hackTable.get(t);
+        if (m != null) {
+            var ret = m.apply(thread, args);
+            var s = thread.top().stack();
+
+            switch (MethodDescriptors.returnType(method.descriptor())) {
+                case 'V':
+                    break;
+                case DESC_array:
+                case DESC_reference:
+                    s.pushAddress((Integer) ret);
+                    break;
+                case DESC_boolean:
+                    s.pushInt(((Boolean) ret) ? 1 : 0);
+                    break;
+                case DESC_byte:
+                    s.pushInt((Byte) ret);
+                    break;
+                case DESC_char:
+                    s.pushInt((Character) ret);
+                    break;
+                case DESC_double:
+                    s.pushDouble((Double) ret);
+                    break;
+                case DESC_float:
+                    s.pushFloat((Float) ret);
+                    break;
+                case DESC_int:
+                    s.pushInt((Integer) ret);
+                    break;
+                case DESC_long:
+                    s.pushLong((Long) ret);
+                    break;
+                case DESC_short:
+                    s.pushInt((Short) ret);
+                    break;
+                default:
+                    throw new Error("Invalid return type");
+            }
+            return;
+        }
+
+        if (method.native_())
+            throw new Error("Unimplemented native method: " + t);
+
+        var frame = new JFrame(method);
+        args.copyTo(0, args.size(), frame.vars(), 0);
+        thread.push(frame);
     }
 
     public void run(JThread thread) {
         // since this method may be invoked when JVM stack isn't empty,
         // for example, by the initialize() method of JClass, we need to exit at the right time.
-        int count = thread.frameCount();
+        int count = thread.size();
 
-        while (thread.frameCount() >= count) {
+        while (thread.size() >= count) {
             var opcode = Byte.toUnsignedInt(thread.pc().byte_());
             if (dispatchTable[opcode] == null)
                 throw new Error(String.format("Unimplemented: %d", opcode));
 
             dispatchTable[opcode].fetchAndRun(thread);
 
-            if (thread.hasException())
+            if (thread.exception() != null)
                 unwind(thread, count);
-            else if (!thread.empty())
-                thread.pc().update();
         }
     }
 
     public void unwind(JThread thread, int lowestFrame) {
         var exception = thread.exception();
         var heap = thread.context().heap();
-        var excClass = heap.get(exception).type();
+        var eClass = exception.type();
 
         // unwind stack
-        while (thread.frameCount() >= lowestFrame) {
-            var frame = thread.currentFrame();
-            var method = frame.methodInfo();
-            var stack = frame.opStack();
+        while (thread.size() >= lowestFrame) {
+            var frame = thread.top();
+            var method = frame.method();
+            var stack = frame.stack();
             var pc = frame.pc();
             for (var handler : method.code().exceptionTable()) {
                 if (pc.position() < handler.startPC()
                     || pc.position() >= handler.endPC()
-                    || (handler.catchType() != null && !excClass.castableTo(handler.catchType())))
+                    || (handler.catchType() != null && eClass.castableTo(handler.catchType())))
                     continue;
 
                 // a matching handler is found
                 pc.position(handler.handlerPC());
                 stack.clear();
-                stack.pushAddress(exception);
+                stack.pushAddress(exception.address());
                 thread.clearException();
                 return;
             }
 
             // no matching handler is found in current method
-            thread.popFrame();
+            thread.pop();
         }
     }
 }

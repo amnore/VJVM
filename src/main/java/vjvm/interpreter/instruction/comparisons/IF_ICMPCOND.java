@@ -11,7 +11,7 @@ public class IF_ICMPCOND extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var stack = thread.currentFrame().opStack();
+        var stack = thread.top().stack();
         var right = stack.popInt();
         var left = stack.popInt();
         var pc = thread.pc();

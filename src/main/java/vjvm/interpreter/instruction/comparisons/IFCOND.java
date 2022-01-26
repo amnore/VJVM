@@ -12,7 +12,7 @@ public class IFCOND extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var stack = thread.currentFrame().opStack();
+        var stack = thread.top().stack();
         var value = stack.popInt();
         var pc = thread.pc();
         var offset = pc.short_();

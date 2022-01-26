@@ -10,12 +10,12 @@ public class GETSTATIC extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var stack = frame.opStack();
+        var frame = thread.top();
+        var stack = frame.stack();
         FieldInfo field;
         JClass jClass;
 
-        var ref = (FieldRef) frame.dynLink().constant(thread.pc().ushort());
+        var ref = (FieldRef) frame.link().constant(thread.pc().ushort());
         field = ref.info();
         jClass = ref.classRef().jClass();
         jClass.initialize(thread);

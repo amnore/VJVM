@@ -2,25 +2,24 @@ package vjvm.runtime;
 
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.MethodInfo;
-import vjvm.vm.VMContext;
 import lombok.Getter;
 
 @Getter
 public class JFrame {
-    private final Slots localVars;
-    private final OperandStack opStack;
-    private final ConstantPool dynLink;
-    private final MethodInfo methodInfo;
+    private final Slots vars;
+    private final OperandStack stack;
+    private final ConstantPool link;
+    private final MethodInfo method;
     private final JClass jClass;
     private final ProgramCounter pc;
 
-    public JFrame(MethodInfo method, VMContext context) {
+    public JFrame(MethodInfo method) {
         var code = method.code();
         jClass = method.jClass();
-        localVars = new Slots(code.maxLocals());
-        opStack = new OperandStack(code.maxStack());
-        dynLink = jClass.constantPool();
-        methodInfo = method;
+        vars = new Slots(code.maxLocals());
+        stack = new OperandStack(code.maxStack());
+        link = jClass.constantPool();
+        this.method = method;
         pc = new ProgramCounter(code.code());
     }
 }

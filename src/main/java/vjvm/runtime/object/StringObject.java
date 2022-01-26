@@ -5,10 +5,6 @@ import vjvm.vm.VMContext;
 import java.nio.charset.StandardCharsets;
 
 public class StringObject extends JObject {
-    public StringObject(VMContext context) {
-        super(context.bootstrapLoader().loadClass("java/lang/String"));
-    }
-
     public StringObject(String value, VMContext context) {
         super(context.bootstrapLoader().loadClass("java/lang/String"));
 
@@ -23,10 +19,6 @@ public class StringObject extends JObject {
         data().int_(valueField.offset(), array.address());
         data().int_(coderField.offset(),
             type().staticFields().int_(latin1Field.offset()));
-    }
-
-    public int intern() {
-        return context().heap().intern(this);
     }
 
     public String value() {

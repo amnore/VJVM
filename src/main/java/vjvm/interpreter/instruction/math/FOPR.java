@@ -4,7 +4,6 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.utils.FloatBinaryOperator;
 import lombok.AllArgsConstructor;
-import lombok.val;
 
 @AllArgsConstructor
 public class FOPR extends Instruction {
@@ -12,7 +11,7 @@ public class FOPR extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var stack = thread.currentFrame().opStack();
+        var stack = thread.top().stack();
         var right = stack.popFloat();
         var left = stack.popFloat();
         stack.pushFloat(opr.applyAsFloat(left, right));

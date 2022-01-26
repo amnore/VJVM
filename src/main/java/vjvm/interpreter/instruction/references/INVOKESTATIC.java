@@ -1,21 +1,22 @@
 package vjvm.interpreter.instruction.references;
 
+import vjvm.interpreter.JInterpreter;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.MethodRef;
-import vjvm.utils.InvokeUtil;
 
 public class INVOKESTATIC extends Instruction {
 
     @Override
     public void fetchAndRun(JThread thread) {
-        var frame = thread.currentFrame();
-        var methodRef = (MethodRef) frame.dynLink().constant(thread.pc().ushort());
+        var frame = thread.top();
+        var methodRef = (MethodRef) frame.link().constant(thread.pc().ushort());
         methodRef.jClass().initialize(thread);
         assert methodRef.jClass().initState() == JClass.InitState.INITIALIZED;
 
-        InvokeUtil.invokeMethod(methodRef.info(), thread);
+        var args = frame.stack().popSlots(methodRef.argc());
+        JInterpreter.invokeMethodWithArgs(methodRef.info(), thread, args);
     }
 
 }

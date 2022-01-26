@@ -3,9 +3,10 @@ package vjvm.runtime;
 import lombok.Getter;
 import vjvm.vm.VMContext;
 
-@Getter
 public class OperandStack {
     private final Slots slots;
+
+    @Getter
     private int top;
 
     public OperandStack(int stackSize) {
@@ -57,9 +58,14 @@ public class OperandStack {
         return popInt();
     }
 
-    public void popSlots(int count) {
+    public Slots popSlots(int count) {
         assert top >= count;
+
+        var ret = new Slots(count);
         top -= count;
+        slots.copyTo(top, count, ret, 0);
+
+        return ret;
     }
 
     public void clear() {
