@@ -4,6 +4,7 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
+import vjvm.runtime.object.JObject;
 
 public class NEW extends Instruction {
 
@@ -16,7 +17,8 @@ public class NEW extends Instruction {
         jClass.initialize(thread);
         assert jClass.initState() == JClass.InitState.INITIALIZED;
 
-        frame.opStack().pushAddress(jClass.createInstance());
+        var obj = new JObject(jClass);
+        frame.opStack().pushAddress(obj.address());
     }
 
 }

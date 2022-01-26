@@ -7,12 +7,10 @@ import vjvm.vm.VMContext;
 public class OperandStack {
     private final Slots slots;
     private int top;
-    private VMContext context;
 
-    public OperandStack(int stackSize, VMContext ctx) {
+    public OperandStack(int stackSize) {
         slots = new Slots(stackSize);
         top = 0;
-        context = ctx;
     }
 
     public void pushInt(int value) {
@@ -70,9 +68,8 @@ public class OperandStack {
 
     @Override
     public String toString() {
-        String sb = "OperandStack{" + "slots=" + slots +
+        return "OperandStack{" + "slots=" + slots +
             ", top=" + top +
             '}';
-        return sb;
     }
 }

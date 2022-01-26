@@ -2,8 +2,7 @@ package vjvm.interpreter.instruction.references;
 
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
-import vjvm.vm.VMContext;
-import lombok.val;
+import vjvm.runtime.object.JObject;
 
 public class ATHROW extends Instruction {
     @Override
@@ -13,7 +12,7 @@ public class ATHROW extends Instruction {
         // if the reference is null, throw an NullPointerException instead
         if (obj == 0) {
             var nptrClass = thread.context().bootstrapLoader().loadClass("java/lang/NullPointerException");
-            obj = nptrClass.createInstance();
+            obj = new JObject(nptrClass).address();
         }
 
         thread.throwException(obj);

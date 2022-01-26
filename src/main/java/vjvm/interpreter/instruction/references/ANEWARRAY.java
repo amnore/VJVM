@@ -4,7 +4,7 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
-import vjvm.utils.ArrayUtil;
+import vjvm.runtime.object.ArrayObject;
 
 public class ANEWARRAY extends Instruction {
 
@@ -19,8 +19,8 @@ public class ANEWARRAY extends Instruction {
         arrayClass.initialize(thread);
         assert arrayClass.initState() == JClass.InitState.INITIALIZED;
 
-        var arr = ArrayUtil.newInstance(arrayClass, count, thread.context().heap());
-        stack.pushAddress(arr);
+        var arr = new ArrayObject(arrayClass, count);
+        stack.pushAddress(arr.address());
     }
 
 }

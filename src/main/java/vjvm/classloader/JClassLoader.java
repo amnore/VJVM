@@ -15,19 +15,18 @@ import java.io.InputStream;
 import java.util.HashMap;
 
 import lombok.Getter;
+import vjvm.vm.VMGlobalObject;
 
-public class JClassLoader implements Closeable {
+public class JClassLoader extends VMGlobalObject implements Closeable {
     // The parent of bootstrap class loader is null
     private final JClassLoader parent;
     private final ClassSearchPath[] searchPaths;
     private final HashMap<String, JClass> definedClass = new HashMap<>();
-    @Getter
-    private final VMContext context;
 
-    public JClassLoader(JClassLoader parent, ClassSearchPath[] searchPaths, VMContext ctx) {
+    public JClassLoader(JClassLoader parent, ClassSearchPath[] searchPaths, VMContext context) {
+        super(context);
         this.parent = parent;
         this.searchPaths = searchPaths;
-        context = ctx;
     }
 
     /**
@@ -72,25 +71,21 @@ public class JClassLoader implements Closeable {
             if (FieldDescriptors.reference(name.charAt(1))) {
                 var elemClass = loadClass(name.substring(1));
                 return elemClass.classLoader().defineArrayClass(name);
-            } else return context.bootstrapLoader().defineArrayClass(name);
+            } else return context().bootstrapLoader().defineArrayClass(name);
         }
 
         // the class is not an array class
         // find in parent first
-        JClass ret;
-        if (parent != null) {
-            try {
-                ret = parent.loadClass(name);
-                return ret;
-            } catch (JClassNotFoundException e) {
-                // Continue...
-            }
+        JClass jClass;
+        if (parent != null
+            && (jClass = parent.loadClass(name)) != null) {
+            return jClass;
         }
 
         // find in loaded classes
-        ret = definedClass.get(name);
-        if (ret != null)
-            return ret;
+        if ((jClass = definedClass.get(name)) != null)
+            return jClass;
+
         // not loaded
         for (var p : searchPaths) {
             var iStream = p.findClass(name);
@@ -98,7 +93,8 @@ public class JClassLoader implements Closeable {
             if (iStream != null)
                 return defineNonarrayClass(name, iStream);
         }
-        throw new JClassNotFoundException(name);
+
+        return null;
     }
 
     public JClass definedClass(String name) {

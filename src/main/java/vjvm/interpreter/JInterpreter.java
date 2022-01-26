@@ -115,7 +115,7 @@ public class JInterpreter {
     public void unwind(JThread thread, int lowestFrame) {
         var exception = thread.exception();
         var heap = thread.context().heap();
-        var excClass = heap.jClass(heap.slots().int_(exception - 1));
+        var excClass = heap.get(exception).type();
 
         // unwind stack
         while (thread.frameCount() >= lowestFrame) {

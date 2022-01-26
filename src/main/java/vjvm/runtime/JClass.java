@@ -12,11 +12,13 @@ import vjvm.runtime.classdata.attribute.NestHost;
 import vjvm.runtime.classdata.attribute.NestMember;
 import vjvm.runtime.classdata.constant.ClassRef;
 import vjvm.runtime.classdata.constant.Constant;
+import vjvm.runtime.object.ClassObject;
 import vjvm.utils.ArrayUtil;
 import vjvm.utils.InvokeUtil;
 import vjvm.vm.VMContext;
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
+import vjvm.vm.VMGlobalObject;
 
 import java.io.DataInput;
 import java.io.InvalidClassException;
@@ -48,10 +50,6 @@ public class JClass {
     private final FieldInfo[] fields;
     private final MethodInfo[] methods;
     private final Attribute[] attributes;
-    @Getter
-    private final int methodAreaIndex;
-    @Getter
-    private final VMContext context;
 
     // initialized with prepare()
     @Getter
@@ -70,13 +68,12 @@ public class JClass {
 
     private JClass nestHost;
 
-    private int classObject = 0;
+    private ClassObject classObject;
 
     // construct from data
     @SneakyThrows
     public JClass(DataInput dataInput, JClassLoader classLoader) {
         this.classLoader = classLoader;
-        context = classLoader.context();
 
         // check magic number
         var magic = dataInput.readInt();
@@ -128,8 +125,6 @@ public class JClass {
         for (var i: interfaces) {
             i.resolve();
         }
-
-        methodAreaIndex = context.heap().addJClass(this);
     }
 
     // create a class with all info provided, used to create array and primitive classes.
@@ -140,9 +135,7 @@ public class JClass {
         String superClassName,
         String[] interfaceNames,
         FieldInfo[] fields,
-        MethodInfo[] methods,
-        VMContext context) {
-        this.context = context;
+        MethodInfo[] methods) {
         this.classLoader = classLoader;
         this.minorVersion = this.majorVersion = 0;
         this.constantPool = new ConstantPool(new Constant[0], this);
@@ -168,8 +161,6 @@ public class JClass {
             superClass.resolve();
         for (var i : interfaces)
             i.resolve();
-
-        methodAreaIndex = this.context.heap().addJClass(this);
     }
 
     public void verify() {
@@ -207,6 +198,7 @@ public class JClass {
             for (int i = 0; i < field.attributeCount(); ++i)
                 if (field.attribute(i) instanceof ConstantValue) {
                     int offset = field.offset();
+                    // TODO: Make it more lazy
                     Object value = ((ConstantValue) field.attribute(i)).value();
                     switch (field.descriptor().charAt(0)) {
                         case DESC_boolean, DESC_byte, DESC_char, DESC_short, DESC_int ->
@@ -240,24 +232,32 @@ public class JClass {
         // for other instance methods, they are all added to vtable
         int superlen = vtable.size();
         outer:
-        for (var mc : methods) {
-            if (mc.static_()) continue;
+        for (var m : methods) {
+            if (m.static_()) {
+                continue;
+            }
+
             for (int j = 0; j < superlen; ++j) {
                 var ma = vtable.get(j);
-                if (!mc.name().equals(ma.name()) || !mc.descriptor().equals(ma.descriptor()))
+                if (!m.name().equals(ma.name()) || !m.descriptor().equals(ma.descriptor())) {
                     continue;
-                if (mc.private_())
+                }
+
+                if (m.private_()) {
                     continue;
+                }
+
                 if (ma.public_() || ma.protected_()
                     || (!ma.private_() && ma.jClass().packageName().equals(packageName))) {
-                    vtable.set(j, mc);
-                    mc.vtableIndex(j);
+                    vtable.set(j, m);
+                    m.vtableIndex(j);
                     continue outer;
                 }
             }
+
             // if there is not override found
-            vtable.add(mc);
-            mc.vtableIndex(vtable.size() - 1);
+            vtable.add(m);
+            m.vtableIndex(vtable.size() - 1);
         }
 
         initState = InitState.PREPARED;
@@ -296,10 +296,7 @@ public class JClass {
         initThread = thread;
 
         // additional: create a class object in the heap to point to this class
-        JClass classClass = context.bootstrapLoader().loadClass("java/lang/Class");
-        classObject = classClass.createInstance();
-        var slots = context.heap().slots();
-        slots.int_(classObject + classClass.instanceSize() - 1, methodAreaIndex);
+        classObject = new ClassObject(this);
 
         // step7
         if (superClass != null) {
@@ -324,7 +321,7 @@ public class JClass {
         MethodInfo clinit = findMethod("<clinit>", "()V", true);
         if (clinit != null) {
             InvokeUtil.invokeMethodWithArgs(clinit, thread, null);
-            context.interpreter().run(thread);
+            context().interpreter().run(thread);
         }
 
         // step10
@@ -443,8 +440,8 @@ public class JClass {
 
         // check for array cast
         if (this.array() && other.array())
-            return ArrayUtil.componentClass(this, context).castableTo(
-                ArrayUtil.componentClass(other, context));
+            return ArrayUtil.componentClass(this, context()).castableTo(
+                ArrayUtil.componentClass(other, context()));
         return false;
     }
 
@@ -463,7 +460,7 @@ public class JClass {
     public boolean accessibleTo(JClass other) {
         // The accessibility of an array class is the same as its component type. See spec. 5.3.3.2
         if (array()) {
-            var elem = ArrayUtil.componentClass(this, context);
+            var elem = ArrayUtil.componentClass(this, context());
             // workaround: element is primitive type
             if (elem == null) return true;
             return elem.accessibleTo(other);
@@ -515,24 +512,12 @@ public class JClass {
         return thisClass.name();
     }
 
-    public int createInstance() {
-        assert initState == InitState.INITIALIZED;
-        assert !array();
-
-        var heap = context.heap();
-        int addr = heap.allocate(instanceSize);
-
-        // set class index
-        heap.slots().int_(addr - 1, methodAreaIndex);
-        return addr;
-    }
-
     /**
      * Get the class object associated with this class.
      *
      * @return an address into the heap slots which points to the class object
      */
-    public int classObject() {
+    public ClassObject classObject() {
         assert initState == InitState.INITIALIZED;
         return classObject;
     }
@@ -561,6 +546,10 @@ public class JClass {
         }
 
         return nestHost = host;
+    }
+
+    public VMContext context() {
+        return classLoader.context();
     }
 
     public static class InitState {

@@ -11,7 +11,7 @@ public class LDC_W extends Instruction {
         var frame = thread.currentFrame();
         var stack = frame.opStack();
         var index = thread.pc().ushort();
-        var value = ((ValueConstant) frame.dynLink().constant(index)).value();
+        var value = ((ValueConstant) frame.dynLink().constant(index)).value(thread.context());
 
         // only int and float are supported
         if (value instanceof Integer)

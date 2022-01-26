@@ -5,7 +5,7 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.ClassRef;
-import vjvm.utils.ArrayUtil;
+import vjvm.runtime.object.ArrayObject;
 import vjvm.vm.VMContext;
 
 public class MULTIANEWARRAY extends Instruction {
@@ -40,12 +40,14 @@ public class MULTIANEWARRAY extends Instruction {
 
     private int createArrayRecursive(int[] dimensionArr, JClass[] arrClasses, int current, VMContext ctx) {
         assert current > 0;
-        var slots = ctx.heap().slots();
-        var arr = ArrayUtil.newInstance(arrClasses[current], dimensionArr[current], ctx.heap());
-        if (current != 1)
-            for (int i = 0; i < dimensionArr[current]; ++i)
-                slots.addressAt(arr + arrClasses[current].instanceSize() + i,
-                    createArrayRecursive(dimensionArr, arrClasses, current - 1, ctx));
-        return arr;
+        var arr = new ArrayObject(arrClasses[current], dimensionArr[current]);
+
+        if (current != 1) {
+            for (int i=0;i<dimensionArr[current]; i++) {
+                arr.address(i, createArrayRecursive(dimensionArr, arrClasses, current - 1, ctx));
+            }
+        }
+
+        return arr.address();
     }
 }

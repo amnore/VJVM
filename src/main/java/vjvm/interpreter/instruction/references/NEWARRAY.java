@@ -3,7 +3,7 @@ package vjvm.interpreter.instruction.references;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
-import vjvm.utils.ArrayUtil;
+import vjvm.runtime.object.ArrayObject;
 
 public class NEWARRAY extends Instruction {
     private static final String[] arrType = {
@@ -20,8 +20,8 @@ public class NEWARRAY extends Instruction {
         assert jClass.initState() == JClass.InitState.INITIALIZED;
 
         var stack = thread.currentFrame().opStack();
-        var ref = ArrayUtil.newInstance(jClass, stack.popInt(), thread.context().heap());
-        stack.pushAddress(ref);
+        var arr = new ArrayObject(jClass, stack.popInt());
+        stack.pushAddress(arr.address());
     }
 
 }

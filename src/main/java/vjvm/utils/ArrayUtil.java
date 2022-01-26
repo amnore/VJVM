@@ -29,27 +29,6 @@ public class ArrayUtil {
         return arrayClass.classLoader().loadClass(componentType);
     }
 
-    public static int length(int arrayRef, JHeap heap) {
-        var slots = heap.slots();
-        var jClass = heap.jClass(slots.int_(arrayRef - 1));
-        assert jClass.array();
-        return slots.int_(arrayRef + jClass.instanceSize() - 1);
-    }
-
-    public static int newInstance(JClass arrayClass, int length, JHeap heap) {
-        // allocate array
-        var objSize = arrayClass.instanceSize();
-        var arrSize = lengthInSlots(arrayClass.name().substring(1), length);
-        var slots = heap.slots();
-        var ret = heap.allocate(objSize + arrSize);
-
-        // set the length and classIndex of new array
-        slots.int_(ret - 1, arrayClass.methodAreaIndex());
-        slots.int_(ret + objSize - 1, length);
-
-        return ret;
-    }
-
     public static JClass createArrayClass(String arrayType, JClassLoader classLoader) {
         var componentType = arrayType.substring(1);
 
@@ -83,40 +62,7 @@ public class ArrayUtil {
             // Arrays implement Cloneable and Serializable, see JLS 4.10.3.
             new String[]{"java/lang/Cloneable", "java/io/Serializable"},
             fields,
-            methods,
-            classLoader.context()
+            methods
         );
-    }
-
-    public static int lengthInSlots(String componentType, int length) {
-        switch (componentType.charAt(0)) {
-            case DESC_boolean:
-            case DESC_byte:
-                length += (-length & 0b11);
-                return length / 4;
-            case DESC_char:
-            case DESC_short:
-                length += length & 1;
-                return length / 2;
-            case DESC_double:
-            case DESC_long:
-                return length * 2;
-            default:
-                return length;
-        }
-    }
-
-    public static char getChar(int array, int index, JHeap heap) {
-        var slots = heap.slots();
-        var jClass = heap.jClass(slots.int_(array - 1));
-        assert jClass.array();
-        return slots.charAt((array + jClass.instanceSize()) * 4 + index * 2);
-    }
-
-    public static void setChar(int array, int index, char value, JHeap heap) {
-        var slots = heap.slots();
-        var jClass = heap.jClass(slots.int_(array - 1));
-        assert jClass.array();
-        slots.charAt((array + jClass.instanceSize()) * 4 + index * 2, value);
     }
 }

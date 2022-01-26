@@ -17,6 +17,7 @@ public class ConstantValue extends Attribute {
     @SneakyThrows
     public ConstantValue(DataInput input, ConstantPool constantPool) {
         int valueIndex = input.readUnsignedShort();
-        value = ((ValueConstant) constantPool.constant(valueIndex)).value();
+        this.value = ((ValueConstant) constantPool.constant(valueIndex))
+            .value(constantPool.context());
     }
 }

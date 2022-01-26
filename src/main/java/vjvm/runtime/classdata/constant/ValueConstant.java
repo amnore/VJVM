@@ -1,9 +1,9 @@
 package vjvm.runtime.classdata.constant;
 
-import lombok.Getter;
+import vjvm.runtime.JThread;
+import vjvm.vm.VMContext;
 
 public abstract class ValueConstant extends Constant {
-    @Getter
     protected final Object value;
 
     public ValueConstant(Object value) {
@@ -15,4 +15,5 @@ public abstract class ValueConstant extends Constant {
         return value.toString();
     }
 
+    public abstract Object value(VMContext context);
 }

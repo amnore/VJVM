@@ -18,7 +18,7 @@ public class JFrame {
         var code = method.code();
         jClass = method.jClass();
         localVars = new Slots(code.maxLocals());
-        opStack = new OperandStack(code.maxStack(), context);
+        opStack = new OperandStack(code.maxStack());
         dynLink = jClass.constantPool();
         methodInfo = method;
         pc = new ProgramCounter(code.code());

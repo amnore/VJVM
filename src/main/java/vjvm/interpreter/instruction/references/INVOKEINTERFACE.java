@@ -15,8 +15,9 @@ public class INVOKEINTERFACE extends Instruction {
         var pc = thread.pc();
         var methodRef = (MethodRef) frame.dynLink().constant(pc.ushort());
         var argc = methodRef.argc();
-        pc.byte_();
-        assert pc.byte_() == 0;
+
+        // skip count and trailing zero
+        pc.short_();
 
         // select the method to call, see spec. 5.4.6
         MethodInfo method;
@@ -25,8 +26,8 @@ public class INVOKEINTERFACE extends Instruction {
         else {
             var heap = thread.context().heap();
             var stack = frame.opStack();
-            var obj = stack.slots().addressAt(stack.top() - methodRef.argc() - 1);
-            var objClass = heap.jClass(heap.slots().int_(obj - 1));
+            var obj = stack.slots().address(stack.top() - methodRef.argc() - 1);
+            var objClass = heap.get(obj).type();
             method = objClass.findMethod(methodRef.name(), methodRef.descriptor(), false);
         }
         InvokeUtil.invokeMethod(method, thread);

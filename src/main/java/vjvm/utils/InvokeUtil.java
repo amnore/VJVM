@@ -2,7 +2,8 @@ package vjvm.utils;
 
 import vjvm.runtime.*;
 import vjvm.runtime.classdata.MethodInfo;
-import vjvm.vm.VMContext;
+import vjvm.runtime.object.ArrayObject;
+import vjvm.runtime.object.StringObject;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.HashMap;
@@ -10,71 +11,68 @@ import java.util.function.Consumer;
 
 public class InvokeUtil {
     // (ClassName, MethodName, MethodDescriptor) -> HackFunction
-    static HashMap<Triple<String, String, String>, Consumer<OperandStack>> hackTable;
+    static HashMap<Triple<String, String, String>, Consumer<JThread>> hackTable;
 
     static {
         hackTable = new HashMap<>();
-        hackTable.put(Triple.of("java/lang/Object", "registerNatives", "()V"), s -> {
+        hackTable.put(Triple.of("java/lang/Object", "registerNatives", "()V"), t -> {
         });
-        hackTable.put(Triple.of("java/lang/Class", "registerNatives", "()V"), s -> {
+        hackTable.put(Triple.of("java/lang/Class", "registerNatives", "()V"), t -> {
         });
-        hackTable.put(Triple.of("java/lang/Class", "desiredAssertionStatus0", "(Ljava/lang/Class;)Z"), s -> {
+        hackTable.put(Triple.of("java/lang/Class", "desiredAssertionStatus0", "(Ljava/lang/Class;)Z"), t -> {
+            var s = t.currentFrame().opStack();
             s.popAddress();
             s.pushInt(1);
         });
         hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"),
-            s -> s.pushAddress(s.context().heap().internString(s.popAddress())));
-        hackTable.put(Triple.of("cases/TestUtil", "reach", "(I)V"), s -> {
-            System.out.println(s.popInt());
-        });
-        hackTable.put(Triple.of("cases/TestUtil", "equalInt", "(II)Z"), s -> {
-            var right = s.popInt();
-            var left = s.popInt();
-            if (left != right)
-                throw new TestUtilException(String.format("%d!=%d", left, right));
-            else s.pushInt(1);
-        });
-        hackTable.put(Triple.of("cases/TestUtil", "equalFloat", "(FF)Z"), s -> {
-            var right = s.popFloat();
-            var left = s.popFloat();
-            if (left != right)
-                throw new TestUtilException(String.format("%f!=%f", left, right));
-            else s.pushInt(1);
-        });
-        hackTable.put(Triple.of("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"), s -> {
+            t -> {
+                var s = t.currentFrame().opStack();
+                var obj = (StringObject) t.context().heap().get(s.popAddress());
+                s.pushAddress(obj.intern());
+            });
+        hackTable.put(Triple.of("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"), t -> {
+            var s = t.currentFrame().opStack();
             s.popInt();
         });
-        hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"), s -> {
-            s.pushAddress(s.context().primitiveClass(StringUtil.valueOf(s.popAddress(), s.context())).classObject());
+        hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"), t -> {
+            var s = t.currentFrame().opStack();
+            var str = (StringObject) t.context().heap().get(s.popAddress());
+            s.pushAddress(t.context().primitiveClass(str.value()).classObject().address());
         });
-        hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), s -> {
+        hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), t -> {
         });
-        hackTable.put(Triple.of("java/lang/Double", "doubleToRawLongBits", "(D)J"), s -> {
+        hackTable.put(Triple.of("java/lang/Double", "doubleToRawLongBits", "(D)J"), t -> {
         });
-        hackTable.put(Triple.of("java/lang/Double", "longBitsToDouble", "(J)D"), s -> {
+        hackTable.put(Triple.of("java/lang/Double", "longBitsToDouble", "(J)D"), t -> {
         });
-        hackTable.put(Triple.of("java/lang/System", "registerNatives", "()V"), s -> {
+        hackTable.put(Triple.of("java/lang/System", "registerNatives", "()V"), t -> {
         });
-        hackTable.put(Triple.of("java/lang/StrictMath", "sin", "(D)D"), s -> {
+        hackTable.put(Triple.of("java/lang/StrictMath", "sin", "(D)D"), t -> {
+            var s = t.currentFrame().opStack();
             s.pushDouble(Math.sin(s.popDouble()));
         });
-        hackTable.put(Triple.of("java/lang/StrictMath", "exp", "(D)D"), s -> {
+        hackTable.put(Triple.of("java/lang/StrictMath", "exp", "(D)D"), t -> {
+            var s = t.currentFrame().opStack();
             s.pushDouble(Math.exp(s.popDouble()));
         });
-        hackTable.put(Triple.of("java/lang/StrictMath", "pow", "(DD)D"), s -> {
+        hackTable.put(Triple.of("java/lang/StrictMath", "pow", "(DD)D"), t -> {
+            var s = t.currentFrame().opStack();
             var right = s.popDouble();
             var left = s.popDouble();
             s.pushDouble(Math.pow(left, right));
         });
-        hackTable.put(Triple.of("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"), s -> {
+        hackTable.put(Triple.of("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"), t -> {
             // only support char[], no checks
+            var s = t.currentFrame().opStack();
+            var heap = t.context().heap();
             var length = s.popInt();
             var destPos = s.popInt();
-            var dest = s.popAddress();
+            var dest = (ArrayObject) heap.get(s.popAddress());
             var srcPos = s.popInt();
-            var src = s.popAddress();
-            for (int i = 0; i < length; ++i)
-                ArrayUtil.setChar(dest, destPos + i, ArrayUtil.getChar(src, srcPos + i, s.context().heap()), s.context().heap());
+            var src = (ArrayObject) heap.get(s.popAddress());
+            for (int i = 0; i < length; ++i) {
+                dest.char_(destPos + 1, src.char_(srcPos + i));
+            }
         });
     }
 
@@ -82,12 +80,12 @@ public class InvokeUtil {
         var t = Triple.of(method.jClass().thisClass().name(), method.name(), method.descriptor());
         var m = hackTable.get(t);
         if (m != null) {
-            m.accept(thread.currentFrame().opStack());
+            m.accept(thread);
             return;
         }
 
         if (method.native_())
-            throw new Error("Unimplemented native method: " + t.toString());
+            throw new Error("Unimplemented native method: " + t);
 
         var stack = thread.currentFrame().opStack();
         var newFrame = new JFrame(method, thread.context());

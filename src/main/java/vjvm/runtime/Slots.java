@@ -45,28 +45,12 @@ public class Slots {
         buf.putDouble(index * 4, value);
     }
 
-    public int addressAt(int addr) {
-        return int_(addr);
+    public int address(int index) {
+        return buf.getInt(index * 4);
     }
 
-    public void addressAt(int addr, int value) {
-        int_(addr, value);
-    }
-
-    public byte byteAt(int addr) { return buf.get(addr); }
-
-    public void byteAt(int addr, byte value) { buf.put(addr, value); }
-
-    public short shortAt(int addr) { return buf.getShort(addr); }
-
-    public void shortAt(int addr, short value) { buf.putShort(addr, value); }
-
-    public char charAt(int addr) { return buf.getChar(addr); }
-
-    public void charAt(int addr, char value) { buf.putChar(addr, value); }
-
-    public ByteBuffer raw_() {
-        return buf;
+    public void address(int index, int value) {
+        buf.putInt(index, value);
     }
 
     public int size() {

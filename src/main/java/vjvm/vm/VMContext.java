@@ -73,14 +73,13 @@ public class VMContext {
             var name = (String)c.getLeft();
             var signature = (String)c.getRight();
             var cls = new JClass(
-                null,
+                bootstrapLoader,
                 (short) (ACC_FINAL|ACC_PUBLIC),
                 signature,
                 null,
                 new String[0],
                 new FieldInfo[0],
-                new MethodInfo[0],
-                this
+                new MethodInfo[0]
             );
 
             primitiveClasses.put(signature, cls);

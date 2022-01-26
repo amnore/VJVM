@@ -21,8 +21,8 @@ public class INVOKEVIRTUAL extends Instruction {
         else {
             var heap = thread.context().heap();
             var stack = frame.opStack();
-            var obj = stack.slots().addressAt(stack.top() - methodRef.argc() - 1);
-            var objClass = heap.jClass(heap.slots().int_(obj - 1));
+            var obj = stack.slots().address(stack.top() - methodRef.argc() - 1);
+            var objClass = heap.get(obj).type();
 //            method = objClass.findMethod(methodRef.name(), methodRef.descriptor());
             method = objClass.vtableMethod(methodRef.info().vtableIndex());
         }

@@ -2,20 +2,19 @@ package vjvm.runtime;
 
 import lombok.Getter;
 import vjvm.vm.VMContext;
+import vjvm.vm.VMGlobalObject;
 
 import java.util.Stack;
 
-public class JThread {
+public class JThread extends VMGlobalObject {
     private final Stack<JFrame> frames = new Stack<>();
     @Getter
     private ProgramCounter pc;
     @Getter
     private int exception;
-    @Getter
-    private final VMContext context;
 
-    public JThread(VMContext ctx) {
-        context = ctx;
+    public JThread(VMContext context) {
+        super(context);
     }
 
     public JFrame currentFrame() {

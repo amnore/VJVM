@@ -23,10 +23,10 @@ public class GETFIELD extends Instruction {
         FieldInfo field;
         field = ref.info();
 
-        var slots = thread.context().heap().slots();
+        var slots = thread.context().heap().get(obj).data();
         if (field.size() == 2)
-            stack.pushLong(slots.long_(obj + field.offset()));
-        else stack.pushInt(slots.int_(obj + field.offset()));
+            stack.pushLong(slots.long_(field.offset()));
+        else stack.pushInt(slots.int_(field.offset()));
     }
 
 }

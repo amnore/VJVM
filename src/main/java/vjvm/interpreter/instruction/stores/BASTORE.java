@@ -2,7 +2,7 @@ package vjvm.interpreter.instruction.stores;
 
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
-import vjvm.vm.VMContext;
+import vjvm.runtime.object.ArrayObject;
 
 public class BASTORE extends Instruction {
     @Override
@@ -10,12 +10,9 @@ public class BASTORE extends Instruction {
         var stack = thread.currentFrame().opStack();
         var value = stack.popInt();
         var index = stack.popInt();
-        var obj = stack.popAddress();
-        var heap = thread.context().heap();
-        var slots = heap.slots();
-        var jClass = heap.jClass(slots.int_(obj - 1));
-        assert jClass.array();
-        // the address of the element (at raw array) is obj * 4 + sizeof(ArrayClass) * 4 + index
-        slots.byteAt((obj + jClass.instanceSize()) * 4 + index, (byte) value);
+        var obj = thread.context().heap().get(stack.popAddress());
+
+        assert obj.type().array();
+        ((ArrayObject)obj).byte_(index, (byte)value);
     }
 }

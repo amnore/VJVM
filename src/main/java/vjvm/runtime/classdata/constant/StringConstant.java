@@ -1,16 +1,13 @@
 package vjvm.runtime.classdata.constant;
 
-import vjvm.runtime.JHeap;
-import vjvm.utils.StringUtil;
+import vjvm.runtime.object.StringObject;
 import vjvm.vm.VMContext;
 
 public class StringConstant extends ValueConstant {
-    private int strAddr = 0;
-    private final VMContext context;
+    private int addr = 0;
 
-    public StringConstant(String value, VMContext ctx) {
+    public StringConstant(String value) {
         super(value);
-        context = ctx;
     }
 
     public String string() {
@@ -18,8 +15,12 @@ public class StringConstant extends ValueConstant {
     }
 
     @Override
-    public Integer value() {
-        return strAddr != 0 ? strAddr :
-            (strAddr = context.heap().internString(StringUtil.createString((String) value, context)));
+    public Integer value(VMContext context) {
+        assert context != null;
+
+        if (addr == 0) {
+            addr = new StringObject((String) value, context).intern();
+        }
+        return addr;
     }
 }

@@ -1,19 +1,7 @@
 package vjvm.vm;
 
 import picocli.CommandLine;
-import vjvm.classloader.JClassLoader;
-import vjvm.interpreter.JInterpreter;
-import vjvm.runtime.JHeap;
-import vjvm.runtime.JThread;
-import vjvm.runtime.Slots;
-import vjvm.utils.InvokeUtil;
-import vjvm.utils.TestUtilException;
-import lombok.val;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.concurrent.Callable;
 
 import static picocli.CommandLine.*;
