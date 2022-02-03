@@ -21,14 +21,27 @@ public class NameAndTypeConstant extends Constant {
         this.self = self;
     }
 
+    public String name() {
+        if (name == null) {
+            name = ((UTF8Constant)self.constantPool().constant(nameIndex)).value();
+        }
+        return name;
+    }
+
+    public String type() {
+        if (descriptor == null) {
+            descriptor = ((UTF8Constant)self.constantPool().constant(descriptorIndex)).value();
+        }
+        return descriptor;
+    }
+
     @Override
     public Pair<String, String> value() {
-        if (name == null) {
-            var pool = self.constantPool();
-            name = ((UTF8Constant)pool.constant(nameIndex)).value();
-            descriptor = ((UTF8Constant)pool.constant(descriptorIndex)).value();
-        }
+        return Pair.of(name(), type());
+    }
 
-        return Pair.of(name, descriptor);
+    @Override
+    public String toString() {
+        return String.format("NameAndType: %s:%s", name(), type());
     }
 }

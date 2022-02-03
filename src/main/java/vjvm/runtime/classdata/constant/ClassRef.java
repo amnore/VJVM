@@ -50,4 +50,9 @@ public class ClassRef extends Constant {
         }
         return name;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Class: %s", name());
+    }
 }

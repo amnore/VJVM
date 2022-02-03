@@ -98,7 +98,7 @@ public class VMContext {
         stringClass.initialize(initThread);
         assert stringClass.initState() == JClass.InitState.INITIALIZED;
 
-        var initClass = userLoader.loadClass(entryClass.replace('.', '/'));
+        var initClass = userLoader.loadClass(entryClass);
         initClass.initialize(initThread);
         assert initClass.initState() == JClass.InitState.INITIALIZED;
 

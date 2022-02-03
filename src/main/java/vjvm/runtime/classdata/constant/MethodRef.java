@@ -12,7 +12,8 @@ public class MethodRef extends Constant {
     private final JClass self;
     private final boolean interface_;
 
-    private JClass jClass;
+    private ClassRef classRef;
+    private NameAndTypeConstant nameAndType;
     private MethodInfo method;
 
     @SneakyThrows
@@ -24,10 +25,21 @@ public class MethodRef extends Constant {
     }
 
     public JClass jClass() {
-        if (jClass == null) {
-            jClass = ((ClassRef)self.constantPool().constant(classIndex)).value();
+        return classRef().value();
+    }
+
+    private ClassRef classRef() {
+        if (classRef == null) {
+            classRef = (ClassRef) self.constantPool().constant(classIndex);
         }
-        return jClass;
+        return classRef;
+    }
+
+    private NameAndTypeConstant nameAndType() {
+        if (nameAndType == null) {
+            nameAndType =(NameAndTypeConstant) self.constantPool().constant(nameAndTypeIndex);
+        }
+        return nameAndType;
     }
 
     /**
@@ -39,8 +51,7 @@ public class MethodRef extends Constant {
             return method;
         }
 
-        var pair = ((NameAndTypeConstant) self.constantPool()
-            .constant(nameAndTypeIndex)).value();
+        var pair = nameAndType().value();
 
         if (jClass().interface_() ^ interface_)
             throw new IncompatibleClassChangeError();
@@ -55,5 +66,10 @@ public class MethodRef extends Constant {
         }
 
         return method;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Methodref: %s.%s:%s", classRef().name(), nameAndType().name(), nameAndType().type());
     }
 }

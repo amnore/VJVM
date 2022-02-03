@@ -33,13 +33,13 @@ public class JClass {
     @Getter
     private final String packageName;
     @Getter
-    private final short minorVersion;
+    private final int minorVersion;
     @Getter
-    private final short majorVersion;
+    private final int majorVersion;
     @Getter
     private final ConstantPool constantPool;
     @Getter
-    private final short accessFlags;
+    private final int accessFlags;
     @Getter
     private final ClassRef thisClass;
     @Getter
@@ -77,16 +77,16 @@ public class JClass {
         var magic = dataInput.readInt();
         if (magic != 0xcafebabe) {
             throw new InvalidClassException(String.format(
-                "Wrong magic number, expected: 0xcafebabe, got: %x", magic));
+                "Wrong magic number, expected: 0xcafebabe, got: 0x%x", magic));
         }
 
         // parse data
         // skip class version check
-        minorVersion = dataInput.readShort();
-        majorVersion = dataInput.readShort();
+        minorVersion = dataInput.readUnsignedShort();
+        majorVersion = dataInput.readUnsignedShort();
 
         constantPool = new ConstantPool(dataInput, this);
-        accessFlags = dataInput.readShort();
+        accessFlags = dataInput.readUnsignedShort();
         thisClass = (ClassRef) constantPool.constant(dataInput.readUnsignedShort());
         packageName = name().substring(0, name().lastIndexOf('/'));
 
@@ -387,6 +387,22 @@ public class JClass {
         }
 
         return null;
+    }
+
+    public int fieldsCount() {
+        return fields.length;
+    }
+
+    public FieldInfo field(int index) {
+        return fields[index];
+    }
+
+    public int methodsCount() {
+        return methods.length;
+    }
+
+    public MethodInfo method(int index) {
+        return methods[index];
     }
 
     public ClassRef superInterface(int index) {

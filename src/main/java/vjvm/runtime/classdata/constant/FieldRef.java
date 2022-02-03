@@ -11,6 +11,8 @@ public class FieldRef extends Constant {
     private final int nameAndTypeIndex;
     private final JClass self;
 
+    private ClassRef classRef;
+    private NameAndTypeConstant nameAndType;
     private FieldInfo field;
 
     @SneakyThrows
@@ -18,6 +20,20 @@ public class FieldRef extends Constant {
         classIndex = input.readUnsignedShort();
         nameAndTypeIndex = input.readUnsignedShort();
         this.self = self;
+    }
+
+    private ClassRef classRef() {
+        if (classRef == null) {
+            classRef = (ClassRef) self.constantPool().constant(classIndex);
+        }
+        return classRef;
+    }
+
+    private NameAndTypeConstant nameAndType() {
+        if (nameAndType == null) {
+            nameAndType =(NameAndTypeConstant) self.constantPool().constant(nameAndTypeIndex);
+        }
+        return nameAndType;
     }
 
     @Override
@@ -29,9 +45,8 @@ public class FieldRef extends Constant {
         /*
           Resolves field reference. See spec. 5.4.3.2
          */
-        var pool = self.constantPool();
-        var ref = ((ClassRef) pool.constant(classIndex)).value();
-        var pair = ((NameAndTypeConstant) pool.constant(nameAndTypeIndex)).value();
+        var ref = classRef().value();
+        var pair = nameAndType().value();
 
         field = ref.findField(pair.getLeft(), pair.getRight());
         if (field == null)
@@ -40,5 +55,10 @@ public class FieldRef extends Constant {
             throw new IllegalAccessError();
 
         return field;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Fieldref: %s.%s:%s", classRef().name(), nameAndType().name(), nameAndType().type());
     }
 }

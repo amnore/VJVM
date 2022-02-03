@@ -15,6 +15,7 @@ import static vjvm.classfiledefs.FieldAccessFlags.*;
 
 @RequiredArgsConstructor
 public class FieldInfo {
+    @Getter
     private final short accessFlags;
     @Getter
     private final String name;

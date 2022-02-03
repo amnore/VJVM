@@ -16,4 +16,9 @@ public class FloatConstant extends Constant {
     public Float value() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Float: %f", value);
+    }
 }

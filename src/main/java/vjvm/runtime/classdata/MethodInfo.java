@@ -14,6 +14,7 @@ import java.io.IOException;
 import static vjvm.classfiledefs.MethodAccessFlags.*;
 
 public class MethodInfo {
+    @Getter
     private final short accessFlags;
     @Getter
     private final String name;

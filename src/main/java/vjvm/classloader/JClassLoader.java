@@ -94,9 +94,10 @@ public class JClassLoader extends VMGlobalObject implements Closeable {
      * @return the loaded class
      */
     public JClass loadClass(String name) {
-        // fix for class name in the form of Lclass;
+        // normalize class name
         if (name.charAt(0) == 'L' && name.charAt(name.length() - 1) == ';')
             name = name.substring(1, name.length() - 1);
+        name = name.replace('.', '/');
 
         // if the class is an array class
         if (name.charAt(0) == FieldDescriptors.DESC_array) {

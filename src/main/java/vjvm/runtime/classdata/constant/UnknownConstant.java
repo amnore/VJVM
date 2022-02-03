@@ -17,4 +17,9 @@ public class UnknownConstant extends Constant {
     public byte[] value() {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return "Unknown:";
+    }
 }
