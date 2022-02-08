@@ -34,7 +34,121 @@ public class JInterpreter {
     private static final Instruction[] dispatchTable;
 
     // (ClassName, MethodName, MethodDescriptor) -> HackFunction
-    public static HashMap<Triple<String, String, String>, BiFunction<JThread, Slots, Object>> hackTable = new HashMap<>();
+    private static final HashMap<Triple<String, String, String>, BiFunction<JThread, Slots, Object>> hackTable = new HashMap<>();
+
+    /**
+     * Invoke a method when there is no frames in a thread.
+     *
+     * @param method the method to call
+     * @param thread the thread to run
+     * @param args   the supplied arguments, index begins at 0
+     */
+    public void invoke(MethodInfo method, JThread thread, Slots args) {
+        assert args.size() == method.argc() + (method.static_() ? 0 : 1);
+
+        var frame = new JFrame(method, args);
+        thread.push(frame);
+
+        if (method.native_()) {
+            runNativeMethod(thread);
+        } else {
+            run(thread);
+        }
+    }
+
+    private void run(JThread thread) {
+        var frame = thread.top();
+
+        while (thread.top() == frame) {
+            var opcode = Byte.toUnsignedInt(thread.pc().byte_());
+            if (dispatchTable[opcode] == null)
+                throw new Error(String.format("Unimplemented: %d", opcode));
+
+            dispatchTable[opcode].fetchAndRun(thread);
+
+            if (thread.exception() != null && !handleException(thread)) {
+                thread.pop();
+                return;
+            }
+        }
+    }
+
+    private void runNativeMethod(JThread thread) {
+        var frame = thread.top();
+        var method = frame.method();
+        assert method.native_();
+
+        var key = Triple.of(method.jClass().name(), method.name(), method.descriptor());
+        var impl = hackTable.get(key);
+        if (impl == null) {
+            // TODO: throw exception in thread
+            throw new Error(String.format("Unimplemented native method: %s", key));
+        }
+
+        var ret = impl.apply(thread, frame.vars());
+        thread.pop();
+        var s = thread.top().stack();
+
+        switch (MethodDescriptors.returnType(method.descriptor())) {
+            case 'V':
+                break;
+            case DESC_array:
+            case DESC_reference:
+                s.pushAddress((Integer) ret);
+                break;
+            case DESC_boolean:
+                s.pushInt(((Boolean) ret) ? 1 : 0);
+                break;
+            case DESC_byte:
+                s.pushInt((Byte) ret);
+                break;
+            case DESC_char:
+                s.pushInt((Character) ret);
+                break;
+            case DESC_double:
+                s.pushDouble((Double) ret);
+                break;
+            case DESC_float:
+                s.pushFloat((Float) ret);
+                break;
+            case DESC_int:
+                s.pushInt((Integer) ret);
+                break;
+            case DESC_long:
+                s.pushLong((Long) ret);
+                break;
+            case DESC_short:
+                s.pushInt((Short) ret);
+                break;
+            default:
+                throw new Error("Invalid return type");
+        }
+    }
+
+    private boolean handleException(JThread thread) {
+        var frame = thread.top();
+        var exception = thread.exception();
+        var eClass = exception.type();
+        var method = frame.method();
+        var pc = frame.pc();
+        var stack = frame.stack();
+
+        for (var handler : method.code().exceptionTable()) {
+            if (pc.position() < handler.startPC()
+                || pc.position() >= handler.endPC()
+                || (handler.catchType() != null && !eClass.castableTo(handler.catchType())))
+                continue;
+
+            // a matching handler is found
+            pc.position(handler.handlerPC());
+            stack.clear();
+            stack.pushAddress(exception.address());
+            thread.exception(null);
+            return true;
+        }
+
+        return false;
+    }
 
     static {
         // @formatter:off
@@ -142,113 +256,5 @@ public class JInterpreter {
             }
             return null;
         });
-    }
-
-    /**
-     * Invoke a method when there is no frames in a thread.
-     *
-     * @param method the method to call
-     * @param thread the thread to run
-     * @param args   the supplied arguments, index begins at 0, can be null if the method has no arguments
-     */
-    public static void invokeMethodWithArgs(MethodInfo method, JThread thread, Slots args) {
-        assert args.size() == method.argc() + (method.static_() ? 0 : 1);
-
-        var t = Triple.of(method.jClass().name(), method.name(), method.descriptor());
-        var m = hackTable.get(t);
-        if (m != null) {
-            var ret = m.apply(thread, args);
-            var s = thread.top().stack();
-
-            switch (MethodDescriptors.returnType(method.descriptor())) {
-                case 'V':
-                    break;
-                case DESC_array:
-                case DESC_reference:
-                    s.pushAddress((Integer) ret);
-                    break;
-                case DESC_boolean:
-                    s.pushInt(((Boolean) ret) ? 1 : 0);
-                    break;
-                case DESC_byte:
-                    s.pushInt((Byte) ret);
-                    break;
-                case DESC_char:
-                    s.pushInt((Character) ret);
-                    break;
-                case DESC_double:
-                    s.pushDouble((Double) ret);
-                    break;
-                case DESC_float:
-                    s.pushFloat((Float) ret);
-                    break;
-                case DESC_int:
-                    s.pushInt((Integer) ret);
-                    break;
-                case DESC_long:
-                    s.pushLong((Long) ret);
-                    break;
-                case DESC_short:
-                    s.pushInt((Short) ret);
-                    break;
-                default:
-                    throw new Error("Invalid return type");
-            }
-            return;
-        }
-
-        if (method.native_())
-            throw new Error("Unimplemented native method: " + t);
-
-        var frame = new JFrame(method);
-        args.copyTo(0, args.size(), frame.vars(), 0);
-        thread.push(frame);
-    }
-
-    public void run(JThread thread) {
-        // since this method may be invoked when JVM stack isn't empty,
-        // for example, by the initialize() method of JClass, we need to exit at the right time.
-        int count = thread.size();
-
-        while (thread.size() >= count) {
-            var opcode = Byte.toUnsignedInt(thread.pc().byte_());
-            if (dispatchTable[opcode] == null)
-                throw new Error(String.format("Unimplemented: %d", opcode));
-
-            dispatchTable[opcode].fetchAndRun(thread);
-
-            if (thread.exception() != null)
-                unwind(thread, count);
-        }
-    }
-
-    public void unwind(JThread thread, int lowestFrame) {
-        var exception = thread.exception();
-        var heap = thread.context().heap();
-        var eClass = exception.type();
-
-        // unwind stack
-        while (thread.size() >= lowestFrame) {
-            var frame = thread.top();
-            var method = frame.method();
-            var stack = frame.stack();
-            var pc = frame.pc();
-            for (var handler : method.code().exceptionTable()) {
-                if (pc.position() < handler.startPC()
-                    || pc.position() >= handler.endPC()
-                    || (handler.catchType() != null && eClass.castableTo(handler.catchType())))
-                    continue;
-
-                // a matching handler is found
-                pc.position(handler.handlerPC());
-                stack.clear();
-                stack.pushAddress(exception.address());
-                thread.clearException();
-                return;
-            }
-
-            // no matching handler is found in current method
-            thread.pop();
-        }
     }
 }

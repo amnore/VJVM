@@ -1,6 +1,7 @@
 package vjvm.runtime;
 
 import lombok.Getter;
+import lombok.Setter;
 import vjvm.runtime.object.JObject;
 import vjvm.vm.VMContext;
 import vjvm.vm.VMGlobalObject;
@@ -10,6 +11,7 @@ import java.util.Stack;
 public class JThread extends VMGlobalObject {
     private final Stack<JFrame> frames = new Stack<>();
     @Getter
+    @Setter
     private JObject exception;
 
     public JThread(VMContext context) {
@@ -17,7 +19,7 @@ public class JThread extends VMGlobalObject {
     }
 
     public JFrame top() {
-        return frames.lastElement();
+        return empty() ? null: frames.lastElement();
     }
 
     public void pop() {
@@ -32,19 +34,7 @@ public class JThread extends VMGlobalObject {
         return empty() ? null : top().pc();
     }
 
-    public int size() {
-        return frames.size();
-    }
-
     public boolean empty() {
         return frames.empty();
-    }
-
-    public void clearException() {
-        exception = null;
-    }
-
-    public void throw_(JObject exception) {
-        this.exception = exception;
     }
 }

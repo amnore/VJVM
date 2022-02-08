@@ -1,6 +1,5 @@
 package vjvm.interpreter.instruction.references;
 
-import vjvm.interpreter.JInterpreter;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
@@ -25,7 +24,7 @@ public class INVOKESPECIAL extends Instruction {
 
         var method = targetClass.vtableMethod(methodRef.value().vtableIndex());
         var args = frame.stack().popSlots(method.argc() + 1);
-        JInterpreter.invokeMethodWithArgs(method, thread, args);
+        thread.context().interpreter().invoke(method, thread, args);
     }
 
 }

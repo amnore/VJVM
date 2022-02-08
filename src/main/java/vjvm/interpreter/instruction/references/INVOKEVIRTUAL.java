@@ -1,6 +1,5 @@
 package vjvm.interpreter.instruction.references;
 
-import vjvm.interpreter.JInterpreter;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.MethodInfo;
@@ -22,7 +21,7 @@ public class INVOKEVIRTUAL extends Instruction {
             method = objClass.vtableMethod(methodRef.value().vtableIndex());
         }
 
-        JInterpreter.invokeMethodWithArgs(method, thread, args);
+        thread.context().interpreter().invoke(method, thread, args);
     }
 
 }

@@ -104,7 +104,6 @@ public class VMContext {
 
         var mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V", true);
         assert mainMethod.jClass() == initClass;
-        JInterpreter.invokeMethodWithArgs(mainMethod, initThread, new Slots(1));
-        interpreter.run(initThread);
+        interpreter.invoke(mainMethod, initThread, new Slots(1));
     }
 }

@@ -1,6 +1,5 @@
 package vjvm.interpreter.instruction.references;
 
-import vjvm.interpreter.JInterpreter;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
@@ -18,7 +17,7 @@ public class INVOKESTATIC extends Instruction {
 
         var method = methodRef.value();
         var args = frame.stack().popSlots(method.argc());
-        JInterpreter.invokeMethodWithArgs(method, thread, args);
+        thread.context().interpreter().invoke(method, thread, args);
     }
 
 }

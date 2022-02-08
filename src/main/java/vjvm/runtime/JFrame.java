@@ -13,13 +13,22 @@ public class JFrame {
     private final JClass jClass;
     private final ProgramCounter pc;
 
-    public JFrame(MethodInfo method) {
-        var code = method.code();
+    public JFrame(MethodInfo method, Slots args) {
         jClass = method.jClass();
-        vars = new Slots(code.maxLocals());
-        stack = new OperandStack(code.maxStack());
         link = jClass.constantPool();
         this.method = method;
-        pc = new ProgramCounter(code.code());
+
+        if (method.native_()) {
+            stack = null;
+            pc = null;
+            vars = new Slots(args.size());
+        } else {
+            var code = method.code();
+            stack = new OperandStack(code.maxStack());
+            pc = new ProgramCounter(code.code());
+            vars = new Slots(code.maxLocals());
+        }
+
+        args.copyTo(0, args.size(), vars, 0);
     }
 }

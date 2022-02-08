@@ -3,7 +3,6 @@ package vjvm.runtime;
 import lombok.SneakyThrows;
 import vjvm.classfiledefs.FieldDescriptors;
 import vjvm.classloader.JClassLoader;
-import vjvm.interpreter.JInterpreter;
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
@@ -306,8 +305,12 @@ public class JClass {
         // step9
         MethodInfo clinit = findMethod("<clinit>", "()V", true);
         if (clinit != null) {
-            JInterpreter.invokeMethodWithArgs(clinit, thread, new Slots(0));
-            context().interpreter().run(thread);
+            context().interpreter().invoke(clinit, thread, new Slots(0));
+
+            if (thread.exception() != null) {
+                // TODO: throw exception in thread
+                throw new Error("Exception in clinit");
+            }
         }
 
         // step10
