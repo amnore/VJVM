@@ -8,14 +8,14 @@ import java.lang.module.ModuleFinder;
 import java.lang.module.ModuleReader;
 
 public class ModuleSearchPath extends ClassSearchPath {
-    private final ModuleReader[] allModules;
+    private final ModuleReader[] modules;
 
     public ModuleSearchPath(ModuleFinder finder) {
-        allModules = finder.findAll().stream().map(m -> {
+        modules = finder.findAll().stream().map(m -> {
             try {
                 return m.open();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new Error(e);
             }
         }).toArray(ModuleReader[]::new);
     }
@@ -23,7 +23,7 @@ public class ModuleSearchPath extends ClassSearchPath {
     @Override
     @SneakyThrows
     public InputStream findClass(String name) {
-        for (var m: allModules) {
+        for (var m: modules) {
             var s = m.open(name + ".class");
             if (s.isPresent())
                 return s.get();
@@ -35,7 +35,7 @@ public class ModuleSearchPath extends ClassSearchPath {
     @Override
     @SneakyThrows
     public void close() {
-        for (var m: allModules) {
+        for (var m: modules) {
             m.close();
         }
     }

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import lombok.SneakyThrows;
 import vjvm.vm.VMGlobalObject;
 
 public class JClassLoader extends VMGlobalObject implements Closeable {
@@ -137,7 +138,8 @@ public class JClassLoader extends VMGlobalObject implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    @SneakyThrows
+    public void close() {
         for (var s : searchPaths)
             s.close();
     }

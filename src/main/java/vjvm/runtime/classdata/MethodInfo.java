@@ -7,6 +7,7 @@ import vjvm.runtime.classdata.attribute.Code;
 import vjvm.runtime.classdata.constant.UTF8Constant;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -33,28 +34,32 @@ public class MethodInfo {
     @Setter
     private int vtableIndex = -1;
 
+    @SneakyThrows
     public MethodInfo(DataInput dataInput, JClass jClass) {
-        try {
-            this.jClass = jClass;
-            var constantPool = jClass.constantPool();
-            accessFlags = dataInput.readShort();
-            int nameIndex = dataInput.readUnsignedShort();
-            name = ((UTF8Constant) constantPool.constant(nameIndex)).value();
-            int descriptorIndex = dataInput.readUnsignedShort();
-            descriptor = ((UTF8Constant) constantPool.constant(descriptorIndex)).value();
-            int attrCount = dataInput.readUnsignedShort();
-            attributes = new Attribute[attrCount];
-            for (int i = 0; i < attrCount; ++i) {
-                attributes[i] = Attribute.constructFromData(dataInput, constantPool);
-            }
-        } catch (IOException e) {
-            throw new ClassFormatError();
+        var constantPool = jClass.constantPool();
+
+        this.jClass = jClass;
+        accessFlags = dataInput.readShort();
+
+        var nameIndex = dataInput.readUnsignedShort();
+        name = ((UTF8Constant) constantPool.constant(nameIndex)).value();
+
+        var descriptorIndex = dataInput.readUnsignedShort();
+        descriptor = ((UTF8Constant) constantPool.constant(descriptorIndex)).value();
+
+        var attrCount = dataInput.readUnsignedShort();
+        attributes = new Attribute[attrCount];
+
+        for (var i = 0; i < attrCount; ++i) {
+            attributes[i] = Attribute.constructFromData(dataInput, constantPool);
         }
-        for (var i : attributes)
+
+        for (var i : attributes) {
             if (i instanceof Code) {
                 code = (Code) i;
                 break;
             }
+        }
     }
 
     public int argc() {

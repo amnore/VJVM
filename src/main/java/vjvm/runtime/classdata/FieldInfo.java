@@ -7,6 +7,7 @@ import vjvm.runtime.classdata.constant.UTF8Constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.SneakyThrows;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -31,22 +32,24 @@ public class FieldInfo {
     @Setter
     private int offset;
 
+    @SneakyThrows
     public FieldInfo(DataInput dataInput, JClass jClass) {
-        try {
-            this.jClass = jClass;
-            var constantPool = jClass.constantPool();
-            accessFlags = dataInput.readShort();
-            int nameIndex = dataInput.readUnsignedShort();
-            name = ((UTF8Constant) constantPool.constant(nameIndex)).value();
-            int descIndex = dataInput.readUnsignedShort();
-            descriptor = ((UTF8Constant) constantPool.constant(descIndex)).value();
-            int attributesCount = dataInput.readUnsignedShort();
-            attributes = new Attribute[attributesCount];
-            for (int i = 0; i < attributesCount; ++i)
-                attributes[i] = Attribute.constructFromData(dataInput, constantPool);
-        } catch (IOException e) {
-            throw new ClassFormatError();
-        }
+        var constantPool = jClass.constantPool();
+
+        this.jClass = jClass;
+        accessFlags = dataInput.readShort();
+
+        int nameIndex = dataInput.readUnsignedShort();
+        name = ((UTF8Constant) constantPool.constant(nameIndex)).value();
+
+        int descIndex = dataInput.readUnsignedShort();
+        descriptor = ((UTF8Constant) constantPool.constant(descIndex)).value();
+
+        int attributesCount = dataInput.readUnsignedShort();
+        attributes = new Attribute[attributesCount];
+
+        for (int i = 0; i < attributesCount; ++i)
+            attributes[i] = Attribute.constructFromData(dataInput, constantPool);
     }
 
     /**
