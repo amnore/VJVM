@@ -2,6 +2,7 @@
 has_children: true
 permalink: /
 title: Lab0 开始之前
+nav_order: 0
 ---
 
 # 大作业简介
