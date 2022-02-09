@@ -64,6 +64,10 @@ public class VMContext {
             assert c.initState() == JClass.InitState.INITIALIZED;
         }
 
+        var systemClass = bootstrapLoader.loadClass("Ljava/lang/System;");
+        var initPhase1 = systemClass.findMethod("initPhase1", "()V", true);
+        interpreter.invoke(initPhase1, initThread, new Slots(0));
+
         var entry = userLoader.loadClass(Descriptors.of(entryClass));
         entry.initialize(initThread);
         assert entry.initState() == JClass.InitState.INITIALIZED;
@@ -76,6 +80,8 @@ public class VMContext {
     static {
         initClasses = new String[] {
             "Ljava/lang/String;",
+            "Ljava/lang/System;",
+            "Ljava/lang/Class;",
             "Z", "B", "C", "D", "F", "I", "J", "S", "V",
         };
     }

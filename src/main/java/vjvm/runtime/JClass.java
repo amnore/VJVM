@@ -47,6 +47,7 @@ public class JClass {
     private final FieldInfo[] fields;
     private final MethodInfo[] methods;
     private final Attribute[] attributes;
+    private final ClassObject classObject;
 
     // initialized with prepare()
     @Getter
@@ -65,7 +66,6 @@ public class JClass {
 
     private JClass nestHost;
 
-    private ClassObject classObject;
 
     // construct from data
     @SneakyThrows
@@ -116,6 +116,8 @@ public class JClass {
 
         // Spec. 5.3.3, 5.3.4: resolve super class and interfaces
         // These are delayed to preparation stage
+
+        classObject = new ClassObject(this);
     }
 
     // create a class with all info provided, used to create array and primitive classes.
@@ -146,6 +148,8 @@ public class JClass {
         for (var m : methods)
             m.jClass(this);
         this.attributes = new Attribute[0];
+
+        classObject = new ClassObject(this);
     }
 
     public void verify() {
@@ -279,9 +283,6 @@ public class JClass {
         // step6
         initState = InitState.INITIALIZING;
         initThread = thread;
-
-        // additional: create a class object in the heap to point to this class
-        classObject = new ClassObject(this);
 
         // step7
         if (superClass != null) {

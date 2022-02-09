@@ -8,7 +8,9 @@ public class ClassObject extends JObject {
     private final JClass jClass;
 
     public ClassObject(JClass jClass) {
-        super(jClass.context().bootstrapLoader().loadClass("Ljava/lang/Class;"));
+        super(jClass.name().equals("java/lang/Class")
+            ? jClass
+            : jClass.context().bootstrapLoader().loadClass("Ljava/lang/Class;"));
         this.jClass = jClass;
     }
 }
