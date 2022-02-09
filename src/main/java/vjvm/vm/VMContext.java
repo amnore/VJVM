@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.classloader.JClassLoader;
 import vjvm.classloader.searchpath.ClassSearchPath;
 import vjvm.classloader.searchpath.ModuleSearchPath;
@@ -21,7 +22,6 @@ import static vjvm.classfiledefs.ClassAccessFlags.ACC_FINAL;
 import static vjvm.classfiledefs.ClassAccessFlags.ACC_PUBLIC;
 
 public class VMContext {
-    private final HashMap<String, JClass> primitiveClasses = new HashMap<>();
     private final ArrayList<JThread> threads = new ArrayList<>();
     @Getter
     private final JClassLoader bootstrapLoader;
@@ -32,6 +32,9 @@ public class VMContext {
     @Getter
     private final JClassLoader userLoader;
     private static final int heapSize = 1024;
+
+    // Classes to load at startup
+    private static final String[] initClasses;
 
     VMContext(String userClassPath) {
         interpreter = new JInterpreter();
@@ -50,60 +53,30 @@ public class VMContext {
         );
     }
 
-    public JClass primitiveClass(String name) {
-        var jClass = primitiveClasses.get(name);
-        assert jClass != null;
-        return jClass;
-    }
-
-    private void initPrimitiveClass(JThread thread) {
-        var names = new Pair[] {
-            Pair.of("boolean", "Z"),
-            Pair.of("byte", "B"),
-            Pair.of("char", "C"),
-            Pair.of("double", "D"),
-            Pair.of("float", "F"),
-            Pair.of("int", "I"),
-            Pair.of("long", "J"),
-            Pair.of("short", "S"),
-        };
-
-        for (var c : names) {
-            var name = (String)c.getLeft();
-            var signature = (String)c.getRight();
-            var cls = new JClass(
-                bootstrapLoader,
-                (short) (ACC_FINAL|ACC_PUBLIC),
-                signature,
-                null,
-                new String[0],
-                new FieldInfo[0],
-                new MethodInfo[0]
-            );
-
-            primitiveClasses.put(signature, cls);
-            primitiveClasses.put(name, cls);
-        }
-
-        for (var c : primitiveClasses.values())
-            c.initialize(thread);
-    }
-
     void run(String entryClass) {
         var initThread = new JThread(this);
         threads.add(initThread);
-        initPrimitiveClass(initThread);
 
-        var stringClass = bootstrapLoader.loadClass("java/lang/String");
-        stringClass.initialize(initThread);
-        assert stringClass.initState() == JClass.InitState.INITIALIZED;
+        for (var desc: initClasses) {
+            var c = bootstrapLoader.loadClass(desc);
+            assert c != null;
+            c.initialize(initThread);
+            assert c.initState() == JClass.InitState.INITIALIZED;
+        }
 
-        var initClass = userLoader.loadClass(entryClass);
-        initClass.initialize(initThread);
-        assert initClass.initState() == JClass.InitState.INITIALIZED;
+        var entry = userLoader.loadClass(Descriptors.of(entryClass));
+        entry.initialize(initThread);
+        assert entry.initState() == JClass.InitState.INITIALIZED;
 
-        var mainMethod = initClass.findMethod("main", "([Ljava/lang/String;)V", true);
-        assert mainMethod.jClass() == initClass;
+        var mainMethod = entry.findMethod("main", "([Ljava/lang/String;)V", true);
+        assert mainMethod.jClass() == entry;
         interpreter.invoke(mainMethod, initThread, new Slots(1));
+    }
+
+    static {
+        initClasses = new String[] {
+            "Ljava/lang/String;",
+            "Z", "B", "C", "D", "F", "I", "J", "S", "V",
+        };
     }
 }

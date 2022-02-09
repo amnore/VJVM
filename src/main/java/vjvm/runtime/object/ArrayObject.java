@@ -1,7 +1,7 @@
 package vjvm.runtime.object;
 
 import lombok.Getter;
-import vjvm.classfiledefs.FieldDescriptors;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.runtime.JClass;
 
 import java.nio.ByteBuffer;
@@ -14,7 +14,7 @@ public class ArrayObject extends JObject {
     public ArrayObject(JClass jClass, int length) {
         super(jClass);
 
-        var elemSize = FieldDescriptors.size(type().name().substring(1));
+        var elemSize = Descriptors.size(type().name().substring(1));
         elements = ByteBuffer.allocate(elemSize * length);
         this.length = length;
         data().address(jClass.findField("length", "I").offset(), length);

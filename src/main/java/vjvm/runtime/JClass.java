@@ -1,7 +1,7 @@
 package vjvm.runtime;
 
 import lombok.SneakyThrows;
-import vjvm.classfiledefs.FieldDescriptors;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.classloader.JClassLoader;
 import vjvm.runtime.classdata.ConstantPool;
 import vjvm.runtime.classdata.FieldInfo;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static vjvm.classfiledefs.ClassAccessFlags.*;
-import static vjvm.classfiledefs.FieldDescriptors.*;
+import static vjvm.classfiledefs.Descriptors.*;
 
 public class JClass {
     // inititlized with constructor
@@ -173,7 +173,7 @@ public class JClass {
         var staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::static_).toList();
         for (var field : staticFieldInfos) {
             field.offset(staticSize);
-            staticSize += FieldDescriptors.size(field.descriptor());
+            staticSize += Descriptors.size(field.descriptor());
         }
         staticFields = new Slots(staticSize);
         // load ConstantValue
@@ -555,8 +555,6 @@ public class JClass {
         assert array();
 
         var componentType = name().substring(1);
-        if (!reference(componentType))
-            return context().primitiveClass(componentType);
         return classLoader.loadClass(componentType);
     }
 

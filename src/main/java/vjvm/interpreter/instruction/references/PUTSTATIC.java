@@ -1,6 +1,6 @@
 package vjvm.interpreter.instruction.references;
 
-import vjvm.classfiledefs.FieldDescriptors;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
@@ -26,7 +26,7 @@ public class PUTSTATIC extends Instruction {
             slots.long_(field.offset(), stack.popLong());
         else {
             var value = stack.popInt();
-            if (field.descriptor().charAt(0) == FieldDescriptors.DESC_boolean)
+            if (field.descriptor().charAt(0) == Descriptors.DESC_boolean)
                 value &= 1;
             slots.int_(field.offset(), value);
         }

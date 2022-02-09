@@ -10,7 +10,7 @@ public class ATHROW extends Instruction {
         var ctx = thread.context();
         var addr = thread.top().stack().popAddress();
 
-        thread.exception(addr == 0 ? ctx.heap().get(addr):
-            new JObject(ctx.bootstrapLoader().loadClass("java/lang/NullPointerException")));
+        assert addr != 0;
+        thread.exception(ctx.heap().get(addr));
     }
 }

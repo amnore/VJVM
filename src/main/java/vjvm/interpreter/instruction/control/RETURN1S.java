@@ -3,7 +3,7 @@ package vjvm.interpreter.instruction.control;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 
-import static vjvm.classfiledefs.FieldDescriptors.*;
+import static vjvm.classfiledefs.Descriptors.*;
 
 public class RETURN1S extends Instruction {
 

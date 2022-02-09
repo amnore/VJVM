@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 
 public class StringObject extends JObject {
     public StringObject(String value, VMContext context) {
-        super(context.bootstrapLoader().loadClass("java/lang/String"));
+        super(context.bootstrapLoader().loadClass("Ljava/lang/String;"));
 
         var valueField = type().findField("value", "[B");
         var coderField = type().findField("coder", "B");

@@ -1,6 +1,7 @@
 package vjvm.runtime.classdata.constant;
 
 import lombok.SneakyThrows;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.runtime.JClass;
 
 import java.io.DataInput;
@@ -35,7 +36,7 @@ public class ClassRef extends Constant {
             ref = self;
         } else {
             // if not, load the Class using the defining class loader of this class
-            ref = self.classLoader().loadClass(name());
+            ref = self.classLoader().loadClass(Descriptors.of(name()));
         }
 
         if (!ref.accessibleTo(self))

@@ -1,6 +1,6 @@
 package vjvm.interpreter.instruction.references;
 
-import vjvm.classfiledefs.FieldDescriptors;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.classdata.constant.FieldRef;
@@ -19,7 +19,7 @@ public class PUTFIELD extends Instruction {
             var value = stack.popInt();
             var obj = heap.get(stack.popAddress());
 
-            if (field.descriptor().charAt(0) == FieldDescriptors.DESC_boolean)
+            if (field.descriptor().charAt(0) == Descriptors.DESC_boolean)
                 value &= 1;
             obj.data().int_(field.offset(), value);
         } else {

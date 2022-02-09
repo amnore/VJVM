@@ -1,8 +1,8 @@
 package vjvm.classfiledefs;
 
 
-import static vjvm.classfiledefs.FieldDescriptors.DESC_array;
-import static vjvm.classfiledefs.FieldDescriptors.DESC_reference;
+import static vjvm.classfiledefs.Descriptors.DESC_array;
+import static vjvm.classfiledefs.Descriptors.DESC_reference;
 
 public class MethodDescriptors {
     public static int argc(String descriptor) {
@@ -11,7 +11,7 @@ public class MethodDescriptors {
         var argc = 0;
         for (int i = 1; i < descriptor.length(); ) {
             if (descriptor.charAt(i) == ')') break;
-            argc += FieldDescriptors.size(descriptor.charAt(i));
+            argc += Descriptors.size(descriptor.charAt(i));
 
             // find the next argument
             while (descriptor.charAt(i) == DESC_array) ++i;

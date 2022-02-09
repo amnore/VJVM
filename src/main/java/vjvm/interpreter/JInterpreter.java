@@ -1,6 +1,7 @@
 package vjvm.interpreter;
 
 import org.apache.commons.lang3.tuple.Triple;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.classfiledefs.MethodDescriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.interpreter.instruction.comparisons.*;
@@ -28,7 +29,7 @@ import vjvm.runtime.object.StringObject;
 import java.util.HashMap;
 import java.util.function.BiFunction;
 
-import static vjvm.classfiledefs.FieldDescriptors.*;
+import static vjvm.classfiledefs.Descriptors.*;
 
 public class JInterpreter {
     private static final Instruction[] dispatchTable;
@@ -233,7 +234,8 @@ public class JInterpreter {
         hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"), (t, a) -> {
             var c = t.context();
             var str = (StringObject) c.heap().get(a.address(0));
-            return c.primitiveClass(str.value()).classObject().address();
+            var desc = Descriptors.of(str.value());
+            return c.bootstrapLoader().loadClass(desc).classObject().address();
         });
         hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), (t, a) -> a.int_(0));
         hackTable.put(Triple.of("java/lang/Double", "doubleToRawLongBits", "(D)J"), (t, a) -> a.long_(0));

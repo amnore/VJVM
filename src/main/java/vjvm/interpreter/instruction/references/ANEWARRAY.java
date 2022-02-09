@@ -1,5 +1,6 @@
 package vjvm.interpreter.instruction.references;
 
+import vjvm.classfiledefs.Descriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
@@ -15,7 +16,7 @@ public class ANEWARRAY extends Instruction {
         var count = stack.popInt();
         var jClass = ((ClassRef) frame.link().constant(thread.pc().ushort())).value();
 
-        JClass arrayClass = jClass.classLoader().loadClass("[L" + jClass.name() + ';');
+        JClass arrayClass = jClass.classLoader().loadClass('[' + Descriptors.of(jClass.name()));
         arrayClass.initialize(thread);
         assert arrayClass.initState() == JClass.InitState.INITIALIZED;
 

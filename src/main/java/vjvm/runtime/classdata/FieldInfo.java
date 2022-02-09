@@ -1,6 +1,6 @@
 package vjvm.runtime.classdata;
 
-import vjvm.classfiledefs.FieldDescriptors;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.attribute.Attribute;
 import vjvm.runtime.classdata.constant.UTF8Constant;
@@ -10,7 +10,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.io.DataInput;
-import java.io.IOException;
 
 import static vjvm.classfiledefs.FieldAccessFlags.*;
 
@@ -102,7 +101,7 @@ public class FieldInfo {
     }
 
     public int size() {
-        return FieldDescriptors.size(descriptor);
+        return Descriptors.size(descriptor);
     }
 
     public boolean public_() {

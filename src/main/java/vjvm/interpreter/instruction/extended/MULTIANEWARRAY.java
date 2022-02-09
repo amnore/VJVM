@@ -1,6 +1,6 @@
 package vjvm.interpreter.instruction.extended;
 
-import vjvm.classfiledefs.FieldDescriptors;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
@@ -25,14 +25,10 @@ public class MULTIANEWARRAY extends Instruction {
         var arrClasses = new JClass[dimensions + 1];
         arrClasses[dimensions] = arrClass;
         for (int i = dimensions - 1; i >= 0; --i) {
-            var name = arrClasses[i + 1].name().substring(1);
-            if (!FieldDescriptors.reference(name))
+            var desc = arrClasses[i + 1].name().substring(1);
+            if (!Descriptors.reference(desc))
                 break;
-            // if the component type is primitive type
-            if (!FieldDescriptors.reference(name))
-                arrClasses[i] = thread.context().primitiveClass(name);
-            else
-                arrClasses[i] = frame.jClass().classLoader().loadClass(name);
+            arrClasses[i] = frame.jClass().classLoader().loadClass(desc);
         }
 
         stack.pushAddress(createArrayRecursive(dimArr, arrClasses, dimensions, thread.context()));

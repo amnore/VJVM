@@ -1,6 +1,7 @@
 package vjvm.vm;
 
 import picocli.CommandLine;
+import vjvm.classfiledefs.Descriptors;
 import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.constant.*;
 
@@ -58,8 +59,9 @@ class Dump implements Callable<Integer> {
 
     @Override
     public Integer call() {
+        ClassLoader.getPlatformClassLoader();
         var ctx = new VMContext(parent.userClassPath);
-        var c = ctx.userLoader().loadClass(className);
+        var c = ctx.userLoader().loadClass(Descriptors.of(className));
 
         if (c == null) {
             System.err.printf("Cannot find class %s\n", className);
