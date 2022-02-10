@@ -8,31 +8,31 @@ import vjvm.vm.VMGlobalObject;
 import java.util.HashMap;
 
 public class JHeap extends VMGlobalObject {
-    private final HashMap<String, Integer> internMap;
-    private final JObject[] objects;
+  private final HashMap<String, Integer> internMap;
+  private final JObject[] objects;
 
-    public JHeap(int heapSize, VMContext context) {
-        super(context);
-        internMap = new HashMap<>();
-        objects = new JObject[heapSize];
+  public JHeap(int heapSize, VMContext context) {
+    super(context);
+    internMap = new HashMap<>();
+    objects = new JObject[heapSize];
+  }
+
+  public int intern(StringObject str) {
+    return internMap.computeIfAbsent(str.value(), v -> str.address());
+  }
+
+  public int allocate(JObject object) {
+    for (int i = 1; i < objects.length; i++) {
+      if (objects[i] == null) {
+        objects[i] = object;
+        return i;
+      }
     }
 
-    public int intern(StringObject str) {
-        return internMap.computeIfAbsent(str.value(), v -> str.address());
-    }
+    return 0;
+  }
 
-    public int allocate(JObject object) {
-        for (int i = 1; i < objects.length; i++) {
-            if (objects[i] == null) {
-                objects[i] = object;
-                return i;
-            }
-        }
-
-        return 0;
-    }
-
-    public JObject get(int address) {
-        return objects[address];
-    }
+  public JObject get(int address) {
+    return objects[address];
+  }
 }

@@ -9,19 +9,19 @@ import vjvm.runtime.object.ArrayObject;
 
 public class ANEWARRAY extends Instruction {
 
-    @Override
-    public void fetchAndRun(JThread thread) {
-        var frame = thread.top();
-        var stack = frame.stack();
-        var count = stack.popInt();
-        var jClass = ((ClassRef) frame.link().constant(thread.pc().ushort())).value();
+  @Override
+  public void fetchAndRun(JThread thread) {
+    var frame = thread.top();
+    var stack = frame.stack();
+    var count = stack.popInt();
+    var jClass = ((ClassRef) frame.link().constant(thread.pc().ushort())).value();
 
-        JClass arrayClass = jClass.classLoader().loadClass('[' + Descriptors.of(jClass.name()));
-        arrayClass.initialize(thread);
-        assert arrayClass.initState() == JClass.InitState.INITIALIZED;
+    JClass arrayClass = jClass.classLoader().loadClass('[' + Descriptors.of(jClass.name()));
+    arrayClass.initialize(thread);
+    assert arrayClass.initState() == JClass.InitState.INITIALIZED;
 
-        var arr = new ArrayObject(arrayClass, count);
-        stack.pushAddress(arr.address());
-    }
+    var arr = new ArrayObject(arrayClass, count);
+    stack.pushAddress(arr.address());
+  }
 
 }

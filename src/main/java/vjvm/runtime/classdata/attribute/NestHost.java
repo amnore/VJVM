@@ -9,11 +9,11 @@ import java.io.DataInput;
 
 @Getter
 public class NestHost extends Attribute {
-    private final ClassRef hostClass;
+  private final ClassRef hostClass;
 
-    @SneakyThrows
-    NestHost(DataInput input, ConstantPool constantPool) {
-        var idx = input.readUnsignedShort();
-        hostClass = (ClassRef) constantPool.constant(idx);
-    }
+  @SneakyThrows
+  NestHost(DataInput input, ConstantPool constantPool) {
+    var idx = input.readUnsignedShort();
+    hostClass = (ClassRef) constantPool.constant(idx);
+  }
 }
