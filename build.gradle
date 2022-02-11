@@ -74,7 +74,7 @@ tasks.register('buildTestRes') {
         Files.walk(p)
           .filter({ !Files.isDirectory(it) && it.toFile().name != ".mkjar" })
           .forEach({
-            var entry = new ZipEntry("${p.relativize(it)}")
+            var entry = new ZipEntry("$relpath")
             jar.putNextEntry(entry)
             Files.copy(it, jar)
             jar.closeEntry()
