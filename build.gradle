@@ -52,13 +52,13 @@ tasks.register('buildTestRes') {
 
   doLast {
     var srcs = file('src/test/java').toPath()
-    var classes = file("$buildDir/classes/java/test")
+    var classes = file("$buildDir/classes/java/test").toPath()
     var dst = file("$buildDir/testres").toPath()
 
     Consumer<File> copyOrZip
     copyOrZip = {
       var p = it.toPath()
-      var relpath = classes.toPath().relativize(p)
+      var relpath = classes.relativize(p)
       var dir = dst.resolve(relpath).parent
 
       if (!it.directory) {
@@ -72,9 +72,12 @@ tasks.register('buildTestRes') {
         var jar = new JarOutputStream(new FileOutputStream(jarPath))
 
         Files.walk(p)
-          .filter({ !Files.isDirectory(it) && it.toFile().name != ".mkjar" })
+          .filter({
+            var f = it.toFile()
+            return !f.isDirectory() && f.name != ".mkjar"
+          })
           .forEach({
-            var entry = new ZipEntry("$relpath")
+            var entry = new ZipEntry("${classes.relativize(it)}")
             jar.putNextEntry(entry)
             Files.copy(it, jar)
             jar.closeEntry()
@@ -85,11 +88,12 @@ tasks.register('buildTestRes') {
       }
     }
 
-    copyOrZip classes
+    copyOrZip classes.toFile()
   }
 }
 
 test {
   dependsOn 'buildTestRes'
-  useJUnit()
+  environment 'VJVM_TESTRES_PATH', "$buildDir/testres"
+  useJUnitPlatform()
 }

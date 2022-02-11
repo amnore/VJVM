@@ -60,7 +60,6 @@ class Dump implements Callable<Integer> {
 
   @Override
   public Integer call() {
-    ClassLoader.getPlatformClassLoader();
     var ctx = new VMContext(parent.userClassPath);
     var c = ctx.userLoader().loadClass(Descriptors.of(className));
 

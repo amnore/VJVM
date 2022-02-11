@@ -12,7 +12,8 @@ public class JObject {
   private final int address;
 
   public JObject(JClass jClass) {
-    assert jClass.initState() == JClass.InitState.INITIALIZED;
+    assert jClass.initState() == JClass.InitState.INITIALIZED
+      || jClass.name().equals("java/lang/Class");
 
     this.type = jClass;
     this.data = new Slots(jClass.instanceSize());
