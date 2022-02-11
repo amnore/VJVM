@@ -210,3 +210,23 @@ public class JClass {
     }
 }
 ```
+
+## 测试设施
+
+测试框架使用 [JUnit](https://junit.org/junit5/docs/current/user-guide/)。
+
+测试文件准备：用例和测试用的类均在 `src/test/java` 下面。在运行 gradle test 之前
+会把编译出来的 class 文件打包到 `build/testres` 文件夹。测试时通过环境变量
+`VJVM_TESTRES_PATH` 传递这个路径。文件结构与包结构相同，对于有 `.mkjar` 文件的目
+录会打包成一个 jar。
+
+```
+src/test/java/lab1        build/testres/lab1/
+├── cases                 ├── cases
+│   ├── Foo.java          │   ├── Foo.class
+│   └── jar           ->  │   └── jar.jar        ->  lab1/cases/jar/Bar.class
+│       ├── Bar.java      ├── DumpSystem.class
+│       └── .mkjar        └── FindClasses.class
+├── DumpSystem.java
+└── FindClasses.java
+```

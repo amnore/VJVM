@@ -67,26 +67,6 @@
 
   可能的内容：GC、反射等。
 
-## 需要进行的工作
-
-  我最近重构了自己大一的 JVVM 作业 [VJVM][4]。因此如果出 JVM 大作业的话可以使用这
-  里的代码作为框架，不用重新写一个 JVM。
-
-  VJVM 基本实现了 Lab1 ~ 3 的功能，如果要出大作业的话还差：
-
-  - `javap` 指令，这部分只需要输出 `JClass` 的内容，不需要太多代码。
-
-  - 调试器，需要对 `JInterpreter` 进行一些改造，但应该也不需要太多代码。
-
-  - 测试用例。我在重构的时候也大幅改动了接口，因此原有的测试用例需要移植过来。
-    JVVM 的用例似乎有点少，可能还需要写一些新的用例。（没错，我重构的时候没有跑
-    测试用例。我目前唯一的测试方法是用 VJVM 运行自己，然后它会在同一个地方因为
-    没有实现某个 `native` 方法报错🤣。）
-
-  - 作业文档。按照之前的设计，这次大作业的结构相对于 JVVM 会有较大的改动。除此之
-    外我们认为原文档也有许多可以改进的地方。因此作业文档可能需要较大规模的重写。
-
 [1]: https://minguw.gitbook.io/jvm
 [2]: https://docs.oracle.com/en/java/javase/17/docs/specs/man/javap.html
 [3]: https://docs.oracle.com/javase/specs/jvms/se17/jvms17.pdf
-[4]: https://github.com/amnore/VJVM
