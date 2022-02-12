@@ -18,10 +18,10 @@ class A {
 }
 ```
 
-```sh
+```
 $ javac a.java
 $ ls
-# A.class A$B.class
+A.class A$B.class
 ```
 
 每个 class 想要执行它的职责首先得被加载到 JVM 中，这便是 ClassLoader 的工作。具
@@ -38,9 +38,9 @@ class 时，它会依次做这样几件事：
 ## 双亲委托加载机制（Parent-First）
 
 虽然 JVM 规范对加载 class 的顺序没做规定，但在 JDK 中默认使用了名为 parent-first
-的策略：每个 ClassLoader （除 Bootstrap Loader 外）均有一个**亲代加载器（parent）
-**，在搜索 class 时首先委托亲代进行搜索，找不到时才搜索自己的加载路径。于是，各
-个 ClassLoader 之间就形成了如下的委托关系：
+的策略：每个 loader（除 Bootstrap Loader 外）均有一个**亲代加载器（parent）**，
+在搜索 class 时首先委托亲代进行搜索，找不到时才搜索自己的加载路径。于是，各个
+ClassLoader 之间就形成了如下的委托关系：
 
 ![ClassLoader Hierarchy](../assets/loader-hierarchy.png)
 
@@ -70,11 +70,13 @@ JDK 中加载类；第二个为 User Loader，负责从命令行指定的 classp
 User Loader 以 parent-first 的方式委托给 Bootstrap Loader。
 
 在框架的 ClassLoader.java 中，我们已为你准备好了加载类的接口：`public JClass
-loadClass(String descriptor)`。需要注意的是，这里传入的名称不是 class 名称，而是
-它的描述符（descriptor）。如 `java.lang.String` 类对应 `Ljava/lang/String;`。对
-于 descriptor 我们将在 Lab 1.2 中再次提及。
+loadClass(String descriptor)`。该方法接受一个字符串，返回加载的类。在 Lab 1.2 中，
+你将解析 class 文件并填入返回的类中。需要注意的是，这里传入的不是 class 名称，而
+是它的描述符（descriptor）。如 `java.lang.String` 类对应 `Ljava/lang/String;`。
+对于 descriptor 我们将在 Lab 1.2 中再次提及。
 
-我们要求多次加载同一个类时应返回同一个对象，而非多个拷贝：
+你在多次加载同一个类时应返回同一个对象，而非多个拷贝。虽然受限于测试方式，我们在
+本次 lab 中无法测试这一要求，但在以后的 lab 中你会遇到下面这种代码：
 
 ```java
 var a = loader.loadClass("Ljava/lang/String;");
