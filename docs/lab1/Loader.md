@@ -88,23 +88,23 @@ assert a == b;
 
 1. 搜索单个目录
 
-  在指定 `/foo` 为加载路径时，如果加载 `bar.A` 类，你应该查找
-  `/foo/bar/A.class` 文件。
+   在指定 `/foo` 为加载路径时，如果加载 `bar.A` 类，你应该查找
+   `/foo/bar/A.class` 文件。
 
 2. 单个 Jar 文件
 
-  Jar 文件本质上是一个 zip 压缩包，将多个 class 文件打包在一起。在从
-  `/foo/bar.jar` 中加载 `baz.B` 时，你应该读取该文件并搜索其中的 `baz/B` 路径。
+   Jar 文件本质上是一个 zip 压缩包，将多个 class 文件打包在一起。在从
+   `/foo/bar.jar` 中加载 `baz.B` 时，你应该读取该文件并搜索其中的 `baz/B` 路径。
 
-  > 你可以使用 `bsdtar -tf <jarfile>` 命令查看 Jar 文件的内容。至于在 Java 中读
-  > 取 Jar 文件的方法，请搜索 JDK 文档。
+   > 你可以使用 `bsdtar -tf <jarfile>` 命令查看 Jar 文件的内容。至于在 Java 中读
+   > 取 Jar 文件的方法，请搜索 JDK 文档。
 
 3. System Modules
 
-  Java Module 是 Java 9 中新引入的一种打包机制，提高了 JDK 的模块化程度。每个
-  module 文件本质上是一个 zip 文件加上 4 bytes 文件头。我们只会在 Bootstrap
-  Loader 中加载 system modules，你可以使用 `ModuleFinder.ofSystem()` 获取其加载
-  路径。
+   Java Module 是 Java 9 中新引入的一种打包机制，提高了 JDK 的模块化程度。每个
+   module 文件本质上是一个 zip 文件加上 4 bytes 文件头。我们只会在 Bootstrap
+   Loader 中加载 system modules，你可以使用 `ModuleFinder.ofSystem()` 获取其加载
+   路径。
 
 这三种加载路径事实上具有同样的接口（interface）：给定一个 class，从中搜索对应的
 文件。我们将这个接口抽象成了 `ClassSearchPath` 类。
