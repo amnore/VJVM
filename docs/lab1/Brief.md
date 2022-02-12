@@ -1,4 +1,5 @@
 ---
+has_children: true
 permalink: /lab1/
 nav_order: 1
 ---
