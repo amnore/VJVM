@@ -4,7 +4,7 @@
 
 - [ ] [文档网页](https://amnore.github.io/VJVM)
   - [ ] 不同类别的显示：info、tasks、critical
-  - [ ] 左边距太大，css
+  - [ ] 图片居中
 - [ ] 测试框架
   - [x] 测试文件生成
   - [ ] Lab2、Lab3：执行结果测试

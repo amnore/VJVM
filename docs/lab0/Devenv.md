@@ -24,9 +24,10 @@ nav_order: 0
 > 个星期，并且他最后是找老师要了后台的日志，并开了一个虚拟机进行测试才找出问题所
 > 在。
 >
-> 🤡竟是我自己！
->
-> ![czg 当时的提交记录](../assets/oslab3.jpg)
+> <figure>
+>   <figcaption>czg 当时的提交记录（🤡竟是我自己！）</figcaption>
+>   <img src="../assets/oslab3.jpg" />
+> </figure>
 
 ## 安装 GNU/Linux
 

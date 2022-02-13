@@ -42,7 +42,12 @@ class 时，它会依次做这样几件事：
 在搜索 class 时首先委托亲代进行搜索，找不到时才搜索自己的加载路径。于是，各个
 ClassLoader 之间就形成了如下的委托关系：
 
-![ClassLoader Hierarchy](../assets/loader-hierarchy.png)
+<figure>
+  <img src="../assets/loader-hierarchy.png" />
+  <figcaption>JDK 中各个 ClassLoader 的委托关系，在新版本 JDK 中 Extension
+  ClassLoader 和 Application ClassLoader 分别被称为 Platform ClassLoader 和
+  System ClassLoader。</figcaption>
+</figure>
 
 关于 JDK 中内置 ClassLoader 的更多信息，请阅读 [相应 JDK 文
 档
