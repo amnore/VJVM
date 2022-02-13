@@ -230,3 +230,5 @@ src/test/java/lab1        build/testres/lab1/
 ├── DumpSystem.java
 └── FindClasses.java
 ```
+
+测试的输入、输出通过命令行和 stdio 进行。
