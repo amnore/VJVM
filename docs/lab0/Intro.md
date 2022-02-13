@@ -1,8 +1,8 @@
 ---
 has_children: true
-permalink: /
+permalink: /lab0/
 title: Lab0 开始之前
-nav_order: 0
+nav_order: 1
 ---
 
 # 大作业简介

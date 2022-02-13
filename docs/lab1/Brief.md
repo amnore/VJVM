@@ -1,7 +1,7 @@
 ---
 has_children: true
 permalink: /lab1/
-nav_order: 1
+nav_order: 2
 ---
 
 # Lab1 类加载与解析

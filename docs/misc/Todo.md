@@ -5,6 +5,7 @@
 - [ ] [文档网页](https://amnore.github.io/VJVM)
   - [ ] 不同类别的显示：info、tasks、critical
   - [ ] 图片居中
+  - [ ] TOC
 - [ ] 测试框架
   - [x] 测试文件生成
   - [ ] Lab2、Lab3：执行结果测试
