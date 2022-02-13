@@ -2,6 +2,3 @@ remote_theme: pmarsceill/just-the-docs
 
 kramdown:
   remove_line_breaks_for_cjk: true
-  syntax_highlighter_opts:
-    block:
-      line_numbers: true
