@@ -102,7 +102,7 @@ Ubuntu 用户，你们可以使用以下命令进行安装：
 ```
 $ git clone https://github.com/amnore/VJVM-public jvm-2022
 $ cd jvm-2022
-$ git checkout -b lab0
+$ git checkout lab0
 ```
 
 进入框架目录后，请设置你的学号和邮箱：
