@@ -116,6 +116,19 @@ test {
 请勿对 `build.gradle` 作任何修改。在 OJ 上运行测试时我们会替换掉该文件，因此你的
 修改可能会导致本地与 OJ 的编译配置不同，无法正确运行。
 
----
-
 新手教程到此就结束了。请期待接下来的 Lab1：Class 文件读取与解析吧！
+
+> Lab0 问答题
+>
+> 1. 请阅读 [提问的智
+>    慧
+>    ](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md)
+>    与 [别像弱智一样提
+>    问
+>    ](https://github.com/tangx/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md)
+>    ，并用一句话总结这两篇文章的内容。
+>
+> 2. 请描述你在 Lab0 中遇到的一个问题，并简要描述你是如何解决的。
+>
+> 3. （选答）请对 Lab0 的文档提出你的意见。可以是你觉得哪里没说清楚，哪里太哆嗦
+>    等任何意见。
