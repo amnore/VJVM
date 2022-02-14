@@ -1,6 +1,6 @@
 ---
 parent: Lab0 开始之前
-nav_order: 2
+nav_order: 1
 ---
 
 # 开发环境配置
