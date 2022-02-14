@@ -30,14 +30,16 @@ Lab 中的得分将根据通过的用例数计算。
 
 废话说完了，现在快来看看我们为你准备的 JVM 大礼包吧！
 
-首先是 [大作业简介](./Intro.md) 和 [JVM 规范](https://docs.oracle.com/javase/specs/jvms/se17/jvms17.pdf)，你
-将在整个大作业中反复阅读后面这份文档。
+首先是 [大作业简介]({{ site.baseurl }}{% link lab0/Intro.md %}) 和 [JVM 规
+范](https://docs.oracle.com/javase/specs/jvms/se17/jvms17.pdf)，你将在整个大作业
+中反复阅读后面这份文档。
 
-然后，我们还准备了 [如何用 C 实现 Java 的主要特性](./OopInC.md) 作为一个简单的面
-向对象入门教程。我们相信这会有助于你上手 Java 语言。
+然后，我们还准备了 [如何用 C 实现 Java 的主要特性]({{ site.baseurl }}{% link
+lab0/OopInC.md %}) 作为一个简单的面向对象入门教程。我们相信这会有助于你上手 Java
+语言。
 
-对于框架代码，我们也编写了一份 [代码与编译脚本导读](./CodeIntro.md)，其中介绍了
-框架代码的结构、使用的库和编译工具。
+对于框架代码，我们也编写了一份 [代码与编译脚本导读]({{ site.baseurl }}{% link
+lab0/CodeIntro.md %})，其中介绍了框架代码的结构、使用的库和编译工具。
 
-最后还有一份 [开发环境配置指南](./Devenv.md)。这本指南将帮助你搭建一个高效的开发
-环境，以便更好地完成大作业。
+最后还有一份 [开发环境配置指南]({{ site.baseurl }}{% link lab0/Devenv.md %})。这
+本指南将帮助你搭建一个高效的开发环境，以便更好地完成大作业。

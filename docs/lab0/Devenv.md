@@ -26,7 +26,7 @@ nav_order: 1
 >
 > <figure>
 >   <figcaption>czg 当时的提交记录（🤡竟是我自己！）</figcaption>
->   <img src="../assets/oslab3.jpg" />
+>   <img src="{{ site.baseurl }}{% link assets/oslab3.jpg %}" />
 > </figure>
 
 ## 安装 GNU/Linux

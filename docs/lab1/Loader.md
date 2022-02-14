@@ -43,7 +43,7 @@ class 时，它会依次做这样几件事：
 ClassLoader 之间就形成了如下的委托关系：
 
 <figure>
-  <img src="../assets/loader-hierarchy.png" />
+  <img src="{{ site.baseurl }}{% link assets/loader-hierarchy.png %}" />
   <figcaption>JDK 中各个 ClassLoader 的委托关系，在新版本 JDK 中 Extension
   ClassLoader 和 Application ClassLoader 分别被称为 Platform ClassLoader 和
   System ClassLoader。</figcaption>
