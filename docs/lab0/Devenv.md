@@ -100,8 +100,8 @@ Ubuntu 用户，你们可以使用以下命令进行安装：
 使用一下命令获取框架代码：
 
 ```
-$ git clone https://github.com/amnore/VJVM-public
-$ cd VJVM-2022
+$ git clone https://github.com/amnore/VJVM-public jvm-2022
+$ cd jvm-2022
 $ git checkout -b lab0
 ```
 
@@ -113,10 +113,3 @@ $ git config user.email '211250001@smail.nju.edu.cn'
 ```
 
 对于基本的 Git 使用，请自行搜索相关资料。提交时请将更改合并至 `master` 分支。
-
-编译项目时需要使用 gradle 命令。生成的 jar 文件可以直接运行：
-
-```
-$ ./gradlew jar
-$ java -jar build/libs/VJVM-0.0.1.jar
-```
