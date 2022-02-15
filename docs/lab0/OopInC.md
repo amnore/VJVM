@@ -58,6 +58,8 @@ static A *new_A() {
 int main() {
   A *a = new_A();
   printf("a=%d,b=%f\n", a->a, a->b);
+  free(a);
+
   return 0;
 }
 ```
@@ -104,6 +106,8 @@ static void A_print(A *this, int b) {
 int main() {
   A *a = new_A();
   A_print(a, 2);
+  free(a);
+
   return 0;
 }
 ```
@@ -174,8 +178,13 @@ int main() {
   printf("a=%d\n", a->a);
   B *b = new_B();
   printf("a=%d,b=%d\n", b->a.a, b->b);
+
+  free(a);
   a = (A*)b;
   printf("a=%d\n", a->a);
+  free(a);
+
+  return 0;
 }
 ```
 
@@ -243,8 +252,12 @@ static B *new_B() {
 int main() {
   A *a = new_A();
   a->print();
+  free(a);
+
   a = (A*)new_B();
   a->print();
+  free(a);
+
   return 0;
 }
 ```

@@ -20,7 +20,7 @@ nav_order: 1
 > '..'（父目录）。
 >
 > 没有认真 RTFM 的 czg 很高兴地硬编码跳过了每个目录的前两项文件。于是在提交上OJ
-> 之后，mkfs 就因为没有跳过当前目录而无线递归爆栈了。这个 bug 卡了 czg 整整一
+> 之后，mkfs 就因为没有跳过当前目录而无限递归爆栈了。这个 bug 卡了 czg 整整一
 > 个星期，并且他最后是找老师要了后台的日志，并开了一个虚拟机进行测试才找出问题所
 > 在。
 >
@@ -46,8 +46,10 @@ nav_order: 1
 [WSL](https://docs.microsoft.com/en-us/windows/wsl/install)、虚拟机（可以使用
 [Virtual Box](https://www.virtualbox.org/) 或 [VMWare
 Player](https://www.vmware.com/products/workstation-player/workstation-player-evaluation.html)
-，请自行查找使用方法）、真机（请事先备份数据）。接下来的配置将以 [Ubuntu 21.10
-LTS](https://ubuntu.com/download/desktop) 为例，但你们可以自行选择发行版与版本。
+，请自行查找使用方法）、真机（请事先备份数据）。对于虚拟机与真机，你可以下载
+[Ubuntu
+21.10](https://mirrors.nju.edu.cn/ubuntu-releases/impish/ubuntu-21.10-desktop-amd64.iso)
+镜像进行安装。
 
 网上有大量的 GNU/Linux 入门教程，如有需要请自行搜索。这里我们给出 [ICS
 PA0](https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA0.html) 的相关链接。
@@ -76,7 +78,7 @@ Ubuntu 用户，你们可以使用以下命令进行安装：
 ```
 
 > 对于 Shell 命令，我们约定以‘$’开始时为普通用户权限，以‘#’开始时为 root 权限。
-> 如何使用 root 权限执行命令请使用 sudo。
+> 你可以使用 sudo 来以 root 权限执行命令。
 
 > 如非必要，不要使用 root 用户！
 >
