@@ -8,14 +8,14 @@ import java.util.function.IntBinaryOperator;
 
 @AllArgsConstructor
 public class IOPR extends Instruction {
-  private final IntBinaryOperator opr;
+	private final IntBinaryOperator opr;
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    var stack = thread.top().stack();
-    var right = stack.popInt();
-    var left = stack.popInt();
-    stack.pushInt(opr.applyAsInt(left, right));
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		var stack = thread.top().stack();
+		var right = stack.popInt();
+		var left = stack.popInt();
+		stack.pushInt(opr.applyAsInt(left, right));
+	}
 
 }
