@@ -1,3 +1,4 @@
 package vjvm.utils;
 
-public class UnimplementedException extends RuntimeException {}
+public class UnimplementedException extends RuntimeException {
+}

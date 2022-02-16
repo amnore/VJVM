@@ -6,5 +6,5 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public abstract class VMGlobalObject {
-  private final VMContext context;
+	private final VMContext context;
 }
