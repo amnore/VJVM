@@ -102,7 +102,7 @@ Ubuntu 用户，你们可以使用以下命令进行安装：
 使用以下命令获取框架代码：
 
 ```
-$ git clone https://github.com/amnore/VJVM-public jvm-2022
+$ git clone https://git.nju.edu.cn/czg/VJVM-public jvm-2022
 $ cd jvm-2022
 $ git checkout lab0
 ```
