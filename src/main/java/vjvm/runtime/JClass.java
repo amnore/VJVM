@@ -69,6 +69,7 @@ public class JClass {
 
 	private JClass nestHost;
 
+	private static final int MAGIC_NUMBER = 0xCAFEBABE;
 
 	// construct from data
 	@SneakyThrows
@@ -77,7 +78,7 @@ public class JClass {
 
 		// check magic number
 		var magic = dataInput.readInt();
-		if (magic != 0xcafebabe) {
+		if (magic != MAGIC_NUMBER) {
 			throw new InvalidClassException(String.format(
 				"Wrong magic number, expected: 0xcafebabe, got: 0x%x", magic));
 		}
