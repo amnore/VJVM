@@ -5,9 +5,9 @@ import vjvm.runtime.JThread;
 
 public class NOP extends Instruction {
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    // do nothing
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		// do nothing
+	}
 
 }

@@ -5,9 +5,9 @@ import vjvm.runtime.JThread;
 
 public class RETURN extends Instruction {
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    thread.pop();
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		thread.pop();
+	}
 
 }

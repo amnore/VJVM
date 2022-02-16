@@ -6,11 +6,11 @@ import vjvm.runtime.JThread;
 
 @RequiredArgsConstructor
 public class FCONST_X extends Instruction {
-  private final float value;
+	private final float value;
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    thread.top().stack().pushFloat(value);
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		thread.top().stack().pushFloat(value);
+	}
 
 }

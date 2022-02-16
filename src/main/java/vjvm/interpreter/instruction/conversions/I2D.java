@@ -5,10 +5,10 @@ import vjvm.runtime.JThread;
 
 public class I2D extends Instruction {
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    var stack = thread.top().stack();
-    stack.pushDouble(stack.popInt());
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		var stack = thread.top().stack();
+		stack.pushDouble(stack.popInt());
+	}
 
 }

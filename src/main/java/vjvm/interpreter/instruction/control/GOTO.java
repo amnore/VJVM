@@ -5,10 +5,10 @@ import vjvm.runtime.JThread;
 
 public class GOTO extends Instruction {
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    var pc = thread.pc();
-    pc.move(pc.short_() - 3);
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		var pc = thread.pc();
+		pc.move(pc.short_() - INSTR_LENGTH);
+	}
 
 }

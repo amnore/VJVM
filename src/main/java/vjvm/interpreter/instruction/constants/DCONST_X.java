@@ -6,11 +6,11 @@ import vjvm.runtime.JThread;
 
 @RequiredArgsConstructor
 public class DCONST_X extends Instruction {
-  private final double value;
+	private final double value;
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    thread.top().stack().pushDouble(value);
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		thread.top().stack().pushDouble(value);
+	}
 
 }

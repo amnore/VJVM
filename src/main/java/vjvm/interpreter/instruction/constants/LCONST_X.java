@@ -6,11 +6,11 @@ import vjvm.runtime.JThread;
 
 @RequiredArgsConstructor
 public class LCONST_X extends Instruction {
-  private final long value;
+	private final long value;
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    thread.top().stack().pushLong(value);
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		thread.top().stack().pushLong(value);
+	}
 
 }

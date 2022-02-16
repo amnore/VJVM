@@ -6,12 +6,12 @@ import vjvm.runtime.JThread;
 
 @RequiredArgsConstructor
 public class LOAD2S_X extends Instruction {
-  private final int index;
+	private final int index;
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    var frame = thread.top();
-    frame.stack().pushLong(frame.vars().long_(index));
-  }
+	@Override
+	public void fetchAndRun(JThread thread) {
+		var frame = thread.top();
+		frame.stack().pushLong(frame.vars().long_(index));
+	}
 
 }
