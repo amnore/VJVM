@@ -10,25 +10,27 @@ import java.util.Arrays;
  * If a subclass doesn't hold any resources, then just do nothing.
  */
 public abstract class ClassSearchPath implements Closeable {
-  /**
-   * Constructs search paths object with given path.
-   */
-  public static ClassSearchPath[] constructSearchPath(String path) {
-    String sep = System.getProperty("path.separator");
-    return Arrays.stream(path.split(sep)).map(searchPath -> {
-      if (searchPath.endsWith(".jar") || searchPath.endsWith(".JAR"))
-        return new JarSearchPath(searchPath);
-      if (searchPath.endsWith("*"))
-        return new WildcardSearchPath(searchPath);
-      return new DirSearchPath(searchPath);
-    }).toArray(ClassSearchPath[]::new);
-  }
+	/**
+	 * Constructs search paths object with given path.
+	 */
+	public static ClassSearchPath[] constructSearchPath(String path) {
+		String sep = System.getProperty("path.separator");
+		return Arrays.stream(path.split(sep)).map(searchPath -> {
+			if (searchPath.endsWith(".jar") || searchPath.endsWith(".JAR")) {
+				return new JarSearchPath(searchPath);
+			}
+			if (searchPath.endsWith("*")) {
+				return new WildcardSearchPath(searchPath);
+			}
+			return new DirSearchPath(searchPath);
+		}).toArray(ClassSearchPath[]::new);
+	}
 
-  /**
-   * Finds a class with specified name.
-   *
-   * @param name name of the class to find.
-   * @return Returns a stream containing the binary data if such class is found, or null if not.
-   */
-  public abstract InputStream findClass(String name);
+	/**
+	 * Finds a class with specified name.
+	 *
+	 * @param name name of the class to find.
+	 * @return Returns a stream containing the binary data if such class is found, or null if not.
+	 */
+	public abstract InputStream findClass(String name);
 }
