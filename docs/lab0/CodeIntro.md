@@ -118,17 +118,21 @@ test {
 
 新手教程到此就结束了。请期待接下来的 Lab1：Class 文件读取与解析吧！
 
-> Lab0 问答题
+> 整理你的 Git 分支
 >
-> 1. 请阅读 [提问的智
->    慧
->    ](https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/main/README-zh_CN.md)
->    与 [别像弱智一样提
->    问
->    ](https://github.com/tangx/Stop-Ask-Questions-The-Stupid-Ways/blob/master/README.md)
->    ，并用一句话总结这两篇文章的内容。
+> 在每个 Lab 的最后，你都需要将本次作业的更改合并到 master 分支下并提交给 OJ 系
+> 统。
 >
-> 2. 请描述你在 Lab0 中遇到的一个问题，并简要描述你是如何解决的。
+> 请使用以下命令将 lab0 合并到 master：
 >
-> 3. （选答）请对 Lab0 的文档提出你的意见。可以是你觉得哪里没说清楚，哪里太哆嗦
->    等任何意见。
+> ```
+> $ git checkout master
+> $ git merge lab0
+> ```
+>
+> 在合并完成后，请将 master 分支 push 到 OJ 上：
+>
+> ```
+> $ git remote add lab0-oj ${OJ 系统中显示的提交地址}
+> $ git push lab0-oj master
+> ```
