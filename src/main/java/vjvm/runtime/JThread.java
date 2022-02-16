@@ -8,33 +8,37 @@ import vjvm.vm.VMGlobalObject;
 
 import java.util.Stack;
 
+/**
+ * 模拟JVM中的线程，本项目只考虑单线程
+ */
 public class JThread extends VMGlobalObject {
-  private final Stack<JFrame> frames = new Stack<>();
-  @Getter
-  @Setter
-  private JObject exception;
 
-  public JThread(VMContext context) {
-    super(context);
-  }
+	private final Stack<JFrame> frames = new Stack<>();
+	@Getter
+	@Setter
+	private JObject exception;
 
-  public JFrame top() {
-    return empty() ? null : frames.lastElement();
-  }
+	public JThread(VMContext context) {
+		super(context);
+	}
 
-  public void pop() {
-    frames.pop();
-  }
+	public JFrame top() {
+		return empty() ? null : frames.lastElement();
+	}
 
-  public void push(JFrame frame) {
-    frames.push(frame);
-  }
+	public void pop() {
+		frames.pop();
+	}
 
-  public ProgramCounter pc() {
-    return empty() ? null : top().pc();
-  }
+	public void push(JFrame frame) {
+		frames.push(frame);
+	}
 
-  public boolean empty() {
-    return frames.empty();
-  }
+	public ProgramCounter pc() {
+		return empty() ? null : top().pc();
+	}
+
+	public boolean empty() {
+		return frames.empty();
+	}
 }
