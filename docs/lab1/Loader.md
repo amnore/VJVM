@@ -5,7 +5,7 @@ parent: Lab1 类加载与解析
 
 # ClassLoader
 
-> 本节对应 JVM 规范内容：5.3.1、5.3.2
+> 本章对应 JVM 规范内容：5.3.1、5.3.2
 
 ## 一个 class 的一生 —— 加载
 
@@ -74,6 +74,10 @@ ClassLoader 之间就形成了如下的委托关系：
 JDK 中加载类；第二个为 User Loader，负责从命令行指定的 classpath 中搜索 class。
 User Loader 以 parent-first 的方式委托给 Bootstrap Loader。
 
+> 在真实的 JVM 中，User Loader 是作为虚拟机中的一个类来实现的。它从指定的路径中
+> 查找 class 文件，并调用 JVM 提供的一个方法由文件创建类。然而，这种实现依赖于
+> native 方法等复杂内容，因此我们在此作了简化，由 JVM 来实现 ClassLoader。
+
 在框架的 ClassLoader.java 中，我们已为你准备好了加载类的接口：`public JClass
 loadClass(String descriptor)`。该方法接受一个字符串，返回加载的类。在 Lab 1.2 中，
 你将解析 class 文件并填入返回的类中。需要注意的是，这里传入的不是 class 名称，而
@@ -119,6 +123,6 @@ Bootstrap Loader 仅加载 system modules，User Loader 从命令行的 `-cp` �
 （path separator）隔开。对于类 Unix 环境，separator 为 `:`，Windows 下则是 `;`。
 你可以使用`System.getProperty("path.separator")` 获取路径分隔符。
 
-在成功找到所需类时，我们要求你的命令返回 0；找不到时需返回非 0 值。你可以利用
-`System.err` 输出任意调试信息，但请勿使用 `System.out`。我们在之后的 Lab 中
-会将其中的信息作为测试输出。
+在成功找到所需类时，我们要求你的命令返回 0；找不到时需返回非 0 值。你可以利用标
+准错误流 `System.err` 输出任意调试信息，但请勿使用标准输出流 `System.out`。我们
+在之后的 Lab 中会将其中的信息作为测试输出。
