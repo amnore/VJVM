@@ -10,6 +10,7 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static lab1.Utils.runCmd;
 
 class FindClasses {
   final Path resPath = Path.of(System.getenv("VJVM_TESTRES_PATH"));
@@ -42,19 +43,5 @@ class FindClasses {
 
     assertEquals(0, exec.apply("java.lang.String"));
     assertNotEquals(0, exec.apply("java.lang.None1234"));
-  }
-
-  int runCmd(String path, String clazz) {
-    var cmd = new CommandLine(new Main());
-    var args = new ArrayList<String>();
-
-    if (path != null) {
-      args.add("-cp");
-      args.add(path);
-    }
-
-    args.add("dump");
-    args.add(clazz);
-    return cmd.execute(args.toArray(String[]::new));
   }
 }

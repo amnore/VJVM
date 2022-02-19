@@ -1,0 +1,41 @@
+class name: lab1/cases/A$B
+minor version: 0
+major version: 61
+flags: 0x20
+this class: lab1/cases/A$B
+super class: java/lang/Object
+
+constant pool:
+#1 = Fieldref: lab1/cases/A$B.this$0:Llab1/cases/A;
+#2 = Class: lab1/cases/A$B
+#3 = NameAndType: this$0:Llab1/cases/A;
+#4 = Utf8: "lab1/cases/A$B"
+#5 = Utf8: "this$0"
+#6 = Utf8: "Llab1/cases/A;"
+#7 = Methodref: java/lang/Object.<init>:()V
+#8 = Class: java/lang/Object
+#9 = NameAndType: <init>:()V
+#10 = Utf8: "java/lang/Object"
+#11 = Utf8: "<init>"
+#12 = Utf8: "()V"
+#13 = Utf8: "(Llab1/cases/A;)V"
+#14 = Utf8: "Code"
+#15 = Utf8: "LineNumberTable"
+#16 = Utf8: "LocalVariableTable"
+#17 = Utf8: "this"
+#18 = Utf8: "Llab1/cases/A$B;"
+#19 = Utf8: "SourceFile"
+#20 = Utf8: "A.java"
+#21 = Utf8: "NestHost"
+#22 = Class: lab1/cases/A
+#23 = Utf8: "lab1/cases/A"
+#24 = Utf8: "InnerClasses"
+#25 = Utf8: "B"
+
+interfaces:
+
+fields:
+this$0(0x1010): Llab1/cases/A;
+
+methods:
+<init>(0x0): (Llab1/cases/A;)V

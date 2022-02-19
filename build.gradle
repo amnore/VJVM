@@ -95,5 +95,6 @@ tasks.register('buildTestRes') {
 test {
   dependsOn 'buildTestRes'
   environment 'VJVM_TESTRES_PATH', "$buildDir/testres"
+  environment 'VJVM_TESTRESULT_PATH', "$projectDir/src/test/java"
   useJUnitPlatform()
 }

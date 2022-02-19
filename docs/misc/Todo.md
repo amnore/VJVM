@@ -63,4 +63,4 @@
 
 ## misc
 
-- [ ] argue 实验设计
+- [x] argue 实验设计

@@ -1,10 +1,9 @@
 package vjvm.runtime.classdata.constant;
 
+import java.io.DataInput;
 import lombok.SneakyThrows;
 import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.MethodInfo;
-
-import java.io.DataInput;
 
 public class MethodRef extends Constant {
   private final int classIndex;
@@ -24,20 +23,19 @@ public class MethodRef extends Constant {
     this.interface_ = interface_;
   }
 
-  public JClass jClass() {
-    return classRef().value();
-  }
+  public JClass jClass() { return classRef().value(); }
 
   private ClassRef classRef() {
     if (classRef == null) {
-      classRef = (ClassRef) self.constantPool().constant(classIndex);
+      classRef = (ClassRef)self.constantPool().constant(classIndex);
     }
     return classRef;
   }
 
   private NameAndTypeConstant nameAndType() {
     if (nameAndType == null) {
-      nameAndType = (NameAndTypeConstant) self.constantPool().constant(nameAndTypeIndex);
+      nameAndType =
+          (NameAndTypeConstant)self.constantPool().constant(nameAndTypeIndex);
     }
     return nameAndType;
   }
@@ -70,6 +68,8 @@ public class MethodRef extends Constant {
 
   @Override
   public String toString() {
-    return String.format("Methodref: %s.%s:%s", classRef().name(), nameAndType().name(), nameAndType().type());
+    return String.format(
+        "%s: %s.%s:%s", interface_ ? "InterfaceMethodref" : "Methodref",
+        classRef().name(), nameAndType().name(), nameAndType().type());
   }
 }

@@ -265,4 +265,4 @@ vendor/
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,gradle,maven,java,visualstudiocode,emacs,vim,jekyll
 
-bin/**/.mkjar
+bin

@@ -1,0 +1,1584 @@
+class name: java/lang/String
+minor version: 0
+major version: 61
+flags: 0x31
+this class: java/lang/String
+super class: java/lang/Object
+
+constant pool:
+#1 = Methodref: java/lang/Object.<init>:()V
+#2 = Class: java/lang/Object
+#3 = NameAndType: <init>:()V
+#4 = Utf8: "java/lang/Object"
+#5 = Utf8: "<init>"
+#6 = Utf8: "()V"
+#7 = String: ""
+#8 = Utf8: ""
+#9 = Fieldref: java/lang/String.value:[B
+#10 = Class: java/lang/String
+#11 = NameAndType: value:[B
+#12 = Utf8: "java/lang/String"
+#13 = Utf8: "value"
+#14 = Utf8: "[B"
+#15 = Fieldref: java/lang/String.coder:B
+#16 = NameAndType: coder:B
+#17 = Utf8: "coder"
+#18 = Utf8: "B"
+#19 = Fieldref: java/lang/String.hash:I
+#20 = NameAndType: hash:I
+#21 = Utf8: "hash"
+#22 = Utf8: "I"
+#23 = Methodref: java/lang/String.<init>:([CIILjava/lang/Void;)V
+#24 = NameAndType: <init>:([CIILjava/lang/Void;)V
+#25 = Utf8: "([CIILjava/lang/Void;)V"
+#26 = Methodref: java/lang/String.rangeCheck:([CII)Ljava/lang/Void;
+#27 = NameAndType: rangeCheck:([CII)Ljava/lang/Void;
+#28 = Utf8: "rangeCheck"
+#29 = Utf8: "([CII)Ljava/lang/Void;"
+#30 = Methodref: java/lang/String.checkBoundsOffCount:(III)V
+#31 = NameAndType: checkBoundsOffCount:(III)V
+#32 = Utf8: "checkBoundsOffCount"
+#33 = Utf8: "(III)V"
+#34 = Fieldref: java/lang/String.COMPACT_STRINGS:Z
+#35 = NameAndType: COMPACT_STRINGS:Z
+#36 = Utf8: "COMPACT_STRINGS"
+#37 = Utf8: "Z"
+#38 = Methodref: java/lang/StringLatin1.toBytes:([III)[B
+#39 = Class: java/lang/StringLatin1
+#40 = NameAndType: toBytes:([III)[B
+#41 = Utf8: "java/lang/StringLatin1"
+#42 = Utf8: "toBytes"
+#43 = Utf8: "([III)[B"
+#44 = Methodref: java/lang/StringUTF16.toBytes:([III)[B
+#45 = Class: java/lang/StringUTF16
+#46 = Utf8: "java/lang/StringUTF16"
+#47 = Methodref: java/util/Arrays.copyOfRange:([BII)[B
+#48 = Class: java/util/Arrays
+#49 = NameAndType: copyOfRange:([BII)[B
+#50 = Utf8: "java/util/Arrays"
+#51 = Utf8: "copyOfRange"
+#52 = Utf8: "([BII)[B"
+#53 = Methodref: java/lang/StringUTF16.newBytesFor:(I)[B
+#54 = NameAndType: newBytesFor:(I)[B
+#55 = Utf8: "newBytesFor"
+#56 = Utf8: "(I)[B"
+#57 = Methodref: java/lang/StringUTF16.putChar:([BII)V
+#58 = NameAndType: putChar:([BII)V
+#59 = Utf8: "putChar"
+#60 = Utf8: "([BII)V"
+#61 = Methodref: java/lang/String.<init>:([BIII)V
+#62 = NameAndType: <init>:([BIII)V
+#63 = Utf8: "([BIII)V"
+#64 = Methodref: java/lang/String.lookupCharset:(Ljava/lang/String;)Ljava/nio/charset/Charset;
+#65 = NameAndType: lookupCharset:(Ljava/lang/String;)Ljava/nio/charset/Charset;
+#66 = Utf8: "lookupCharset"
+#67 = Utf8: "(Ljava/lang/String;)Ljava/nio/charset/Charset;"
+#68 = Methodref: java/lang/String.<init>:([BIILjava/nio/charset/Charset;)V
+#69 = NameAndType: <init>:([BIILjava/nio/charset/Charset;)V
+#70 = Utf8: "([BIILjava/nio/charset/Charset;)V"
+#71 = Methodref: java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+#72 = Class: java/util/Objects
+#73 = NameAndType: requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+#74 = Utf8: "java/util/Objects"
+#75 = Utf8: "requireNonNull"
+#76 = Utf8: "(Ljava/lang/Object;)Ljava/lang/Object;"
+#77 = Fieldref: sun/nio/cs/UTF_8.INSTANCE:Lsun/nio/cs/UTF_8;
+#78 = Class: sun/nio/cs/UTF_8
+#79 = NameAndType: INSTANCE:Lsun/nio/cs/UTF_8;
+#80 = Utf8: "sun/nio/cs/UTF_8"
+#81 = Utf8: "INSTANCE"
+#82 = Utf8: "Lsun/nio/cs/UTF_8;"
+#83 = Methodref: java/lang/StringCoding.hasNegatives:([BII)Z
+#84 = Class: java/lang/StringCoding
+#85 = NameAndType: hasNegatives:([BII)Z
+#86 = Utf8: "java/lang/StringCoding"
+#87 = Utf8: "hasNegatives"
+#88 = Utf8: "([BII)Z"
+#89 = Methodref: java/lang/String.isNotContinuation:(I)Z
+#90 = NameAndType: isNotContinuation:(I)Z
+#91 = Utf8: "isNotContinuation"
+#92 = Utf8: "(I)Z"
+#93 = Methodref: java/lang/String.decode2:(II)C
+#94 = NameAndType: decode2:(II)C
+#95 = Utf8: "decode2"
+#96 = Utf8: "(II)C"
+#97 = Methodref: java/util/Arrays.copyOf:([BI)[B
+#98 = NameAndType: copyOf:([BI)[B
+#99 = Utf8: "copyOf"
+#100 = Utf8: "([BI)[B"
+#101 = Methodref: java/lang/StringLatin1.inflate:([BI[BII)V
+#102 = NameAndType: inflate:([BI[BII)V
+#103 = Utf8: "inflate"
+#104 = Utf8: "([BI[BII)V"
+#105 = Methodref: java/lang/String.decodeUTF8_UTF16:([BII[BIZ)I
+#106 = NameAndType: decodeUTF8_UTF16:([BII[BIZ)I
+#107 = Utf8: "decodeUTF8_UTF16"
+#108 = Utf8: "([BII[BIZ)I"
+#109 = Fieldref: sun/nio/cs/ISO_8859_1.INSTANCE:Lsun/nio/cs/ISO_8859_1;
+#110 = Class: sun/nio/cs/ISO_8859_1
+#111 = NameAndType: INSTANCE:Lsun/nio/cs/ISO_8859_1;
+#112 = Utf8: "sun/nio/cs/ISO_8859_1"
+#113 = Utf8: "Lsun/nio/cs/ISO_8859_1;"
+#114 = Methodref: java/lang/StringLatin1.inflate:([BII)[B
+#115 = NameAndType: inflate:([BII)[B
+#116 = Fieldref: sun/nio/cs/US_ASCII.INSTANCE:Lsun/nio/cs/US_ASCII;
+#117 = Class: sun/nio/cs/US_ASCII
+#118 = NameAndType: INSTANCE:Lsun/nio/cs/US_ASCII;
+#119 = Utf8: "sun/nio/cs/US_ASCII"
+#120 = Utf8: "Lsun/nio/cs/US_ASCII;"
+#121 = Integer: 65533
+#122 = Methodref: java/nio/charset/Charset.newDecoder:()Ljava/nio/charset/CharsetDecoder;
+#123 = Class: java/nio/charset/Charset
+#124 = NameAndType: newDecoder:()Ljava/nio/charset/CharsetDecoder;
+#125 = Utf8: "java/nio/charset/Charset"
+#126 = Utf8: "newDecoder"
+#127 = Utf8: "()Ljava/nio/charset/CharsetDecoder;"
+#128 = Class: sun/nio/cs/ArrayDecoder
+#129 = Utf8: "sun/nio/cs/ArrayDecoder"
+#130 = Methodref: sun/nio/cs/ArrayDecoder.isASCIICompatible:()Z
+#131 = NameAndType: isASCIICompatible:()Z
+#132 = Utf8: "isASCIICompatible"
+#133 = Utf8: "()Z"
+#134 = Methodref: sun/nio/cs/ArrayDecoder.isLatin1Decodable:()Z
+#135 = NameAndType: isLatin1Decodable:()Z
+#136 = Utf8: "isLatin1Decodable"
+#137 = Methodref: sun/nio/cs/ArrayDecoder.decodeToLatin1:([BII[B)I
+#138 = NameAndType: decodeToLatin1:([BII[B)I
+#139 = Utf8: "decodeToLatin1"
+#140 = Utf8: "([BII[B)I"
+#141 = Methodref: java/nio/charset/CharsetDecoder.maxCharsPerByte:()F
+#142 = Class: java/nio/charset/CharsetDecoder
+#143 = NameAndType: maxCharsPerByte:()F
+#144 = Utf8: "java/nio/charset/CharsetDecoder"
+#145 = Utf8: "maxCharsPerByte"
+#146 = Utf8: "()F"
+#147 = Methodref: java/lang/String.scale:(IF)I
+#148 = NameAndType: scale:(IF)I
+#149 = Utf8: "scale"
+#150 = Utf8: "(IF)I"
+#151 = Fieldref: java/nio/charset/CodingErrorAction.REPLACE:Ljava/nio/charset/CodingErrorAction;
+#152 = Class: java/nio/charset/CodingErrorAction
+#153 = NameAndType: REPLACE:Ljava/nio/charset/CodingErrorAction;
+#154 = Utf8: "java/nio/charset/CodingErrorAction"
+#155 = Utf8: "REPLACE"
+#156 = Utf8: "Ljava/nio/charset/CodingErrorAction;"
+#157 = Methodref: java/nio/charset/CharsetDecoder.onMalformedInput:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetDecoder;
+#158 = NameAndType: onMalformedInput:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetDecoder;
+#159 = Utf8: "onMalformedInput"
+#160 = Utf8: "(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetDecoder;"
+#161 = Methodref: java/nio/charset/CharsetDecoder.onUnmappableCharacter:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetDecoder;
+#162 = NameAndType: onUnmappableCharacter:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetDecoder;
+#163 = Utf8: "onUnmappableCharacter"
+#164 = Methodref: sun/nio/cs/ArrayDecoder.decode:([BII[C)I
+#165 = NameAndType: decode:([BII[C)I
+#166 = Utf8: "decode"
+#167 = Utf8: "([BII[C)I"
+#168 = Methodref: java/lang/StringUTF16.compress:([CII)[B
+#169 = NameAndType: compress:([CII)[B
+#170 = Utf8: "compress"
+#171 = Utf8: "([CII)[B"
+#172 = Methodref: java/lang/StringUTF16.toBytes:([CII)[B
+#173 = NameAndType: toBytes:([CII)[B
+#174 = Methodref: java/lang/Object.getClass:()Ljava/lang/Class;
+#175 = NameAndType: getClass:()Ljava/lang/Class;
+#176 = Utf8: "getClass"
+#177 = Utf8: "()Ljava/lang/Class;"
+#178 = Methodref: java/lang/Class.getClassLoader0:()Ljava/lang/ClassLoader;
+#179 = Class: java/lang/Class
+#180 = NameAndType: getClassLoader0:()Ljava/lang/ClassLoader;
+#181 = Utf8: "java/lang/Class"
+#182 = Utf8: "getClassLoader0"
+#183 = Utf8: "()Ljava/lang/ClassLoader;"
+#184 = Methodref: java/lang/System.getSecurityManager:()Ljava/lang/SecurityManager;
+#185 = Class: java/lang/System
+#186 = NameAndType: getSecurityManager:()Ljava/lang/SecurityManager;
+#187 = Utf8: "java/lang/System"
+#188 = Utf8: "getSecurityManager"
+#189 = Utf8: "()Ljava/lang/SecurityManager;"
+#190 = Methodref: java/lang/String.decodeWithDecoder:(Ljava/nio/charset/CharsetDecoder;[C[BII)I
+#191 = NameAndType: decodeWithDecoder:(Ljava/nio/charset/CharsetDecoder;[C[BII)I
+#192 = Utf8: "decodeWithDecoder"
+#193 = Utf8: "(Ljava/nio/charset/CharsetDecoder;[C[BII)I"
+#194 = Methodref: java/lang/String.<init>:([BB)V
+#195 = NameAndType: <init>:([BB)V
+#196 = Utf8: "([BB)V"
+#197 = Methodref: java/lang/String.newStringNoRepl1:([BLjava/nio/charset/Charset;)Ljava/lang/String;
+#198 = NameAndType: newStringNoRepl1:([BLjava/nio/charset/Charset;)Ljava/lang/String;
+#199 = Utf8: "newStringNoRepl1"
+#200 = Utf8: "([BLjava/nio/charset/Charset;)Ljava/lang/String;"
+#201 = Class: java/lang/IllegalArgumentException
+#202 = Utf8: "java/lang/IllegalArgumentException"
+#203 = Methodref: java/lang/IllegalArgumentException.getCause:()Ljava/lang/Throwable;
+#204 = NameAndType: getCause:()Ljava/lang/Throwable;
+#205 = Utf8: "getCause"
+#206 = Utf8: "()Ljava/lang/Throwable;"
+#207 = Class: java/nio/charset/MalformedInputException
+#208 = Utf8: "java/nio/charset/MalformedInputException"
+#209 = Class: java/nio/charset/CharacterCodingException
+#210 = Utf8: "java/nio/charset/CharacterCodingException"
+#211 = Methodref: java/lang/String.newStringUTF8NoRepl:([BII)Ljava/lang/String;
+#212 = NameAndType: newStringUTF8NoRepl:([BII)Ljava/lang/String;
+#213 = Utf8: "newStringUTF8NoRepl"
+#214 = Utf8: "([BII)Ljava/lang/String;"
+#215 = Methodref: java/lang/String.throwMalformed:([B)V
+#216 = NameAndType: throwMalformed:([B)V
+#217 = Utf8: "throwMalformed"
+#218 = Utf8: "([B)V"
+#219 = Methodref: java/nio/charset/Charset.forName:(Ljava/lang/String;)Ljava/nio/charset/Charset;
+#220 = NameAndType: forName:(Ljava/lang/String;)Ljava/nio/charset/Charset;
+#221 = Utf8: "forName"
+#222 = Class: java/nio/charset/UnsupportedCharsetException
+#223 = Utf8: "java/nio/charset/UnsupportedCharsetException"
+#224 = Class: java/nio/charset/IllegalCharsetNameException
+#225 = Utf8: "java/nio/charset/IllegalCharsetNameException"
+#226 = Class: java/io/UnsupportedEncodingException
+#227 = Utf8: "java/io/UnsupportedEncodingException"
+#228 = Methodref: java/io/UnsupportedEncodingException.<init>:(Ljava/lang/String;)V
+#229 = NameAndType: <init>:(Ljava/lang/String;)V
+#230 = Utf8: "(Ljava/lang/String;)V"
+#231 = Methodref: java/lang/String.encodeUTF8:(B[BZ)[B
+#232 = NameAndType: encodeUTF8:(B[BZ)[B
+#233 = Utf8: "encodeUTF8"
+#234 = Utf8: "(B[BZ)[B"
+#235 = Methodref: java/lang/String.encode8859_1:(B[B)[B
+#236 = NameAndType: encode8859_1:(B[B)[B
+#237 = Utf8: "encode8859_1"
+#238 = Utf8: "(B[B)[B"
+#239 = Methodref: java/lang/String.encodeASCII:(B[B)[B
+#240 = NameAndType: encodeASCII:(B[B)[B
+#241 = Utf8: "encodeASCII"
+#242 = Methodref: java/lang/String.encodeWithEncoder:(Ljava/nio/charset/Charset;B[BZ)[B
+#243 = NameAndType: encodeWithEncoder:(Ljava/nio/charset/Charset;B[BZ)[B
+#244 = Utf8: "encodeWithEncoder"
+#245 = Utf8: "(Ljava/nio/charset/Charset;B[BZ)[B"
+#246 = Methodref: java/nio/charset/Charset.newEncoder:()Ljava/nio/charset/CharsetEncoder;
+#247 = NameAndType: newEncoder:()Ljava/nio/charset/CharsetEncoder;
+#248 = Utf8: "newEncoder"
+#249 = Utf8: "()Ljava/nio/charset/CharsetEncoder;"
+#250 = Methodref: java/nio/charset/CharsetEncoder.maxBytesPerChar:()F
+#251 = Class: java/nio/charset/CharsetEncoder
+#252 = NameAndType: maxBytesPerChar:()F
+#253 = Utf8: "java/nio/charset/CharsetEncoder"
+#254 = Utf8: "maxBytesPerChar"
+#255 = Class: sun/nio/cs/ArrayEncoder
+#256 = Utf8: "sun/nio/cs/ArrayEncoder"
+#257 = Methodref: sun/nio/cs/ArrayEncoder.isASCIICompatible:()Z
+#258 = Methodref: java/nio/charset/CharsetEncoder.onMalformedInput:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetEncoder;
+#259 = NameAndType: onMalformedInput:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetEncoder;
+#260 = Utf8: "(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetEncoder;"
+#261 = Methodref: java/nio/charset/CharsetEncoder.onUnmappableCharacter:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetEncoder;
+#262 = NameAndType: onUnmappableCharacter:(Ljava/nio/charset/CodingErrorAction;)Ljava/nio/charset/CharsetEncoder;
+#263 = Methodref: sun/nio/cs/ArrayEncoder.encodeFromLatin1:([BII[B)I
+#264 = NameAndType: encodeFromLatin1:([BII[B)I
+#265 = Utf8: "encodeFromLatin1"
+#266 = Methodref: sun/nio/cs/ArrayEncoder.encodeFromUTF16:([BII[B)I
+#267 = NameAndType: encodeFromUTF16:([BII[B)I
+#268 = Utf8: "encodeFromUTF16"
+#269 = Methodref: java/lang/String.safeTrim:([BIZ)[B
+#270 = NameAndType: safeTrim:([BIZ)[B
+#271 = Utf8: "safeTrim"
+#272 = Utf8: "([BIZ)[B"
+#273 = Methodref: java/lang/StringLatin1.toChars:([B)[C
+#274 = NameAndType: toChars:([B)[C
+#275 = Utf8: "toChars"
+#276 = Utf8: "([B)[C"
+#277 = Methodref: java/lang/StringUTF16.toChars:([B)[C
+#278 = Methodref: java/nio/ByteBuffer.wrap:([B)Ljava/nio/ByteBuffer;
+#279 = Class: java/nio/ByteBuffer
+#280 = NameAndType: wrap:([B)Ljava/nio/ByteBuffer;
+#281 = Utf8: "java/nio/ByteBuffer"
+#282 = Utf8: "wrap"
+#283 = Utf8: "([B)Ljava/nio/ByteBuffer;"
+#284 = Methodref: java/nio/CharBuffer.wrap:([CII)Ljava/nio/CharBuffer;
+#285 = Class: java/nio/CharBuffer
+#286 = NameAndType: wrap:([CII)Ljava/nio/CharBuffer;
+#287 = Utf8: "java/nio/CharBuffer"
+#288 = Utf8: "([CII)Ljava/nio/CharBuffer;"
+#289 = Methodref: java/nio/charset/CharsetEncoder.encode:(Ljava/nio/CharBuffer;Ljava/nio/ByteBuffer;Z)Ljava/nio/charset/CoderResult;
+#290 = NameAndType: encode:(Ljava/nio/CharBuffer;Ljava/nio/ByteBuffer;Z)Ljava/nio/charset/CoderResult;
+#291 = Utf8: "encode"
+#292 = Utf8: "(Ljava/nio/CharBuffer;Ljava/nio/ByteBuffer;Z)Ljava/nio/charset/CoderResult;"
+#293 = Methodref: java/nio/charset/CoderResult.isUnderflow:()Z
+#294 = Class: java/nio/charset/CoderResult
+#295 = NameAndType: isUnderflow:()Z
+#296 = Utf8: "java/nio/charset/CoderResult"
+#297 = Utf8: "isUnderflow"
+#298 = Methodref: java/nio/charset/CoderResult.throwException:()V
+#299 = NameAndType: throwException:()V
+#300 = Utf8: "throwException"
+#301 = Methodref: java/nio/charset/CharsetEncoder.flush:(Ljava/nio/ByteBuffer;)Ljava/nio/charset/CoderResult;
+#302 = NameAndType: flush:(Ljava/nio/ByteBuffer;)Ljava/nio/charset/CoderResult;
+#303 = Utf8: "flush"
+#304 = Utf8: "(Ljava/nio/ByteBuffer;)Ljava/nio/charset/CoderResult;"
+#305 = Methodref: java/lang/IllegalArgumentException.<init>:(Ljava/lang/Throwable;)V
+#306 = NameAndType: <init>:(Ljava/lang/Throwable;)V
+#307 = Utf8: "(Ljava/lang/Throwable;)V"
+#308 = Class: java/lang/Error
+#309 = Utf8: "java/lang/Error"
+#310 = Methodref: java/lang/Error.<init>:(Ljava/lang/Throwable;)V
+#311 = Methodref: java/nio/ByteBuffer.position:()I
+#312 = NameAndType: position:()I
+#313 = Utf8: "position"
+#314 = Utf8: "()I"
+#315 = Methodref: java/lang/String.coder:()B
+#316 = NameAndType: coder:()B
+#317 = Utf8: "()B"
+#318 = Methodref: java/lang/String.value:()[B
+#319 = NameAndType: value:()[B
+#320 = Utf8: "()[B"
+#321 = Methodref: java/lang/String.getBytesNoRepl1:(Ljava/lang/String;Ljava/nio/charset/Charset;)[B
+#322 = NameAndType: getBytesNoRepl1:(Ljava/lang/String;Ljava/nio/charset/Charset;)[B
+#323 = Utf8: "getBytesNoRepl1"
+#324 = Utf8: "(Ljava/lang/String;Ljava/nio/charset/Charset;)[B"
+#325 = Class: java/nio/charset/UnmappableCharacterException
+#326 = Utf8: "java/nio/charset/UnmappableCharacterException"
+#327 = Methodref: java/lang/String.isASCII:([B)Z
+#328 = NameAndType: isASCII:([B)Z
+#329 = Utf8: "isASCII"
+#330 = Utf8: "([B)Z"
+#331 = Methodref: java/lang/String.encode8859_1:(B[BZ)[B
+#332 = NameAndType: encode8859_1:(B[BZ)[B
+#333 = Methodref: java/lang/String.throwUnmappable:([B)V
+#334 = NameAndType: throwUnmappable:([B)V
+#335 = Utf8: "throwUnmappable"
+#336 = Methodref: java/lang/StringUTF16.getChar:([BI)C
+#337 = NameAndType: getChar:([BI)C
+#338 = Utf8: "getChar"
+#339 = Utf8: "([BI)C"
+#340 = Methodref: java/lang/Character.isHighSurrogate:(C)Z
+#341 = Class: java/lang/Character
+#342 = NameAndType: isHighSurrogate:(C)Z
+#343 = Utf8: "java/lang/Character"
+#344 = Utf8: "isHighSurrogate"
+#345 = Utf8: "(C)Z"
+#346 = Methodref: java/lang/Character.isLowSurrogate:(C)Z
+#347 = NameAndType: isLowSurrogate:(C)Z
+#348 = Utf8: "isLowSurrogate"
+#349 = Methodref: java/lang/StringCoding.implEncodeISOArray:([BI[BII)I
+#350 = NameAndType: implEncodeISOArray:([BI[BII)I
+#351 = Utf8: "implEncodeISOArray"
+#352 = Utf8: "([BI[BII)I"
+#353 = Methodref: java/lang/String.throwUnmappable:(I)V
+#354 = NameAndType: throwUnmappable:(I)V
+#355 = Utf8: "(I)V"
+#356 = Methodref: java/lang/StringLatin1.inflate:([BI[CII)V
+#357 = NameAndType: inflate:([BI[CII)V
+#358 = Utf8: "([BI[CII)V"
+#359 = Integer: -123008
+#360 = Integer: 3678080
+#361 = Methodref: java/lang/String.throwMalformed:(II)V
+#362 = NameAndType: throwMalformed:(II)V
+#363 = Utf8: "(II)V"
+#364 = Methodref: java/lang/String.isMalformed3:(III)Z
+#365 = NameAndType: isMalformed3:(III)Z
+#366 = Utf8: "isMalformed3"
+#367 = Utf8: "(III)Z"
+#368 = Methodref: java/lang/String.malformed3:([BI)I
+#369 = NameAndType: malformed3:([BI)I
+#370 = Utf8: "malformed3"
+#371 = Utf8: "([BI)I"
+#372 = Methodref: java/lang/String.decode3:(III)C
+#373 = NameAndType: decode3:(III)C
+#374 = Utf8: "decode3"
+#375 = Utf8: "(III)C"
+#376 = Methodref: java/lang/Character.isSurrogate:(C)Z
+#377 = NameAndType: isSurrogate:(C)Z
+#378 = Utf8: "isSurrogate"
+#379 = Methodref: java/lang/String.isMalformed3_2:(II)Z
+#380 = NameAndType: isMalformed3_2:(II)Z
+#381 = Utf8: "isMalformed3_2"
+#382 = Utf8: "(II)Z"
+#383 = Methodref: java/lang/String.decode4:(IIII)I
+#384 = NameAndType: decode4:(IIII)I
+#385 = Utf8: "decode4"
+#386 = Utf8: "(IIII)I"
+#387 = Methodref: java/lang/String.isMalformed4:(III)Z
+#388 = NameAndType: isMalformed4:(III)Z
+#389 = Utf8: "isMalformed4"
+#390 = Methodref: java/lang/Character.isSupplementaryCodePoint:(I)Z
+#391 = NameAndType: isSupplementaryCodePoint:(I)Z
+#392 = Utf8: "isSupplementaryCodePoint"
+#393 = Methodref: java/lang/String.malformed4:([BI)I
+#394 = NameAndType: malformed4:([BI)I
+#395 = Utf8: "malformed4"
+#396 = Methodref: java/lang/Character.highSurrogate:(I)C
+#397 = NameAndType: highSurrogate:(I)C
+#398 = Utf8: "highSurrogate"
+#399 = Utf8: "(I)C"
+#400 = Methodref: java/lang/Character.lowSurrogate:(I)C
+#401 = NameAndType: lowSurrogate:(I)C
+#402 = Utf8: "lowSurrogate"
+#403 = Methodref: java/lang/String.isMalformed4_2:(II)Z
+#404 = NameAndType: isMalformed4_2:(II)Z
+#405 = Utf8: "isMalformed4_2"
+#406 = Methodref: java/lang/String.isMalformed4_3:(I)Z
+#407 = NameAndType: isMalformed4_3:(I)Z
+#408 = Utf8: "isMalformed4_3"
+#409 = Methodref: java/nio/ByteBuffer.wrap:([BII)Ljava/nio/ByteBuffer;
+#410 = NameAndType: wrap:([BII)Ljava/nio/ByteBuffer;
+#411 = Utf8: "([BII)Ljava/nio/ByteBuffer;"
+#412 = Methodref: java/nio/charset/CharsetDecoder.decode:(Ljava/nio/ByteBuffer;Ljava/nio/CharBuffer;Z)Ljava/nio/charset/CoderResult;
+#413 = NameAndType: decode:(Ljava/nio/ByteBuffer;Ljava/nio/CharBuffer;Z)Ljava/nio/charset/CoderResult;
+#414 = Utf8: "(Ljava/nio/ByteBuffer;Ljava/nio/CharBuffer;Z)Ljava/nio/charset/CoderResult;"
+#415 = Methodref: java/nio/charset/CharsetDecoder.flush:(Ljava/nio/CharBuffer;)Ljava/nio/charset/CoderResult;
+#416 = NameAndType: flush:(Ljava/nio/CharBuffer;)Ljava/nio/charset/CoderResult;
+#417 = Utf8: "(Ljava/nio/CharBuffer;)Ljava/nio/charset/CoderResult;"
+#418 = Methodref: java/nio/CharBuffer.position:()I
+#419 = Class: java/lang/StringBuilder
+#420 = Utf8: "java/lang/StringBuilder"
+#421 = Methodref: java/lang/StringBuilder.<init>:()V
+#422 = String: "malformed input off : "
+#423 = Utf8: "malformed input off : "
+#424 = Methodref: java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+#425 = NameAndType: append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+#426 = Utf8: "append"
+#427 = Utf8: "(Ljava/lang/String;)Ljava/lang/StringBuilder;"
+#428 = Methodref: java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+#429 = NameAndType: append:(I)Ljava/lang/StringBuilder;
+#430 = Utf8: "(I)Ljava/lang/StringBuilder;"
+#431 = String: ", length : "
+#432 = Utf8: ", length : "
+#433 = Methodref: java/lang/StringBuilder.toString:()Ljava/lang/String;
+#434 = NameAndType: toString:()Ljava/lang/String;
+#435 = Utf8: "toString"
+#436 = Utf8: "()Ljava/lang/String;"
+#437 = Methodref: java/nio/charset/MalformedInputException.<init>:(I)V
+#438 = NameAndType: <init>:(I)V
+#439 = Methodref: java/lang/IllegalArgumentException.<init>:(Ljava/lang/String;Ljava/lang/Throwable;)V
+#440 = NameAndType: <init>:(Ljava/lang/String;Ljava/lang/Throwable;)V
+#441 = Utf8: "(Ljava/lang/String;Ljava/lang/Throwable;)V"
+#442 = String: ", length : 1"
+#443 = Utf8: ", length : 1"
+#444 = Methodref: java/nio/charset/UnmappableCharacterException.<init>:(I)V
+#445 = Methodref: java/lang/String.encodeUTF8_UTF16:([BZ)[B
+#446 = NameAndType: encodeUTF8_UTF16:([BZ)[B
+#447 = Utf8: "encodeUTF8_UTF16"
+#448 = Utf8: "([BZ)[B"
+#449 = Methodref: java/lang/Character.toCodePoint:(CC)I
+#450 = NameAndType: toCodePoint:(CC)I
+#451 = Utf8: "toCodePoint"
+#452 = Utf8: "(CC)I"
+#453 = Methodref: java/lang/String.<init>:([BIILjava/lang/String;)V
+#454 = NameAndType: <init>:([BIILjava/lang/String;)V
+#455 = Utf8: "([BIILjava/lang/String;)V"
+#456 = Methodref: java/nio/charset/Charset.defaultCharset:()Ljava/nio/charset/Charset;
+#457 = NameAndType: defaultCharset:()Ljava/nio/charset/Charset;
+#458 = Utf8: "defaultCharset"
+#459 = Utf8: "()Ljava/nio/charset/Charset;"
+#460 = Methodref: java/lang/String.<init>:([BII)V
+#461 = NameAndType: <init>:([BII)V
+#462 = Methodref: java/lang/StringBuffer.toString:()Ljava/lang/String;
+#463 = Class: java/lang/StringBuffer
+#464 = Utf8: "java/lang/StringBuffer"
+#465 = Methodref: java/lang/String.<init>:(Ljava/lang/String;)V
+#466 = Methodref: java/lang/String.<init>:(Ljava/lang/AbstractStringBuilder;Ljava/lang/Void;)V
+#467 = NameAndType: <init>:(Ljava/lang/AbstractStringBuilder;Ljava/lang/Void;)V
+#468 = Utf8: "(Ljava/lang/AbstractStringBuilder;Ljava/lang/Void;)V"
+#469 = Methodref: java/lang/String.isLatin1:()Z
+#470 = NameAndType: isLatin1:()Z
+#471 = Utf8: "isLatin1"
+#472 = Methodref: java/lang/StringLatin1.charAt:([BI)C
+#473 = NameAndType: charAt:([BI)C
+#474 = Utf8: "charAt"
+#475 = Methodref: java/lang/StringUTF16.charAt:([BI)C
+#476 = Methodref: java/lang/String.checkIndex:(II)V
+#477 = NameAndType: checkIndex:(II)V
+#478 = Utf8: "checkIndex"
+#479 = Methodref: java/lang/StringUTF16.codePointAt:([BII)I
+#480 = NameAndType: codePointAt:([BII)I
+#481 = Utf8: "codePointAt"
+#482 = Utf8: "([BII)I"
+#483 = Methodref: java/lang/String.length:()I
+#484 = NameAndType: length:()I
+#485 = Utf8: "length"
+#486 = Class: java/lang/StringIndexOutOfBoundsException
+#487 = Utf8: "java/lang/StringIndexOutOfBoundsException"
+#488 = Methodref: java/lang/StringIndexOutOfBoundsException.<init>:(I)V
+#489 = Methodref: java/lang/StringUTF16.codePointBefore:([BI)I
+#490 = NameAndType: codePointBefore:([BI)I
+#491 = Utf8: "codePointBefore"
+#492 = Class: java/lang/IndexOutOfBoundsException
+#493 = Utf8: "java/lang/IndexOutOfBoundsException"
+#494 = Methodref: java/lang/IndexOutOfBoundsException.<init>:()V
+#495 = Methodref: java/lang/StringUTF16.codePointCount:([BII)I
+#496 = NameAndType: codePointCount:([BII)I
+#497 = Utf8: "codePointCount"
+#498 = Methodref: java/lang/Character.offsetByCodePoints:(Ljava/lang/CharSequence;II)I
+#499 = NameAndType: offsetByCodePoints:(Ljava/lang/CharSequence;II)I
+#500 = Utf8: "offsetByCodePoints"
+#501 = Utf8: "(Ljava/lang/CharSequence;II)I"
+#502 = Methodref: java/lang/String.checkBoundsBeginEnd:(III)V
+#503 = NameAndType: checkBoundsBeginEnd:(III)V
+#504 = Utf8: "checkBoundsBeginEnd"
+#505 = Methodref: java/lang/StringLatin1.getChars:([BII[CI)V
+#506 = NameAndType: getChars:([BII[CI)V
+#507 = Utf8: "getChars"
+#508 = Utf8: "([BII[CI)V"
+#509 = Methodref: java/lang/StringUTF16.getChars:([BII[CI)V
+#510 = Methodref: java/lang/StringLatin1.getBytes:([BII[BI)V
+#511 = NameAndType: getBytes:([BII[BI)V
+#512 = Utf8: "getBytes"
+#513 = Utf8: "([BII[BI)V"
+#514 = Methodref: java/lang/StringUTF16.getBytes:([BII[BI)V
+#515 = Class: java/lang/NullPointerException
+#516 = Utf8: "java/lang/NullPointerException"
+#517 = Methodref: java/lang/NullPointerException.<init>:()V
+#518 = Methodref: java/lang/String.encode:(Ljava/nio/charset/Charset;B[B)[B
+#519 = NameAndType: encode:(Ljava/nio/charset/Charset;B[B)[B
+#520 = Utf8: "(Ljava/nio/charset/Charset;B[B)[B"
+#521 = Methodref: java/lang/StringLatin1.equals:([B[B)Z
+#522 = NameAndType: equals:([B[B)Z
+#523 = Utf8: "equals"
+#524 = Utf8: "([B[B)Z"
+#525 = Methodref: java/lang/String.contentEquals:(Ljava/lang/CharSequence;)Z
+#526 = NameAndType: contentEquals:(Ljava/lang/CharSequence;)Z
+#527 = Utf8: "contentEquals"
+#528 = Utf8: "(Ljava/lang/CharSequence;)Z"
+#529 = Methodref: java/lang/AbstractStringBuilder.length:()I
+#530 = Class: java/lang/AbstractStringBuilder
+#531 = Utf8: "java/lang/AbstractStringBuilder"
+#532 = Methodref: java/lang/AbstractStringBuilder.getValue:()[B
+#533 = NameAndType: getValue:()[B
+#534 = Utf8: "getValue"
+#535 = Methodref: java/lang/AbstractStringBuilder.getCoder:()B
+#536 = NameAndType: getCoder:()B
+#537 = Utf8: "getCoder"
+#538 = Methodref: java/lang/StringUTF16.contentEquals:([B[BI)Z
+#539 = NameAndType: contentEquals:([B[BI)Z
+#540 = Utf8: "([B[BI)Z"
+#541 = Methodref: java/lang/String.nonSyncContentEquals:(Ljava/lang/AbstractStringBuilder;)Z
+#542 = NameAndType: nonSyncContentEquals:(Ljava/lang/AbstractStringBuilder;)Z
+#543 = Utf8: "nonSyncContentEquals"
+#544 = Utf8: "(Ljava/lang/AbstractStringBuilder;)Z"
+#545 = Methodref: java/lang/String.equals:(Ljava/lang/Object;)Z
+#546 = NameAndType: equals:(Ljava/lang/Object;)Z
+#547 = Utf8: "(Ljava/lang/Object;)Z"
+#548 = Methodref: java/lang/CharSequence.length:()I
+#549 = Class: java/lang/CharSequence
+#550 = Utf8: "java/lang/CharSequence"
+#551 = Methodref: java/lang/CharSequence.charAt:(I)C
+#552 = NameAndType: charAt:(I)C
+#553 = Methodref: java/lang/StringUTF16.contentEquals:([BLjava/lang/CharSequence;I)Z
+#554 = NameAndType: contentEquals:([BLjava/lang/CharSequence;I)Z
+#555 = Utf8: "([BLjava/lang/CharSequence;I)Z"
+#556 = Methodref: java/lang/String.regionMatches:(ZILjava/lang/String;II)Z
+#557 = NameAndType: regionMatches:(ZILjava/lang/String;II)Z
+#558 = Utf8: "regionMatches"
+#559 = Utf8: "(ZILjava/lang/String;II)Z"
+#560 = Methodref: java/lang/StringLatin1.compareTo:([B[B)I
+#561 = NameAndType: compareTo:([B[B)I
+#562 = Utf8: "compareTo"
+#563 = Utf8: "([B[B)I"
+#564 = Methodref: java/lang/StringUTF16.compareTo:([B[B)I
+#565 = Methodref: java/lang/StringLatin1.compareToUTF16:([B[B)I
+#566 = NameAndType: compareToUTF16:([B[B)I
+#567 = Utf8: "compareToUTF16"
+#568 = Methodref: java/lang/StringUTF16.compareToLatin1:([B[B)I
+#569 = NameAndType: compareToLatin1:([B[B)I
+#570 = Utf8: "compareToLatin1"
+#571 = Fieldref: java/lang/String.CASE_INSENSITIVE_ORDER:Ljava/util/Comparator;
+#572 = NameAndType: CASE_INSENSITIVE_ORDER:Ljava/util/Comparator;
+#573 = Utf8: "CASE_INSENSITIVE_ORDER"
+#574 = Utf8: "Ljava/util/Comparator;"
+#575 = Methodref: java/util/Comparator.compare:(Ljava/lang/Object;Ljava/lang/Object;)I
+#576 = Class: java/util/Comparator
+#577 = NameAndType: compare:(Ljava/lang/Object;Ljava/lang/Object;)I
+#578 = Utf8: "java/util/Comparator"
+#579 = Utf8: "compare"
+#580 = Utf8: "(Ljava/lang/Object;Ljava/lang/Object;)I"
+#581 = Methodref: java/lang/StringLatin1.getChar:([BI)C
+#582 = Methodref: java/lang/String.regionMatches:(ILjava/lang/String;II)Z
+#583 = NameAndType: regionMatches:(ILjava/lang/String;II)Z
+#584 = Utf8: "(ILjava/lang/String;II)Z"
+#585 = Methodref: java/lang/StringLatin1.regionMatchesCI:([BI[BII)Z
+#586 = NameAndType: regionMatchesCI:([BI[BII)Z
+#587 = Utf8: "regionMatchesCI"
+#588 = Utf8: "([BI[BII)Z"
+#589 = Methodref: java/lang/StringUTF16.regionMatchesCI:([BI[BII)Z
+#590 = Methodref: java/lang/StringLatin1.regionMatchesCI_UTF16:([BI[BII)Z
+#591 = NameAndType: regionMatchesCI_UTF16:([BI[BII)Z
+#592 = Utf8: "regionMatchesCI_UTF16"
+#593 = Methodref: java/lang/StringUTF16.regionMatchesCI_Latin1:([BI[BII)Z
+#594 = NameAndType: regionMatchesCI_Latin1:([BI[BII)Z
+#595 = Utf8: "regionMatchesCI_Latin1"
+#596 = Methodref: java/lang/String.startsWith:(Ljava/lang/String;I)Z
+#597 = NameAndType: startsWith:(Ljava/lang/String;I)Z
+#598 = Utf8: "startsWith"
+#599 = Utf8: "(Ljava/lang/String;I)Z"
+#600 = Fieldref: java/lang/String.hashIsZero:Z
+#601 = NameAndType: hashIsZero:Z
+#602 = Utf8: "hashIsZero"
+#603 = Methodref: java/lang/StringLatin1.hashCode:([B)I
+#604 = NameAndType: hashCode:([B)I
+#605 = Utf8: "hashCode"
+#606 = Utf8: "([B)I"
+#607 = Methodref: java/lang/StringUTF16.hashCode:([B)I
+#608 = Methodref: java/lang/String.indexOf:(II)I
+#609 = NameAndType: indexOf:(II)I
+#610 = Utf8: "indexOf"
+#611 = Utf8: "(II)I"
+#612 = Methodref: java/lang/StringLatin1.indexOf:([BII)I
+#613 = NameAndType: indexOf:([BII)I
+#614 = Methodref: java/lang/StringUTF16.indexOf:([BII)I
+#615 = Methodref: java/lang/String.lastIndexOf:(II)I
+#616 = NameAndType: lastIndexOf:(II)I
+#617 = Utf8: "lastIndexOf"
+#618 = Methodref: java/lang/StringLatin1.lastIndexOf:([BII)I
+#619 = NameAndType: lastIndexOf:([BII)I
+#620 = Methodref: java/lang/StringUTF16.lastIndexOf:([BII)I
+#621 = Methodref: java/lang/StringLatin1.indexOf:([B[B)I
+#622 = NameAndType: indexOf:([B[B)I
+#623 = Methodref: java/lang/StringUTF16.indexOf:([B[B)I
+#624 = Methodref: java/lang/StringUTF16.indexOfLatin1:([B[B)I
+#625 = NameAndType: indexOfLatin1:([B[B)I
+#626 = Utf8: "indexOfLatin1"
+#627 = Methodref: java/lang/String.indexOf:([BBILjava/lang/String;I)I
+#628 = NameAndType: indexOf:([BBILjava/lang/String;I)I
+#629 = Utf8: "([BBILjava/lang/String;I)I"
+#630 = Methodref: java/lang/StringLatin1.indexOf:([BI[BII)I
+#631 = NameAndType: indexOf:([BI[BII)I
+#632 = Methodref: java/lang/StringUTF16.indexOf:([BI[BII)I
+#633 = Methodref: java/lang/StringUTF16.indexOfLatin1:([BI[BII)I
+#634 = NameAndType: indexOfLatin1:([BI[BII)I
+#635 = Methodref: java/lang/String.lastIndexOf:(Ljava/lang/String;I)I
+#636 = NameAndType: lastIndexOf:(Ljava/lang/String;I)I
+#637 = Utf8: "(Ljava/lang/String;I)I"
+#638 = Methodref: java/lang/String.lastIndexOf:([BBILjava/lang/String;I)I
+#639 = NameAndType: lastIndexOf:([BBILjava/lang/String;I)I
+#640 = Methodref: java/lang/StringLatin1.lastIndexOf:([BI[BII)I
+#641 = NameAndType: lastIndexOf:([BI[BII)I
+#642 = Methodref: java/lang/StringUTF16.lastIndexOf:([BI[BII)I
+#643 = Methodref: java/lang/StringUTF16.lastIndexOfLatin1:([BI[BII)I
+#644 = NameAndType: lastIndexOfLatin1:([BI[BII)I
+#645 = Utf8: "lastIndexOfLatin1"
+#646 = Methodref: java/lang/String.substring:(II)Ljava/lang/String;
+#647 = NameAndType: substring:(II)Ljava/lang/String;
+#648 = Utf8: "substring"
+#649 = Utf8: "(II)Ljava/lang/String;"
+#650 = Methodref: java/lang/StringLatin1.newString:([BII)Ljava/lang/String;
+#651 = NameAndType: newString:([BII)Ljava/lang/String;
+#652 = Utf8: "newString"
+#653 = Methodref: java/lang/StringUTF16.newString:([BII)Ljava/lang/String;
+#654 = Methodref: java/lang/String.isEmpty:()Z
+#655 = NameAndType: isEmpty:()Z
+#656 = Utf8: "isEmpty"
+#657 = Methodref: java/lang/StringConcatHelper.simpleConcat:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/String;
+#658 = Class: java/lang/StringConcatHelper
+#659 = NameAndType: simpleConcat:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/String;
+#660 = Utf8: "java/lang/StringConcatHelper"
+#661 = Utf8: "simpleConcat"
+#662 = Utf8: "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/String;"
+#663 = Methodref: java/lang/StringLatin1.replace:([BCC)Ljava/lang/String;
+#664 = NameAndType: replace:([BCC)Ljava/lang/String;
+#665 = Utf8: "replace"
+#666 = Utf8: "([BCC)Ljava/lang/String;"
+#667 = Methodref: java/lang/StringUTF16.replace:([BCC)Ljava/lang/String;
+#668 = Methodref: java/util/regex/Pattern.matches:(Ljava/lang/String;Ljava/lang/CharSequence;)Z
+#669 = Class: java/util/regex/Pattern
+#670 = NameAndType: matches:(Ljava/lang/String;Ljava/lang/CharSequence;)Z
+#671 = Utf8: "java/util/regex/Pattern"
+#672 = Utf8: "matches"
+#673 = Utf8: "(Ljava/lang/String;Ljava/lang/CharSequence;)Z"
+#674 = Methodref: java/lang/CharSequence.toString:()Ljava/lang/String;
+#675 = Methodref: java/lang/String.indexOf:(Ljava/lang/String;)I
+#676 = NameAndType: indexOf:(Ljava/lang/String;)I
+#677 = Utf8: "(Ljava/lang/String;)I"
+#678 = Methodref: java/util/regex/Pattern.compile:(Ljava/lang/String;)Ljava/util/regex/Pattern;
+#679 = NameAndType: compile:(Ljava/lang/String;)Ljava/util/regex/Pattern;
+#680 = Utf8: "compile"
+#681 = Utf8: "(Ljava/lang/String;)Ljava/util/regex/Pattern;"
+#682 = Methodref: java/util/regex/Pattern.matcher:(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+#683 = NameAndType: matcher:(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;
+#684 = Utf8: "matcher"
+#685 = Utf8: "(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;"
+#686 = Methodref: java/util/regex/Matcher.replaceFirst:(Ljava/lang/String;)Ljava/lang/String;
+#687 = Class: java/util/regex/Matcher
+#688 = NameAndType: replaceFirst:(Ljava/lang/String;)Ljava/lang/String;
+#689 = Utf8: "java/util/regex/Matcher"
+#690 = Utf8: "replaceFirst"
+#691 = Utf8: "(Ljava/lang/String;)Ljava/lang/String;"
+#692 = Methodref: java/util/regex/Matcher.replaceAll:(Ljava/lang/String;)Ljava/lang/String;
+#693 = NameAndType: replaceAll:(Ljava/lang/String;)Ljava/lang/String;
+#694 = Utf8: "replaceAll"
+#695 = Methodref: java/lang/String.charAt:(I)C
+#696 = Methodref: java/lang/String.replace:(CC)Ljava/lang/String;
+#697 = NameAndType: replace:(CC)Ljava/lang/String;
+#698 = Utf8: "(CC)Ljava/lang/String;"
+#699 = Methodref: java/lang/StringLatin1.replace:([BI[BI[BI)Ljava/lang/String;
+#700 = NameAndType: replace:([BI[BI[BI)Ljava/lang/String;
+#701 = Utf8: "([BI[BI[BI)Ljava/lang/String;"
+#702 = Methodref: java/lang/StringUTF16.replace:([BIZ[BIZ[BIZ)Ljava/lang/String;
+#703 = NameAndType: replace:([BIZ[BIZ[BIZ)Ljava/lang/String;
+#704 = Utf8: "([BIZ[BIZ[BIZ)Ljava/lang/String;"
+#705 = Methodref: java/lang/Math.addExact:(II)I
+#706 = Class: java/lang/Math
+#707 = NameAndType: addExact:(II)I
+#708 = Utf8: "java/lang/Math"
+#709 = Utf8: "addExact"
+#710 = Methodref: java/lang/Math.multiplyExact:(II)I
+#711 = NameAndType: multiplyExact:(II)I
+#712 = Utf8: "multiplyExact"
+#713 = Class: java/lang/ArithmeticException
+#714 = Utf8: "java/lang/ArithmeticException"
+#715 = Class: java/lang/OutOfMemoryError
+#716 = Utf8: "java/lang/OutOfMemoryError"
+#717 = String: "Required length exceeds implementation limit"
+#718 = Utf8: "Required length exceeds implementation limit"
+#719 = Methodref: java/lang/OutOfMemoryError.<init>:(Ljava/lang/String;)V
+#720 = Methodref: java/lang/StringBuilder.<init>:(I)V
+#721 = Methodref: java/lang/StringBuilder.append:(C)Ljava/lang/StringBuilder;
+#722 = NameAndType: append:(C)Ljava/lang/StringBuilder;
+#723 = Utf8: "(C)Ljava/lang/StringBuilder;"
+#724 = String: ".$|()[{^?*+\\"
+#725 = Utf8: ".$|()[{^?*+\\"
+#726 = Methodref: java/lang/String.indexOf:(I)I
+#727 = NameAndType: indexOf:(I)I
+#728 = Utf8: "(I)I"
+#729 = Integer: 55296
+#730 = Integer: 57343
+#731 = Class: java/util/ArrayList
+#732 = Utf8: "java/util/ArrayList"
+#733 = Methodref: java/util/ArrayList.<init>:()V
+#734 = Methodref: java/util/ArrayList.size:()I
+#735 = NameAndType: size:()I
+#736 = Utf8: "size"
+#737 = Methodref: java/util/ArrayList.add:(Ljava/lang/Object;)Z
+#738 = NameAndType: add:(Ljava/lang/Object;)Z
+#739 = Utf8: "add"
+#740 = Methodref: java/util/ArrayList.get:(I)Ljava/lang/Object;
+#741 = NameAndType: get:(I)Ljava/lang/Object;
+#742 = Utf8: "get"
+#743 = Utf8: "(I)Ljava/lang/Object;"
+#744 = Methodref: java/util/ArrayList.subList:(II)Ljava/util/List;
+#745 = NameAndType: subList:(II)Ljava/util/List;
+#746 = Utf8: "subList"
+#747 = Utf8: "(II)Ljava/util/List;"
+#748 = Methodref: java/util/List.toArray:([Ljava/lang/Object;)[Ljava/lang/Object;
+#749 = Class: java/util/List
+#750 = NameAndType: toArray:([Ljava/lang/Object;)[Ljava/lang/Object;
+#751 = Utf8: "java/util/List"
+#752 = Utf8: "toArray"
+#753 = Utf8: "([Ljava/lang/Object;)[Ljava/lang/Object;"
+#754 = Class: [Ljava/lang/String;
+#755 = Utf8: "[Ljava/lang/String;"
+#756 = Methodref: java/util/regex/Pattern.split:(Ljava/lang/CharSequence;I)[Ljava/lang/String;
+#757 = NameAndType: split:(Ljava/lang/CharSequence;I)[Ljava/lang/String;
+#758 = Utf8: "split"
+#759 = Utf8: "(Ljava/lang/CharSequence;I)[Ljava/lang/String;"
+#760 = Methodref: java/lang/String.split:(Ljava/lang/String;I)[Ljava/lang/String;
+#761 = NameAndType: split:(Ljava/lang/String;I)[Ljava/lang/String;
+#762 = Utf8: "(Ljava/lang/String;I)[Ljava/lang/String;"
+#763 = Methodref: java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+#764 = NameAndType: valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+#765 = Utf8: "valueOf"
+#766 = Utf8: "(Ljava/lang/Object;)Ljava/lang/String;"
+#767 = Methodref: java/lang/String.join:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;I)Ljava/lang/String;
+#768 = NameAndType: join:(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;I)Ljava/lang/String;
+#769 = Utf8: "join"
+#770 = Utf8: "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;I)Ljava/lang/String;"
+#771 = String: "Requested string length exceeds VM limit"
+#772 = Utf8: "Requested string length exceeds VM limit"
+#773 = Methodref: java/lang/StringConcatHelper.newArray:(J)[B
+#774 = NameAndType: newArray:(J)[B
+#775 = Utf8: "newArray"
+#776 = Utf8: "(J)[B"
+#777 = Methodref: java/lang/String.getBytes:([BIB)V
+#778 = NameAndType: getBytes:([BIB)V
+#779 = Utf8: "([BIB)V"
+#780 = Methodref: java/lang/Iterable.iterator:()Ljava/util/Iterator;
+#781 = Class: java/lang/Iterable
+#782 = NameAndType: iterator:()Ljava/util/Iterator;
+#783 = Utf8: "java/lang/Iterable"
+#784 = Utf8: "iterator"
+#785 = Utf8: "()Ljava/util/Iterator;"
+#786 = Methodref: java/util/Iterator.hasNext:()Z
+#787 = Class: java/util/Iterator
+#788 = NameAndType: hasNext:()Z
+#789 = Utf8: "java/util/Iterator"
+#790 = Utf8: "hasNext"
+#791 = Methodref: java/util/Iterator.next:()Ljava/lang/Object;
+#792 = NameAndType: next:()Ljava/lang/Object;
+#793 = Utf8: "next"
+#794 = Utf8: "()Ljava/lang/Object;"
+#795 = Methodref: java/util/Arrays.copyOf:([Ljava/lang/Object;I)[Ljava/lang/Object;
+#796 = NameAndType: copyOf:([Ljava/lang/Object;I)[Ljava/lang/Object;
+#797 = Utf8: "([Ljava/lang/Object;I)[Ljava/lang/Object;"
+#798 = Methodref: java/lang/StringLatin1.toLowerCase:(Ljava/lang/String;[BLjava/util/Locale;)Ljava/lang/String;
+#799 = NameAndType: toLowerCase:(Ljava/lang/String;[BLjava/util/Locale;)Ljava/lang/String;
+#800 = Utf8: "toLowerCase"
+#801 = Utf8: "(Ljava/lang/String;[BLjava/util/Locale;)Ljava/lang/String;"
+#802 = Methodref: java/lang/StringUTF16.toLowerCase:(Ljava/lang/String;[BLjava/util/Locale;)Ljava/lang/String;
+#803 = Methodref: java/util/Locale.getDefault:()Ljava/util/Locale;
+#804 = Class: java/util/Locale
+#805 = NameAndType: getDefault:()Ljava/util/Locale;
+#806 = Utf8: "java/util/Locale"
+#807 = Utf8: "getDefault"
+#808 = Utf8: "()Ljava/util/Locale;"
+#809 = Methodref: java/lang/String.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String;
+#810 = NameAndType: toLowerCase:(Ljava/util/Locale;)Ljava/lang/String;
+#811 = Utf8: "(Ljava/util/Locale;)Ljava/lang/String;"
+#812 = Methodref: java/lang/StringLatin1.toUpperCase:(Ljava/lang/String;[BLjava/util/Locale;)Ljava/lang/String;
+#813 = NameAndType: toUpperCase:(Ljava/lang/String;[BLjava/util/Locale;)Ljava/lang/String;
+#814 = Utf8: "toUpperCase"
+#815 = Methodref: java/lang/StringUTF16.toUpperCase:(Ljava/lang/String;[BLjava/util/Locale;)Ljava/lang/String;
+#816 = Methodref: java/lang/String.toUpperCase:(Ljava/util/Locale;)Ljava/lang/String;
+#817 = NameAndType: toUpperCase:(Ljava/util/Locale;)Ljava/lang/String;
+#818 = Methodref: java/lang/StringLatin1.trim:([B)Ljava/lang/String;
+#819 = NameAndType: trim:([B)Ljava/lang/String;
+#820 = Utf8: "trim"
+#821 = Utf8: "([B)Ljava/lang/String;"
+#822 = Methodref: java/lang/StringUTF16.trim:([B)Ljava/lang/String;
+#823 = Methodref: java/lang/StringLatin1.strip:([B)Ljava/lang/String;
+#824 = NameAndType: strip:([B)Ljava/lang/String;
+#825 = Utf8: "strip"
+#826 = Methodref: java/lang/StringUTF16.strip:([B)Ljava/lang/String;
+#827 = Methodref: java/lang/StringLatin1.stripLeading:([B)Ljava/lang/String;
+#828 = NameAndType: stripLeading:([B)Ljava/lang/String;
+#829 = Utf8: "stripLeading"
+#830 = Methodref: java/lang/StringUTF16.stripLeading:([B)Ljava/lang/String;
+#831 = Methodref: java/lang/StringLatin1.stripTrailing:([B)Ljava/lang/String;
+#832 = NameAndType: stripTrailing:([B)Ljava/lang/String;
+#833 = Utf8: "stripTrailing"
+#834 = Methodref: java/lang/StringUTF16.stripTrailing:([B)Ljava/lang/String;
+#835 = Methodref: java/lang/String.indexOfNonWhitespace:()I
+#836 = NameAndType: indexOfNonWhitespace:()I
+#837 = Utf8: "indexOfNonWhitespace"
+#838 = Methodref: java/lang/StringLatin1.lines:([B)Ljava/util/stream/Stream;
+#839 = NameAndType: lines:([B)Ljava/util/stream/Stream;
+#840 = Utf8: "lines"
+#841 = Utf8: "([B)Ljava/util/stream/Stream;"
+#842 = Methodref: java/lang/StringUTF16.lines:([B)Ljava/util/stream/Stream;
+#843 = Methodref: java/lang/String.lines:()Ljava/util/stream/Stream;
+#844 = NameAndType: lines:()Ljava/util/stream/Stream;
+#845 = Utf8: "()Ljava/util/stream/Stream;"
+#846 = String: " "
+#847 = Utf8: " "
+#848 = Methodref: java/lang/String.repeat:(I)Ljava/lang/String;
+#849 = NameAndType: repeat:(I)Ljava/lang/String;
+#850 = Utf8: "repeat"
+#851 = Utf8: "(I)Ljava/lang/String;"
+#852 = Unknown:
+#853 = NameAndType: apply:(Ljava/lang/String;)Ljava/util/function/Function;
+#854 = Utf8: "apply"
+#855 = Utf8: "(Ljava/lang/String;)Ljava/util/function/Function;"
+#856 = Methodref: java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+#857 = Class: java/util/stream/Stream
+#858 = NameAndType: map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+#859 = Utf8: "java/util/stream/Stream"
+#860 = Utf8: "map"
+#861 = Utf8: "(Ljava/util/function/Function;)Ljava/util/stream/Stream;"
+#862 = Class: java/lang/Integer
+#863 = Utf8: "java/lang/Integer"
+#864 = Integer: -2147483648
+#865 = Unknown:
+#866 = NameAndType: apply:()Ljava/util/function/Function;
+#867 = Utf8: "()Ljava/util/function/Function;"
+#868 = Unknown:
+#869 = NameAndType: apply:(I)Ljava/util/function/Function;
+#870 = Utf8: "(I)Ljava/util/function/Function;"
+#871 = String: "\n"
+#872 = Utf8: "\n"
+#873 = Methodref: java/util/stream/Collectors.joining:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/util/stream/Collector;
+#874 = Class: java/util/stream/Collectors
+#875 = NameAndType: joining:(Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/util/stream/Collector;
+#876 = Utf8: "java/util/stream/Collectors"
+#877 = Utf8: "joining"
+#878 = Utf8: "(Ljava/lang/CharSequence;Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/util/stream/Collector;"
+#879 = Methodref: java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+#880 = NameAndType: collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+#881 = Utf8: "collect"
+#882 = Utf8: "(Ljava/util/stream/Collector;)Ljava/lang/Object;"
+#883 = Methodref: java/lang/StringLatin1.indexOfNonWhitespace:([B)I
+#884 = NameAndType: indexOfNonWhitespace:([B)I
+#885 = Methodref: java/lang/StringUTF16.indexOfNonWhitespace:([B)I
+#886 = Methodref: java/lang/StringLatin1.lastIndexOfNonWhitespace:([B)I
+#887 = NameAndType: lastIndexOfNonWhitespace:([B)I
+#888 = Utf8: "lastIndexOfNonWhitespace"
+#889 = Methodref: java/lang/StringUTF16.lastIndexOfNonWhitespace:([B)I
+#890 = Methodref: java/util/stream/Stream.toList:()Ljava/util/List;
+#891 = NameAndType: toList:()Ljava/util/List;
+#892 = Utf8: "toList"
+#893 = Utf8: "()Ljava/util/List;"
+#894 = Methodref: java/lang/String.outdent:(Ljava/util/List;)I
+#895 = NameAndType: outdent:(Ljava/util/List;)I
+#896 = Utf8: "outdent"
+#897 = Utf8: "(Ljava/util/List;)I"
+#898 = Methodref: java/util/List.stream:()Ljava/util/stream/Stream;
+#899 = NameAndType: stream:()Ljava/util/stream/Stream;
+#900 = Utf8: "stream"
+#901 = Unknown:
+#902 = Integer: 2147483647
+#903 = Methodref: java/util/List.iterator:()Ljava/util/Iterator;
+#904 = Methodref: java/lang/Integer.min:(II)I
+#905 = NameAndType: min:(II)I
+#906 = Utf8: "min"
+#907 = Methodref: java/util/List.size:()I
+#908 = Methodref: java/util/List.get:(I)Ljava/lang/Object;
+#909 = Methodref: java/lang/String.isBlank:()Z
+#910 = NameAndType: isBlank:()Z
+#911 = Utf8: "isBlank"
+#912 = Methodref: java/lang/String.toCharArray:()[C
+#913 = NameAndType: toCharArray:()[C
+#914 = Utf8: "toCharArray"
+#915 = Utf8: "()[C"
+#916 = String: "Invalid escape sequence: \\%c \\\\u%04X"
+#917 = Utf8: "Invalid escape sequence: \\%c \\\\u%04X"
+#918 = Methodref: java/lang/Character.valueOf:(C)Ljava/lang/Character;
+#919 = NameAndType: valueOf:(C)Ljava/lang/Character;
+#920 = Utf8: "(C)Ljava/lang/Character;"
+#921 = Methodref: java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+#922 = NameAndType: valueOf:(I)Ljava/lang/Integer;
+#923 = Utf8: "(I)Ljava/lang/Integer;"
+#924 = Methodref: java/lang/String.format:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+#925 = NameAndType: format:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+#926 = Utf8: "format"
+#927 = Utf8: "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;"
+#928 = Methodref: java/lang/IllegalArgumentException.<init>:(Ljava/lang/String;)V
+#929 = Methodref: java/lang/String.<init>:([CII)V
+#930 = NameAndType: <init>:([CII)V
+#931 = Utf8: "([CII)V"
+#932 = Methodref: java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;
+#933 = Class: java/util/function/Function
+#934 = NameAndType: apply:(Ljava/lang/Object;)Ljava/lang/Object;
+#935 = Utf8: "java/util/function/Function"
+#936 = Class: java/lang/StringLatin1$CharsSpliterator
+#937 = Utf8: "java/lang/StringLatin1$CharsSpliterator"
+#938 = Class: java/util/Spliterator
+#939 = Utf8: "java/util/Spliterator"
+#940 = Methodref: java/lang/StringLatin1$CharsSpliterator.<init>:([BI)V
+#941 = NameAndType: <init>:([BI)V
+#942 = Utf8: "([BI)V"
+#943 = Class: java/lang/StringUTF16$CharsSpliterator
+#944 = Utf8: "java/lang/StringUTF16$CharsSpliterator"
+#945 = Methodref: java/lang/StringUTF16$CharsSpliterator.<init>:([BI)V
+#946 = Methodref: java/util/stream/StreamSupport.intStream:(Ljava/util/Spliterator$OfInt;Z)Ljava/util/stream/IntStream;
+#947 = Class: java/util/stream/StreamSupport
+#948 = NameAndType: intStream:(Ljava/util/Spliterator$OfInt;Z)Ljava/util/stream/IntStream;
+#949 = Utf8: "java/util/stream/StreamSupport"
+#950 = Utf8: "intStream"
+#951 = Utf8: "(Ljava/util/Spliterator$OfInt;Z)Ljava/util/stream/IntStream;"
+#952 = Class: java/lang/StringUTF16$CodePointsSpliterator
+#953 = Utf8: "java/lang/StringUTF16$CodePointsSpliterator"
+#954 = Methodref: java/lang/StringUTF16$CodePointsSpliterator.<init>:([BI)V
+#955 = Class: java/util/Formatter
+#956 = Utf8: "java/util/Formatter"
+#957 = Methodref: java/util/Formatter.<init>:()V
+#958 = Methodref: java/util/Formatter.format:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/util/Formatter;
+#959 = NameAndType: format:(Ljava/lang/String;[Ljava/lang/Object;)Ljava/util/Formatter;
+#960 = Utf8: "(Ljava/lang/String;[Ljava/lang/Object;)Ljava/util/Formatter;"
+#961 = Methodref: java/util/Formatter.toString:()Ljava/lang/String;
+#962 = Methodref: java/util/Formatter.<init>:(Ljava/util/Locale;)V
+#963 = NameAndType: <init>:(Ljava/util/Locale;)V
+#964 = Utf8: "(Ljava/util/Locale;)V"
+#965 = String: "null"
+#966 = Utf8: "null"
+#967 = Methodref: java/lang/Object.toString:()Ljava/lang/String;
+#968 = Methodref: java/lang/String.<init>:([C)V
+#969 = NameAndType: <init>:([C)V
+#970 = Utf8: "([C)V"
+#971 = String: "true"
+#972 = Utf8: "true"
+#973 = String: "false"
+#974 = Utf8: "false"
+#975 = Methodref: java/lang/StringLatin1.canEncode:(I)Z
+#976 = NameAndType: canEncode:(I)Z
+#977 = Utf8: "canEncode"
+#978 = Methodref: java/lang/StringLatin1.toBytes:(C)[B
+#979 = NameAndType: toBytes:(C)[B
+#980 = Utf8: "(C)[B"
+#981 = Methodref: java/lang/StringUTF16.toBytes:(C)[B
+#982 = Methodref: java/lang/Integer.toString:(I)Ljava/lang/String;
+#983 = NameAndType: toString:(I)Ljava/lang/String;
+#984 = Methodref: java/lang/Long.toString:(J)Ljava/lang/String;
+#985 = Class: java/lang/Long
+#986 = NameAndType: toString:(J)Ljava/lang/String;
+#987 = Utf8: "java/lang/Long"
+#988 = Utf8: "(J)Ljava/lang/String;"
+#989 = Methodref: java/lang/Float.toString:(F)Ljava/lang/String;
+#990 = Class: java/lang/Float
+#991 = NameAndType: toString:(F)Ljava/lang/String;
+#992 = Utf8: "java/lang/Float"
+#993 = Utf8: "(F)Ljava/lang/String;"
+#994 = Methodref: java/lang/Double.toString:(D)Ljava/lang/String;
+#995 = Class: java/lang/Double
+#996 = NameAndType: toString:(D)Ljava/lang/String;
+#997 = Utf8: "java/lang/Double"
+#998 = Utf8: "(D)Ljava/lang/String;"
+#999 = String: "count is negative: "
+#1000 = Utf8: "count is negative: "
+#1001 = Methodref: java/util/Arrays.fill:([BB)V
+#1002 = NameAndType: fill:([BB)V
+#1003 = Utf8: "fill"
+#1004 = Methodref: java/lang/System.arraycopy:(Ljava/lang/Object;ILjava/lang/Object;II)V
+#1005 = NameAndType: arraycopy:(Ljava/lang/Object;ILjava/lang/Object;II)V
+#1006 = Utf8: "arraycopy"
+#1007 = Utf8: "(Ljava/lang/Object;ILjava/lang/Object;II)V"
+#1008 = Methodref: java/lang/AbstractStringBuilder.isLatin1:()Z
+#1009 = Methodref: java/lang/StringUTF16.compress:([BII)[B
+#1010 = NameAndType: compress:([BII)[B
+#1011 = String: "index "
+#1012 = Utf8: "index "
+#1013 = String: ", length "
+#1014 = Utf8: ", length "
+#1015 = Methodref: java/lang/StringIndexOutOfBoundsException.<init>:(Ljava/lang/String;)V
+#1016 = String: "offset "
+#1017 = Utf8: "offset "
+#1018 = String: ", count "
+#1019 = Utf8: ", count "
+#1020 = String: "begin "
+#1021 = Utf8: "begin "
+#1022 = String: ", end "
+#1023 = Utf8: ", end "
+#1024 = Methodref: java/lang/Character.isBmpCodePoint:(I)Z
+#1025 = NameAndType: isBmpCodePoint:(I)Z
+#1026 = Utf8: "isBmpCodePoint"
+#1027 = Methodref: java/lang/StringUTF16.toBytesSupplementary:(I)[B
+#1028 = NameAndType: toBytesSupplementary:(I)[B
+#1029 = Utf8: "toBytesSupplementary"
+#1030 = String: "Not a valid Unicode code point: 0x%X"
+#1031 = Utf8: "Not a valid Unicode code point: 0x%X"
+#1032 = Methodref: java/util/Optional.of:(Ljava/lang/Object;)Ljava/util/Optional;
+#1033 = Class: java/util/Optional
+#1034 = NameAndType: of:(Ljava/lang/Object;)Ljava/util/Optional;
+#1035 = Utf8: "java/util/Optional"
+#1036 = Utf8: "of"
+#1037 = Utf8: "(Ljava/lang/Object;)Ljava/util/Optional;"
+#1038 = Methodref: java/lang/String.compareTo:(Ljava/lang/String;)I
+#1039 = NameAndType: compareTo:(Ljava/lang/String;)I
+#1040 = Methodref: java/lang/String.resolveConstantDesc:(Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/String;
+#1041 = NameAndType: resolveConstantDesc:(Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/String;
+#1042 = Utf8: "resolveConstantDesc"
+#1043 = Utf8: "(Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/String;"
+#1044 = Methodref: java/lang/String.lastIndexOfNonWhitespace:()I
+#1045 = NameAndType: lastIndexOfNonWhitespace:()I
+#1046 = Methodref: java/lang/Math.min:(II)I
+#1047 = Methodref: java/lang/String.substring:(I)Ljava/lang/String;
+#1048 = NameAndType: substring:(I)Ljava/lang/String;
+#1049 = Methodref: java/lang/String.stripLeading:()Ljava/lang/String;
+#1050 = NameAndType: stripLeading:()Ljava/lang/String;
+#1051 = Class: java/io/ObjectStreamField
+#1052 = Utf8: "java/io/ObjectStreamField"
+#1053 = Fieldref: java/lang/String.serialPersistentFields:[Ljava/io/ObjectStreamField;
+#1054 = NameAndType: serialPersistentFields:[Ljava/io/ObjectStreamField;
+#1055 = Utf8: "serialPersistentFields"
+#1056 = Utf8: "[Ljava/io/ObjectStreamField;"
+#1057 = Class: java/lang/String$CaseInsensitiveComparator
+#1058 = Utf8: "java/lang/String$CaseInsensitiveComparator"
+#1059 = Methodref: java/lang/String$CaseInsensitiveComparator.<init>:()V
+#1060 = Class: java/io/Serializable
+#1061 = Utf8: "java/io/Serializable"
+#1062 = Class: java/lang/Comparable
+#1063 = Utf8: "java/lang/Comparable"
+#1064 = Class: java/lang/constant/Constable
+#1065 = Utf8: "java/lang/constant/Constable"
+#1066 = Class: java/lang/constant/ConstantDesc
+#1067 = Utf8: "java/lang/constant/ConstantDesc"
+#1068 = Utf8: "RuntimeVisibleAnnotations"
+#1069 = Utf8: "Ljdk/internal/vm/annotation/Stable;"
+#1070 = Utf8: "serialVersionUID"
+#1071 = Utf8: "J"
+#1072 = Utf8: "ConstantValue"
+#1073 = Long: -6849794470754667710
+#1075 = Utf8: "REPL"
+#1076 = Utf8: "C"
+#1077 = Utf8: "Signature"
+#1078 = Utf8: "Ljava/util/Comparator<Ljava/lang/String;>;"
+#1079 = Utf8: "LATIN1"
+#1080 = Integer: 0
+#1081 = Utf8: "UTF16"
+#1082 = Integer: 1
+#1083 = Utf8: "Code"
+#1084 = Utf8: "LineNumberTable"
+#1085 = Utf8: "LocalVariableTable"
+#1086 = Utf8: "this"
+#1087 = Utf8: "Ljava/lang/String;"
+#1088 = Utf8: "original"
+#1089 = Utf8: "Ljdk/internal/vm/annotation/IntrinsicCandidate;"
+#1090 = Utf8: "[C"
+#1091 = Utf8: "offset"
+#1092 = Utf8: "count"
+#1093 = Utf8: "([III)V"
+#1094 = Utf8: "val"
+#1095 = Utf8: "codePoints"
+#1096 = Utf8: "[I"
+#1097 = Utf8: "StackMapTable"
+#1098 = Class: [I
+#1099 = Utf8: "i"
+#1100 = Utf8: "ascii"
+#1101 = Utf8: "hibyte"
+#1102 = Class: [B
+#1103 = Utf8: "Deprecated"
+#1104 = Utf8: "Ljava/lang/Deprecated;"
+#1105 = Utf8: "since"
+#1106 = Utf8: "1.1"
+#1107 = Utf8: "bytes"
+#1108 = Utf8: "charsetName"
+#1109 = Utf8: "Exceptions"
+#1110 = Utf8: "b2"
+#1111 = Utf8: "b1"
+#1112 = Utf8: "buf"
+#1113 = Utf8: "sl"
+#1114 = Utf8: "dp"
+#1115 = Utf8: "dst"
+#1116 = Utf8: "b"
+#1117 = Utf8: "bs"
+#1118 = Utf8: "en"
+#1119 = Utf8: "ca"
+#1120 = Utf8: "clen"
+#1121 = Utf8: "ad"
+#1122 = Utf8: "Lsun/nio/cs/ArrayDecoder;"
+#1123 = Utf8: "cd"
+#1124 = Utf8: "Ljava/nio/charset/CharsetDecoder;"
+#1125 = Utf8: "caLen"
+#1126 = Utf8: "charset"
+#1127 = Utf8: "Ljava/nio/charset/Charset;"
+#1128 = Class: [C
+#1129 = Utf8: "newStringNoRepl"
+#1130 = Utf8: "mie"
+#1131 = Utf8: "Ljava/nio/charset/MalformedInputException;"
+#1132 = Utf8: "cause"
+#1133 = Utf8: "Ljava/lang/Throwable;"
+#1134 = Utf8: "e"
+#1135 = Utf8: "Ljava/lang/IllegalArgumentException;"
+#1136 = Utf8: "src"
+#1137 = Utf8: "cs"
+#1138 = Class: java/lang/Throwable
+#1139 = Utf8: "java/lang/Throwable"
+#1140 = Utf8: "len"
+#1141 = Utf8: "ba"
+#1142 = Utf8: "isTrusted"
+#1143 = Utf8: "expansionFactor"
+#1144 = Utf8: "F"
+#1145 = Utf8: "x"
+#1146 = Utf8: "csn"
+#1147 = Utf8: "blen"
+#1148 = Utf8: "ae"
+#1149 = Utf8: "Lsun/nio/cs/ArrayEncoder;"
+#1150 = Utf8: "cr"
+#1151 = Utf8: "Ljava/nio/charset/CoderResult;"
+#1152 = Utf8: "Ljava/nio/charset/CharacterCodingException;"
+#1153 = Utf8: "doReplace"
+#1154 = Utf8: "ce"
+#1155 = Utf8: "Ljava/nio/charset/CharsetEncoder;"
+#1156 = Utf8: "bb"
+#1157 = Utf8: "Ljava/nio/ByteBuffer;"
+#1158 = Utf8: "cb"
+#1159 = Utf8: "Ljava/nio/CharBuffer;"
+#1160 = Utf8: "getBytesUTF8NoRepl"
+#1161 = Utf8: "(Ljava/lang/String;)[B"
+#1162 = Utf8: "s"
+#1163 = Utf8: "getBytesNoRepl"
+#1164 = Utf8: "c"
+#1165 = Utf8: "ret"
+#1166 = Utf8: "sp"
+#1167 = Utf8: "decodeASCII"
+#1168 = Utf8: "([BI[CII)I"
+#1169 = Utf8: "start"
+#1170 = Utf8: "end"
+#1171 = Utf8: "sa"
+#1172 = Utf8: "da"
+#1173 = Utf8: "b3"
+#1174 = Utf8: "b4"
+#1175 = Utf8: "uc"
+#1176 = Utf8: "off"
+#1177 = Utf8: "nb"
+#1178 = Utf8: "msg"
+#1179 = Utf8: "c2"
+#1180 = Utf8: "([BLjava/lang/String;)V"
+#1181 = Utf8: "([BLjava/nio/charset/Charset;)V"
+#1182 = Utf8: "(Ljava/lang/StringBuffer;)V"
+#1183 = Utf8: "buffer"
+#1184 = Utf8: "Ljava/lang/StringBuffer;"
+#1185 = Utf8: "(Ljava/lang/StringBuilder;)V"
+#1186 = Utf8: "builder"
+#1187 = Utf8: "Ljava/lang/StringBuilder;"
+#1188 = Utf8: "index"
+#1189 = Utf8: "beginIndex"
+#1190 = Utf8: "endIndex"
+#1191 = Utf8: "codePointOffset"
+#1192 = Utf8: "(II[CI)V"
+#1193 = Utf8: "srcBegin"
+#1194 = Utf8: "srcEnd"
+#1195 = Utf8: "dstBegin"
+#1196 = Utf8: "(II[BI)V"
+#1197 = Utf8: "(Ljava/nio/charset/Charset;)[B"
+#1198 = Utf8: "aString"
+#1199 = Utf8: "anObject"
+#1200 = Utf8: "Ljava/lang/Object;"
+#1201 = Utf8: "(Ljava/lang/StringBuffer;)Z"
+#1202 = Utf8: "sb"
+#1203 = Utf8: "n"
+#1204 = Utf8: "Ljava/lang/AbstractStringBuilder;"
+#1205 = Utf8: "v1"
+#1206 = Utf8: "v2"
+#1207 = Utf8: "Ljava/lang/CharSequence;"
+#1208 = Utf8: "equalsIgnoreCase"
+#1209 = Utf8: "(Ljava/lang/String;)Z"
+#1210 = Utf8: "anotherString"
+#1211 = Utf8: "compareToIgnoreCase"
+#1212 = Utf8: "str"
+#1213 = Utf8: "toffset"
+#1214 = Utf8: "other"
+#1215 = Utf8: "ooffset"
+#1216 = Utf8: "tv"
+#1217 = Utf8: "ov"
+#1218 = Utf8: "ignoreCase"
+#1219 = Utf8: "to"
+#1220 = Utf8: "prefix"
+#1221 = Utf8: "ta"
+#1222 = Utf8: "pa"
+#1223 = Utf8: "po"
+#1224 = Utf8: "pc"
+#1225 = Utf8: "endsWith"
+#1226 = Utf8: "suffix"
+#1227 = Utf8: "h"
+#1228 = Utf8: "ch"
+#1229 = Utf8: "fromIndex"
+#1230 = Utf8: "srcCoder"
+#1231 = Utf8: "srcCount"
+#1232 = Utf8: "tgtStr"
+#1233 = Utf8: "tgt"
+#1234 = Utf8: "tgtCoder"
+#1235 = Utf8: "tgtCount"
+#1236 = Utf8: "rightIndex"
+#1237 = Utf8: "subLen"
+#1238 = Utf8: "subSequence"
+#1239 = Utf8: "(II)Ljava/lang/CharSequence;"
+#1240 = Utf8: "concat"
+#1241 = Utf8: "oldChar"
+#1242 = Utf8: "newChar"
+#1243 = Utf8: "regex"
+#1244 = Utf8: "contains"
+#1245 = Utf8: "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;"
+#1246 = Utf8: "replacement"
+#1247 = Utf8: "(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;"
+#1248 = Utf8: "thisIsLatin1"
+#1249 = Utf8: "trgtIsLatin1"
+#1250 = Utf8: "replIsLatin1"
+#1251 = Utf8: "resultLen"
+#1252 = Utf8: "ignored"
+#1253 = Utf8: "Ljava/lang/ArithmeticException;"
+#1254 = Utf8: "target"
+#1255 = Utf8: "trgtStr"
+#1256 = Utf8: "replStr"
+#1257 = Utf8: "thisLen"
+#1258 = Utf8: "trgtLen"
+#1259 = Utf8: "replLen"
+#1260 = Utf8: "last"
+#1261 = Utf8: "limited"
+#1262 = Utf8: "list"
+#1263 = Utf8: "Ljava/util/ArrayList;"
+#1264 = Utf8: "resultSize"
+#1265 = Utf8: "result"
+#1266 = Utf8: "limit"
+#1267 = Utf8: "LocalVariableTypeTable"
+#1268 = Utf8: "Ljava/util/ArrayList<Ljava/lang/String;>;"
+#1269 = Utf8: "(Ljava/lang/String;)[Ljava/lang/String;"
+#1270 = Utf8: "(Ljava/lang/CharSequence;[Ljava/lang/CharSequence;)Ljava/lang/String;"
+#1271 = Utf8: "delimiter"
+#1272 = Utf8: "elements"
+#1273 = Utf8: "[Ljava/lang/CharSequence;"
+#1274 = Utf8: "delim"
+#1275 = Utf8: "elems"
+#1276 = Utf8: "el"
+#1277 = Utf8: "icoder"
+#1278 = Utf8: "Ljdk/internal/vm/annotation/ForceInline;"
+#1279 = Utf8: "(Ljava/lang/CharSequence;Ljava/lang/Iterable;)Ljava/lang/String;"
+#1280 = Utf8: "Ljava/lang/Iterable;"
+#1281 = Utf8: "Ljava/lang/Iterable<+Ljava/lang/CharSequence;>;"
+#1282 = Utf8: "(Ljava/lang/CharSequence;Ljava/lang/Iterable<+Ljava/lang/CharSequence;>;)Ljava/lang/String;"
+#1283 = Utf8: "locale"
+#1284 = Utf8: "Ljava/util/Locale;"
+#1285 = Utf8: "()Ljava/util/stream/Stream<Ljava/lang/String;>;"
+#1286 = Utf8: "indent"
+#1287 = Utf8: "spaces"
+#1288 = Utf8: "Ljava/util/stream/Stream;"
+#1289 = Utf8: "Ljava/util/stream/Stream<Ljava/lang/String;>;"
+#1290 = Utf8: "stripIndent"
+#1291 = Utf8: "lastChar"
+#1292 = Utf8: "optOut"
+#1293 = Utf8: "Ljava/util/List;"
+#1294 = Utf8: "Ljava/util/List<Ljava/lang/String;>;"
+#1295 = Utf8: "leadingWhitespace"
+#1296 = Utf8: "line"
+#1297 = Utf8: "lastLine"
+#1298 = Utf8: "(Ljava/util/List<Ljava/lang/String;>;)I"
+#1299 = Utf8: "translateEscapes"
+#1300 = Utf8: "code"
+#1301 = Utf8: "chars"
+#1302 = Utf8: "from"
+#1303 = Utf8: "transform"
+#1304 = Utf8: "(Ljava/util/function/Function;)Ljava/lang/Object;"
+#1305 = Utf8: "f"
+#1306 = Utf8: "Ljava/util/function/Function;"
+#1307 = Utf8: "Ljava/util/function/Function<-Ljava/lang/String;+TR;>;"
+#1308 = Utf8: "<R:Ljava/lang/Object;>(Ljava/util/function/Function<-Ljava/lang/String;+TR;>;)TR;"
+#1309 = Utf8: "()Ljava/util/stream/IntStream;"
+#1310 = Class: java/util/Spliterator$OfInt
+#1311 = Utf8: "java/util/Spliterator$OfInt"
+#1312 = Utf8: "args"
+#1313 = Utf8: "[Ljava/lang/Object;"
+#1314 = Utf8: "(Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;"
+#1315 = Utf8: "l"
+#1316 = Utf8: "formatted"
+#1317 = Utf8: "([Ljava/lang/Object;)Ljava/lang/String;"
+#1318 = Utf8: "obj"
+#1319 = Utf8: "([C)Ljava/lang/String;"
+#1320 = Utf8: "data"
+#1321 = Utf8: "([CII)Ljava/lang/String;"
+#1322 = Utf8: "copyValueOf"
+#1323 = Utf8: "(Z)Ljava/lang/String;"
+#1324 = Utf8: "(C)Ljava/lang/String;"
+#1325 = Utf8: "d"
+#1326 = Utf8: "D"
+#1327 = Utf8: "intern"
+#1328 = Utf8: "single"
+#1329 = Utf8: "multiple"
+#1330 = Utf8: "copied"
+#1331 = Utf8: "([BIIBI)V"
+#1332 = Utf8: "srcPos"
+#1333 = Utf8: "sig"
+#1334 = Utf8: "Ljava/lang/Void;"
+#1335 = Class: java/lang/Void
+#1336 = Utf8: "java/lang/Void"
+#1337 = Utf8: "asb"
+#1338 = Utf8: "checkOffset"
+#1339 = Utf8: "begin"
+#1340 = Utf8: "valueOfCodePoint"
+#1341 = Utf8: "codePoint"
+#1342 = Utf8: "describeConstable"
+#1343 = Utf8: "()Ljava/util/Optional;"
+#1344 = Utf8: "()Ljava/util/Optional<Ljava/lang/String;>;"
+#1345 = Utf8: "lookup"
+#1346 = Utf8: "Ljava/lang/invoke/MethodHandles$Lookup;"
+#1347 = Utf8: "(Ljava/lang/Object;)I"
+#1348 = Utf8: "(Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/Object;"
+#1349 = Class: java/lang/ReflectiveOperationException
+#1350 = Utf8: "java/lang/ReflectiveOperationException"
+#1351 = Utf8: "lambda$stripIndent$3"
+#1352 = Utf8: "(ILjava/lang/String;)Ljava/lang/String;"
+#1353 = Utf8: "firstNonWhitespace"
+#1354 = Utf8: "lastNonWhitespace"
+#1355 = Utf8: "incidentalWhitespace"
+#1356 = Utf8: "lambda$indent$2"
+#1357 = Utf8: "lambda$indent$1"
+#1358 = Utf8: "lambda$indent$0"
+#1359 = Utf8: "<clinit>"
+#1360 = Utf8: "Ljava/lang/Object;Ljava/io/Serializable;Ljava/lang/Comparable<Ljava/lang/String;>;Ljava/lang/CharSequence;Ljava/lang/constant/Constable;Ljava/lang/constant/ConstantDesc;"
+#1361 = Utf8: "SourceFile"
+#1362 = Utf8: "String.java"
+#1363 = Utf8: "NestMembers"
+#1364 = Utf8: "BootstrapMethods"
+#1365 = Unknown:
+#1366 = Methodref: java/lang/invoke/LambdaMetafactory.metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+#1367 = Class: java/lang/invoke/LambdaMetafactory
+#1368 = NameAndType: metafactory:(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;
+#1369 = Utf8: "java/lang/invoke/LambdaMetafactory"
+#1370 = Utf8: "metafactory"
+#1371 = Utf8: "(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodType;Ljava/lang/invoke/MethodHandle;Ljava/lang/invoke/MethodType;)Ljava/lang/invoke/CallSite;"
+#1372 = Unknown:
+#1373 = Unknown:
+#1374 = Methodref: java/lang/String.lambda$indent$0:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+#1375 = NameAndType: lambda$indent$0:(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+#1376 = Unknown:
+#1377 = Unknown:
+#1378 = Methodref: java/lang/String.lambda$indent$1:(Ljava/lang/String;)Ljava/lang/String;
+#1379 = NameAndType: lambda$indent$1:(Ljava/lang/String;)Ljava/lang/String;
+#1380 = Unknown:
+#1381 = Methodref: java/lang/String.lambda$indent$2:(ILjava/lang/String;)Ljava/lang/String;
+#1382 = NameAndType: lambda$indent$2:(ILjava/lang/String;)Ljava/lang/String;
+#1383 = Unknown:
+#1384 = Methodref: java/lang/String.lambda$stripIndent$3:(ILjava/lang/String;)Ljava/lang/String;
+#1385 = NameAndType: lambda$stripIndent$3:(ILjava/lang/String;)Ljava/lang/String;
+#1386 = Utf8: "InnerClasses"
+#1387 = Utf8: "CharsSpliterator"
+#1388 = Utf8: "OfInt"
+#1389 = Utf8: "CodePointsSpliterator"
+#1390 = Class: java/lang/invoke/MethodHandles$Lookup
+#1391 = Utf8: "java/lang/invoke/MethodHandles$Lookup"
+#1392 = Class: java/lang/invoke/MethodHandles
+#1393 = Utf8: "java/lang/invoke/MethodHandles"
+#1394 = Utf8: "Lookup"
+#1395 = Utf8: "CaseInsensitiveComparator"
+
+interfaces:
+java/io/Serializable
+java/lang/Comparable
+java/lang/CharSequence
+java/lang/constant/Constable
+java/lang/constant/ConstantDesc
+
+fields:
+value(0x12): [B
+coder(0x12): B
+hash(0x2): I
+hashIsZero(0x2): Z
+serialVersionUID(0x1a): J
+COMPACT_STRINGS(0x18): Z
+serialPersistentFields(0x1a): [Ljava/io/ObjectStreamField;
+REPL(0x1a): C
+CASE_INSENSITIVE_ORDER(0x19): Ljava/util/Comparator;
+LATIN1(0x18): B
+UTF16(0x18): B
+
+methods:
+<init>(0x1): ()V
+<init>(0x1): (Ljava/lang/String;)V
+<init>(0x1): ([C)V
+<init>(0x1): ([CII)V
+rangeCheck(0xa): ([CII)Ljava/lang/Void;
+<init>(0x1): ([III)V
+<init>(0x1): ([BIII)V
+<init>(0x1): ([BI)V
+<init>(0x1): ([BIILjava/lang/String;)V
+<init>(0x1): ([BIILjava/nio/charset/Charset;)V
+newStringUTF8NoRepl(0x8): ([BII)Ljava/lang/String;
+newStringNoRepl(0x8): ([BLjava/nio/charset/Charset;)Ljava/lang/String;
+newStringNoRepl1(0xa): ([BLjava/nio/charset/Charset;)Ljava/lang/String;
+safeTrim(0xa): ([BIZ)[B
+scale(0xa): (IF)I
+lookupCharset(0xa): (Ljava/lang/String;)Ljava/nio/charset/Charset;
+encode(0xa): (Ljava/nio/charset/Charset;B[B)[B
+encodeWithEncoder(0xa): (Ljava/nio/charset/Charset;B[BZ)[B
+getBytesUTF8NoRepl(0x8): (Ljava/lang/String;)[B
+isASCII(0xa): ([B)Z
+getBytesNoRepl(0x8): (Ljava/lang/String;Ljava/nio/charset/Charset;)[B
+getBytesNoRepl1(0xa): (Ljava/lang/String;Ljava/nio/charset/Charset;)[B
+encodeASCII(0xa): (B[B)[B
+encode8859_1(0xa): (B[B)[B
+encode8859_1(0xa): (B[BZ)[B
+decodeASCII(0x8): ([BI[CII)I
+isNotContinuation(0xa): (I)Z
+isMalformed3(0xa): (III)Z
+isMalformed3_2(0xa): (II)Z
+isMalformed4(0xa): (III)Z
+isMalformed4_2(0xa): (II)Z
+isMalformed4_3(0xa): (I)Z
+decode2(0xa): (II)C
+decode3(0xa): (III)C
+decode4(0xa): (IIII)I
+decodeUTF8_UTF16(0xa): ([BII[BIZ)I
+decodeWithDecoder(0xa): (Ljava/nio/charset/CharsetDecoder;[C[BII)I
+malformed3(0xa): ([BI)I
+malformed4(0xa): ([BI)I
+throwMalformed(0xa): (II)V
+throwMalformed(0xa): ([B)V
+throwUnmappable(0xa): (I)V
+throwUnmappable(0xa): ([B)V
+encodeUTF8(0xa): (B[BZ)[B
+encodeUTF8_UTF16(0xa): ([BZ)[B
+<init>(0x1): ([BLjava/lang/String;)V
+<init>(0x1): ([BLjava/nio/charset/Charset;)V
+<init>(0x1): ([BII)V
+<init>(0x1): ([B)V
+<init>(0x1): (Ljava/lang/StringBuffer;)V
+<init>(0x1): (Ljava/lang/StringBuilder;)V
+length(0x1): ()I
+isEmpty(0x1): ()Z
+charAt(0x1): (I)C
+codePointAt(0x1): (I)I
+codePointBefore(0x1): (I)I
+codePointCount(0x1): (II)I
+offsetByCodePoints(0x1): (II)I
+getChars(0x1): (II[CI)V
+getBytes(0x1): (II[BI)V
+getBytes(0x1): (Ljava/lang/String;)[B
+getBytes(0x1): (Ljava/nio/charset/Charset;)[B
+getBytes(0x1): ()[B
+equals(0x1): (Ljava/lang/Object;)Z
+contentEquals(0x1): (Ljava/lang/StringBuffer;)Z
+nonSyncContentEquals(0x2): (Ljava/lang/AbstractStringBuilder;)Z
+contentEquals(0x1): (Ljava/lang/CharSequence;)Z
+equalsIgnoreCase(0x1): (Ljava/lang/String;)Z
+compareTo(0x1): (Ljava/lang/String;)I
+compareToIgnoreCase(0x1): (Ljava/lang/String;)I
+regionMatches(0x1): (ILjava/lang/String;II)Z
+regionMatches(0x1): (ZILjava/lang/String;II)Z
+startsWith(0x1): (Ljava/lang/String;I)Z
+startsWith(0x1): (Ljava/lang/String;)Z
+endsWith(0x1): (Ljava/lang/String;)Z
+hashCode(0x1): ()I
+indexOf(0x1): (I)I
+indexOf(0x1): (II)I
+lastIndexOf(0x1): (I)I
+lastIndexOf(0x1): (II)I
+indexOf(0x1): (Ljava/lang/String;)I
+indexOf(0x1): (Ljava/lang/String;I)I
+indexOf(0x8): ([BBILjava/lang/String;I)I
+lastIndexOf(0x1): (Ljava/lang/String;)I
+lastIndexOf(0x1): (Ljava/lang/String;I)I
+lastIndexOf(0x8): ([BBILjava/lang/String;I)I
+substring(0x1): (I)Ljava/lang/String;
+substring(0x1): (II)Ljava/lang/String;
+subSequence(0x1): (II)Ljava/lang/CharSequence;
+concat(0x1): (Ljava/lang/String;)Ljava/lang/String;
+replace(0x1): (CC)Ljava/lang/String;
+matches(0x1): (Ljava/lang/String;)Z
+contains(0x1): (Ljava/lang/CharSequence;)Z
+replaceFirst(0x1): (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+replaceAll(0x1): (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+replace(0x1): (Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
+split(0x1): (Ljava/lang/String;I)[Ljava/lang/String;
+split(0x1): (Ljava/lang/String;)[Ljava/lang/String;
+join(0x89): (Ljava/lang/CharSequence;[Ljava/lang/CharSequence;)Ljava/lang/String;
+join(0x8): (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;I)Ljava/lang/String;
+join(0x9): (Ljava/lang/CharSequence;Ljava/lang/Iterable;)Ljava/lang/String;
+toLowerCase(0x1): (Ljava/util/Locale;)Ljava/lang/String;
+toLowerCase(0x1): ()Ljava/lang/String;
+toUpperCase(0x1): (Ljava/util/Locale;)Ljava/lang/String;
+toUpperCase(0x1): ()Ljava/lang/String;
+trim(0x1): ()Ljava/lang/String;
+strip(0x1): ()Ljava/lang/String;
+stripLeading(0x1): ()Ljava/lang/String;
+stripTrailing(0x1): ()Ljava/lang/String;
+isBlank(0x1): ()Z
+lines(0x1): ()Ljava/util/stream/Stream;
+indent(0x1): (I)Ljava/lang/String;
+indexOfNonWhitespace(0x2): ()I
+lastIndexOfNonWhitespace(0x2): ()I
+stripIndent(0x1): ()Ljava/lang/String;
+outdent(0xa): (Ljava/util/List;)I
+translateEscapes(0x1): ()Ljava/lang/String;
+transform(0x1): (Ljava/util/function/Function;)Ljava/lang/Object;
+toString(0x1): ()Ljava/lang/String;
+chars(0x1): ()Ljava/util/stream/IntStream;
+codePoints(0x1): ()Ljava/util/stream/IntStream;
+toCharArray(0x1): ()[C
+format(0x89): (Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+format(0x89): (Ljava/util/Locale;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;
+formatted(0x81): ([Ljava/lang/Object;)Ljava/lang/String;
+valueOf(0x9): (Ljava/lang/Object;)Ljava/lang/String;
+valueOf(0x9): ([C)Ljava/lang/String;
+valueOf(0x9): ([CII)Ljava/lang/String;
+copyValueOf(0x9): ([CII)Ljava/lang/String;
+copyValueOf(0x9): ([C)Ljava/lang/String;
+valueOf(0x9): (Z)Ljava/lang/String;
+valueOf(0x9): (C)Ljava/lang/String;
+valueOf(0x9): (I)Ljava/lang/String;
+valueOf(0x9): (J)Ljava/lang/String;
+valueOf(0x9): (F)Ljava/lang/String;
+valueOf(0x9): (D)Ljava/lang/String;
+intern(0x101): ()Ljava/lang/String;
+repeat(0x1): (I)Ljava/lang/String;
+getBytes(0x0): ([BIB)V
+getBytes(0x0): ([BIIBI)V
+<init>(0x0): ([CIILjava/lang/Void;)V
+<init>(0x0): (Ljava/lang/AbstractStringBuilder;Ljava/lang/Void;)V
+<init>(0x0): ([BB)V
+coder(0x0): ()B
+value(0x0): ()[B
+isLatin1(0x0): ()Z
+checkIndex(0x8): (II)V
+checkOffset(0x8): (II)V
+checkBoundsOffCount(0x8): (III)V
+checkBoundsBeginEnd(0x8): (III)V
+valueOfCodePoint(0x8): (I)Ljava/lang/String;
+describeConstable(0x1): ()Ljava/util/Optional;
+resolveConstantDesc(0x1): (Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/String;
+compareTo(0x1041): (Ljava/lang/Object;)I
+resolveConstantDesc(0x1041): (Ljava/lang/invoke/MethodHandles$Lookup;)Ljava/lang/Object;
+lambda$stripIndent$3(0x100a): (ILjava/lang/String;)Ljava/lang/String;
+lambda$indent$2(0x100a): (ILjava/lang/String;)Ljava/lang/String;
+lambda$indent$1(0x100a): (Ljava/lang/String;)Ljava/lang/String;
+lambda$indent$0(0x100a): (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+<clinit>(0x8): ()V
