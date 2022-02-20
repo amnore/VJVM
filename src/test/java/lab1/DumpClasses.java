@@ -23,7 +23,6 @@ public class DumpClasses {
   @Test
   void dumpInDir() {
     Consumer<String> run = clazz -> checkDump(resPath.toString(), "lab1.cases." + clazz);
-    ;
 
     run.accept("A");
     run.accept("A$B");

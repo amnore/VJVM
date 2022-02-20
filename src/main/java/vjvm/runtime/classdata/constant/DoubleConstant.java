@@ -19,6 +19,6 @@ public class DoubleConstant extends Constant {
 
   @Override
   public String toString() {
-    return String.format("Double: %d", value);
+    return String.format("Double: %a", value);
   }
 }

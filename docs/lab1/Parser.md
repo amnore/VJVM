@@ -85,10 +85,12 @@ $ javap -verbose A.class | less
   式的常量：
 
     - Class：输出其名称
-    - Fieldref、Methodref、InterfaceMethodref：以 `${类名}.${成员名}:${方法/成员描述符}` 的形式输出
+    - Fieldref、Methodref、InterfaceMethodref：以 `${类名}.${成员名}:${方法/成员
+      描述符}` 的形式输出
     - String、Utf8：以 `"${字符串}"` 的形式输出，其中字符串应使用
       `org.apache.commons.text.StringEscapeUtils.escapeJava` 进行转义。
-    - Integer、Float、Long、Double：以默认格式输出
+    - Integer、Float：以默认格式输出
+    - Long、Double：为了保证不丢失精度，我们要求你使用 16 进制浮点数输出。
     - NameAndType：以 `${名称}:${描述符}` 的形式输出
 
   对于其它类型的常量（MethodHandle、MethodType、Dynamic、InvokeDynamic、Module、

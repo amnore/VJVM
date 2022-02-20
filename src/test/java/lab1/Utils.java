@@ -82,13 +82,8 @@ public class Utils {
     assertEquals(expectedVars.group(2), actualVars.group(2));
 
     switch (expectedVars.group(2)) {
-    case "Class", "Fieldref", "Methodref", "InterfaceMethodref", "String", "Utf8", "Integer", "Long", "NameAndType" -> {
+    case "Class", "Fieldref", "Methodref", "InterfaceMethodref", "String", "Utf8", "Integer", "Long", "NameAndType", "Float", "Double" -> {
       assertEquals(expectedVars.group(3), actualVars.group(3));
-    }
-    case "Float", "Double" -> {
-      var epsilon = 1e-4;
-      assertTrue(
-          Math.abs(Double.parseDouble(expectedVars.group(3)) - Double.parseDouble(actualVars.group(3))) < epsilon);
     }
     case "Unknown" -> {
       // skip check actual
