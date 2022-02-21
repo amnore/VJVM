@@ -3,7 +3,7 @@ nav_order: 0
 parent: Lab1 类加载与解析
 ---
 
-# ClassLoader
+# 1.1 ClassLoader
 
 > 本章对应 JVM 规范内容：5.3.1、5.3.2，另请参阅 [ClassLoader 的 JDK 文
 > 档

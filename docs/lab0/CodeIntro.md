@@ -3,7 +3,7 @@ parent: Lab0 开始之前
 nav_order: 2
 ---
 
-# Read The Friendly Code
+# 0.3 Read The Friendly Code
 
 在开始~~痛苦~~愉快的 JVM 之旅之前，请先允许我向你们介绍一下框架代码。
 

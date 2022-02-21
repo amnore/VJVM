@@ -3,7 +3,7 @@ parent: Lab0 开始之前
 nav_order: 0
 ---
 
-# Java 的主要面向对象特性
+# 0.1 Java 的主要面向对象特性
 
 在本章中，我们将展示一些等价的 C 与 Java 程序，帮助你理解 Java 中主要的 OOP 特性。
 对于 Java 的基本语法，请自行搜索“Java 入门”。
