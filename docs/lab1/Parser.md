@@ -5,13 +5,13 @@ parent: Lab1 类加载与解析
 
 # Parser
 
-> 本章对应 JVM 规范内容：4.1 ~ 4.11，我们不会完全实现规范中所有要求的内容，请自
-> 行跳过。
+> 本章对应 JVM 规范内容：4.1 ~ 4.11。我们不会完全实现规范中所有的内容，请自
+> 行跳过无关部分。
 
 ## Class 文件的结构
 
-Class 文件存储了执行 Java 程序所需的（几乎）全部信息。理所当然地，我们在源代码文
-件中看到的全部内容，都会以某种方式包含在其中。我们以一个简单的类为例：
+Class 文件存储了执行 Java 程序所需的（几乎）全部信息。我们在源代码文件中看到的全
+部内容，都会以某种方式包含在其中。以一个简单的类为例：
 
 ```java
 package test;
@@ -55,14 +55,14 @@ public class A
 }
 ```
 
-事实上，我们可以使用 `javap` 命令查看这个 class 文件的内容：
+经过编译后，我们可以使用 `javap` 命令查看这个 class 文件的内容：
 
 ```
 $ javac A.java
 $ javap -verbose A.class | less
 ```
 
-关于 class 文件的具体结构，请阅读相关手册。
+关于 class 文件的具体结构，请阅读手册。
 
 在 Lab 1.2 中，我们将对 class 文件的内容进行解析，并实现一个类似于 `javap` 的程
 序，作为 Lab 2 的准备工作。
@@ -106,3 +106,14 @@ $ javap -verbose A.class | less
 
 我们在框架中给出了测试使用的比较方法和一个样例，你可以参考其中的内容。如果你发现测
 试代码有什么 bug 或不合理的地方，请联系助教。
+
+---
+
+Lab 1 到此结束，请整理你的 Git 分支并提交到 OJ 上。
+
+```
+$ git checkout master
+$ git merge lab1
+$ git remote add lab1-oj ${OJ 提交地址}
+$ git push lab1-oj master
+```

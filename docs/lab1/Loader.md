@@ -5,7 +5,10 @@ parent: Lab1 类加载与解析
 
 # ClassLoader
 
-> 本章对应 JVM 规范内容：5.3.1、5.3.2
+> 本章对应 JVM 规范内容：5.3.1、5.3.2，另请参阅 [ClassLoader 的 JDK 文
+> 档
+> ](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html)
+> 。
 
 ## 一个 class 的一生 —— 加载
 
@@ -24,23 +27,36 @@ $ ls
 A.class A$B.class
 ```
 
-每个 class 想要执行它的职责首先得被加载到 JVM 中，这便是 ClassLoader 的工作。具
-体而言，每个 ClassLoader 中保存了一组搜索 class 文件的路径。在请求加载一个
-class 时，它会依次做这样几件事：
+在每个 class 行使它的功能前，JVM 首先需要利用 class 文件中的数据创建运行时的数据
+结构。这个步骤被称为“加载”，是由 JVM 和 ClassLoader 共同完成的。（注意以上步骤只
+适用于正常的类。数组和基本类型是由 JVM 直接创建的，不需要 ClassLoader 的参与）
 
-1. 查找自身是否已加载所需的 class，如果是则返回已加载的 class。
-2. 从自己的加载路径中搜索这个 class，如果找到则利用 class 文件创建一个新
-   class，或者
-3. 请求另一个 ClassLoader 加载这个 class。
+更具体地，在需要创建一个 class 时，JVM 会做以下几件事情：
 
-其中，步骤 2 和 3 可以按任何顺序执行，也可以只执行其中的一个。
+- 首先，每个类的的创建都是在执行另一个类的代码时触发的（除一些特殊情况外）。而触
+  发的那个类也有自己的 ClassLoader。每个 ClassLoader 都记录了它已加载的类。JVM
+  会首先在其中查找所需的类是否已被加载，如果找到则直接返回这个类。
+
+- 如果没找到，JVM 会请求这个 ClassLoader 提供 class 数据。最常见的方式是在一个路
+  径下查找 class 文件并读取其数据。为了查找 class 文件，ClassLoader 可以做以下两
+  件事之一：
+
+  - 在自己维护的搜索路径中查找该文件
+  - 请求另一个 ClassLoader 查找这个文件
+
+- 如果 ClassLoader 找到了 class，JVM 会利用它提供的数据创建对应的类。
+
+ClassLoader 又分为 Bootstrap Loader 和 User-defined Loader，前者在 JVM 中实现，
+而后者自身也是在 JVM 中执行的类。由于 User-defined Loader 的实现需要 native 方法
+等复杂机制，我们在此做了简化，将 User-defined Loader 也放到 JVM 中。关于两种
+loader 在行为上的区别请自行阅读文档。
 
 ## 双亲委托加载机制（Parent-First）
 
-虽然 JVM 规范对加载 class 的顺序没做规定，但在 JDK 中默认使用了名为 parent-first
-的策略：每个 loader（除 Bootstrap Loader 外）均有一个**亲代加载器（parent）**，
-在搜索 class 时首先委托亲代进行搜索，找不到时才搜索自己的加载路径。于是，各个
-ClassLoader 之间就形成了如下的委托关系：
+虽然 JVM 规范对 ClassLoader 的加载方式没做规定，但 Java 默认使用了名为
+parent-first 的策略：每个 loader（除 Bootstrap Loader 外）均有一个**亲代加载器
+（parent）**，在搜索 class 时首先委托亲代进行搜索，找不到时才搜索自己的加载路径。
+于是，各个 ClassLoader 之间就形成了如下的委托关系：
 
 <figure>
   <img src="{{ site.baseurl }}{% link assets/loader-hierarchy.png %}" />
@@ -60,6 +76,41 @@ ClassLoader 之间就形成了如下的委托关系：
 
 ## 实验要求
 
+> 及时 commit 你的更改
+>
+> 我们会根据你的 Git 日志来评判你是否有抄袭的嫌疑。如果你把全部更改都放在一次
+> commit 中，那么我们就有很大可能怀疑你是 copy-paste 的。
+>
+> 即使我们不检查日志，你也应该养成及时 commit 的习惯。每次 commit 都会生成一份你
+> 的仓库当前状态的副本，及时你不小心删除了某个文件也可以从这个副本中恢复。
+>
+> 我们还建议你将仓库 push 到 [GitHub](https://github.com) 或 [NJU
+> Git](https://git.nju.edu.cn) 上，这样即使你删除了电脑上的全部文件也可以在远程
+> 仓库中找到备份。
+>
+> <figure>
+>   <img src="{{ site.baseurl }}{% link assets/git-commit-in-case-of-fire.webp %}" />
+>   <figcaption>着火时需做的三件事</figcaption>
+> </figure>
+>
+> 你可以使用以下命令来完成 commit：
+>
+> ```
+> $ git add ${需要 commit 的文件}
+> $ git status
+> $ git commit -m "${描述本次 commit 的内容}"
+> ```
+
+在 Lab 1.1 中，我们将实现两个 ClassLoader：第一个为 Bootstrap Loader，负责从系统
+JDK 中加载类；第二个为 User Loader，负责从命令行指定的 classpath 中搜索 class。
+User Loader 以 parent-first 的方式委托给 Bootstrap Loader。
+
+在框架的 ClassLoader.java 中，我们已为你准备好了加载类的接口：`public JClass
+loadClass(String descriptor)`。该方法接受一个字符串，返回加载的类。在 Lab 1.2 中，
+你将解析 class 文件并填入返回的类中。需要注意的是，这里传入的不是 class 名称，而
+是它的描述符（descriptor）。如 `java.lang.String` 类对应 `Ljava/lang/String;`。
+对于 descriptor 我们将在 Lab 1.2 中再次提及。
+
 > 修改框架代码
 >
 > 我们所有的测试都通过命令行进行（请参阅 test 目录中的样例）。因此，在维持命令行
@@ -69,20 +120,6 @@ ClassLoader 之间就形成了如下的委托关系：
 > 需要注意的是，我们在以后的 Lab 中会向框架加入新的代码。如果你对框架代码的接口
 > 做了修改，在加入我们的代码时你可能需要进行相应的调整。不用害怕，这正是你学习
 > `git merge`，`diff` 等工具的好机会。
-
-在 Lab 1.1 中，我们将实现两个 ClassLoader：第一个为 Bootstrap Loader，负责从系统
-JDK 中加载类；第二个为 User Loader，负责从命令行指定的 classpath 中搜索 class。
-User Loader 以 parent-first 的方式委托给 Bootstrap Loader。
-
-> 在真实的 JVM 中，User Loader 是作为虚拟机中的一个类来实现的。它从指定的路径中
-> 查找 class 文件，并调用 JVM 提供的一个方法由文件创建类。然而，这种实现依赖于
-> native 方法等复杂内容，因此我们在此作了简化，由 JVM 来实现 ClassLoader。
-
-在框架的 ClassLoader.java 中，我们已为你准备好了加载类的接口：`public JClass
-loadClass(String descriptor)`。该方法接受一个字符串，返回加载的类。在 Lab 1.2 中，
-你将解析 class 文件并填入返回的类中。需要注意的是，这里传入的不是 class 名称，而
-是它的描述符（descriptor）。如 `java.lang.String` 类对应 `Ljava/lang/String;`。
-对于 descriptor 我们将在 Lab 1.2 中再次提及。
 
 你在多次加载同一个类时应返回同一个对象，而非多个拷贝。虽然受限于测试方式，我们在
 本次 lab 中无法测试这一要求，但在以后的 lab 中你会遇到下面这种代码：
