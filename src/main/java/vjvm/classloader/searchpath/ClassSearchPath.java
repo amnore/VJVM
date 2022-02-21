@@ -18,8 +18,6 @@ public abstract class ClassSearchPath implements Closeable {
     return Arrays.stream(path.split(sep)).map(searchPath -> {
       if (searchPath.endsWith(".jar") || searchPath.endsWith(".JAR"))
         return new JarSearchPath(searchPath);
-      if (searchPath.endsWith("*"))
-        return new WildcardSearchPath(searchPath);
       return new DirSearchPath(searchPath);
     }).toArray(ClassSearchPath[]::new);
   }
