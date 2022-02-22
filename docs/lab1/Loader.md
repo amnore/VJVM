@@ -74,6 +74,56 @@ parent-first 的策略：每个 loader（除 Bootstrap Loader 外）均有一个
 [Tomcat](https://tomcat.apache.org/tomcat-10.0-doc/class-loader-howto.html) 等应
 用为了满足自身的特殊需求就采用了 child-first 的方式。
 
+## Read The Friendly Code (2)
+
+作为 Lab 1 的引导，我们先来看看框架代码的逻辑。
+
+[前文]({{ site.baseurl }}{% link lab0/CodeIntro.md %})提到，代码的入口是
+`vjvm.vm.Main` 类中的 `main` 方法，此外还有 `Run` 和 `Dump` 两个类用于实现执行
+Java 程序和打印 class 文件信息两个功能。我们在 Lab 1 中将实现 `Dump`。
+
+在我们执行 `dump` 命令时，框架会调用解析命令行参数并调用 `Dump.call` 方法。在这
+个方法中，我们做了以下几件事：
+
+- 创建一个 VMContext。在框架代码中，一个 context 包含了运行 JVM 所需的全部数据。
+  Lab 1 中只有两个 ClassLoader：bootstrapLoader 与 userLoader。这两个 loader 在
+  构造函数中被初始化。
+- 尝试用 userLoader 加载所需的类。如果加载失败则报告错误。
+- 如果加载成功，在 `dump` 方法中输出这个类的信息。
+
+在对 `dump` 命令做的事有了一个宏观上的认识之后，我们继续来看创建 context 的过程。
+
+在 `VMContext.java` 中，我们调用了 `ClassLoader` 的构造函数来进行初始化。这个构
+造函数接受三个参数：亲代加载器（用于实现双亲委托）、搜索路径和 `context` 自身
+（保存以备后用）。搜索路径由一个 `ClassSearchPath` 的数组构成。其中，
+bootstrapLoader 的路径为系统 JDK 的模组路径，而用户加载器的路径由
+`ClassSearchPath.constructSearthPath` 解析生成。
+
+接下来是加载 class 的部分。我们将 `ClassLoader.loadClass` 方法留空，你需要按照双
+亲委托的逻辑来实现类的加载。在从自己的加载路径中搜索 class 时，你需要依次调用
+`searchPaths` 这个数组中每一个的 `findClass` 方法，并用找到的第一个 class 文件来
+创建类。
+
+对于类的创建，我们调用了 `JClass` 的构造方法。你可以在 Lab 1.1 中把这个方法留空，
+我们会在 Lab 1.2 中实现它。
+
+代码中需要你自己实现的部分我们已用 `UnimplementedError` 标识出来。你可以使用以下
+命令来查找所有未实现的内容：
+
+```
+$ grep -irH UnimplementedError
+```
+
+> 修改框架代码
+>
+> 我们所有的测试都通过命令行进行（请参阅 test 目录中的样例）。因此，在维持命令行
+> 接口不变的前提下，你可以任意修改框架代码。事实上，我们鼓励你按照自己的喜好重构
+> 框架，并与我们交流你对代码设计的想法。
+>
+> 需要注意的是，我们在以后的 Lab 中会向框架加入新的代码。如果你对框架代码的接口
+> 做了修改，在加入我们的代码时你可能需要进行相应的调整。不用害怕，这正是你学习
+> `git merge`，`diff` 等工具的好机会。
+
 ## 实验要求
 
 > 及时 commit 你的更改
@@ -105,21 +155,11 @@ parent-first 的策略：每个 loader（除 Bootstrap Loader 外）均有一个
 JDK 中加载类；第二个为 User Loader，负责从命令行指定的 classpath 中搜索 class。
 User Loader 以 parent-first 的方式委托给 Bootstrap Loader。
 
-在框架的 ClassLoader.java 中，我们已为你准备好了加载类的接口：`public JClass
-loadClass(String descriptor)`。该方法接受一个字符串，返回加载的类。在 Lab 1.2 中，
-你将解析 class 文件并填入返回的类中。需要注意的是，这里传入的不是 class 名称，而
-是它的描述符（descriptor）。如 `java.lang.String` 类对应 `Ljava/lang/String;`。
-对于 descriptor 我们将在 Lab 1.2 中再次提及。
-
-> 修改框架代码
->
-> 我们所有的测试都通过命令行进行（请参阅 test 目录中的样例）。因此，在维持命令行
-> 接口不变的前提下，你可以任意修改框架代码。事实上，我们鼓励你按照自己的喜好重构
-> 框架，并与我们交流你对代码设计的想法。
->
-> 需要注意的是，我们在以后的 Lab 中会向框架加入新的代码。如果你对框架代码的接口
-> 做了修改，在加入我们的代码时你可能需要进行相应的调整。不用害怕，这正是你学习
-> `git merge`，`diff` 等工具的好机会。
+在框架中，我们已为你准备好了加载类的接口：`ClassLoader.loadClass`。该方法接受一
+个字符串，返回加载的类。在 Lab 1.2 中，你将解析 class 文件并填入返回的类。需要注
+意的是，这里传入的不是 class 名称，而是它的描述符（descriptor）。如
+`java.lang.String` 类对应 `Ljava/lang/String;`。对于 descriptor 我们将在 Lab 1.2
+中再次提及。
 
 你在多次加载同一个类时应返回同一个对象，而非多个拷贝。虽然受限于测试方式，我们在
 本次 lab 中无法测试这一要求，但在以后的 lab 中你会遇到下面这种代码：
@@ -130,7 +170,7 @@ var b = loader.loadClass("Ljava/lang/String;");
 assert a == b;
 ```
 
-对于加载路径，我们要求你实现以下三种类型：
+在查找 class 文件时，Lab 1 中有以下三种路径：
 
 1. 搜索单个目录
 
@@ -141,18 +181,25 @@ assert a == b;
 
    Jar 文件本质上是一个 zip 压缩包，将多个 class 文件打包在一起。在从
    `/foo/bar.jar` 中加载 `baz.B` 时，你应该读取该文件并搜索其中的 `baz/B` 路径。
+   JDK 中提供了 `JarFile` 类来读取 jar 文件。
 
-   > 你可以使用 `bsdtar -tf <jarfile>` 命令查看 Jar 文件的内容。至于在 Java 中读
-   > 取 Jar 文件的方法，请搜索 JDK 文档。
+   > 你可以使用 `bsdtar -tf <jarfile>` 命令查看 Jar 文件的内容。
 
 3. System Modules
 
-   Java Module 是 Java 9 中新引入的一种打包机制，每个module 文件本质上是一个 zip
-   文件加上 4 bytes 文件头。我们只会在 Bootstrap Loader 中加载 system modules，
-   你可以使用 `ModuleFinder.ofSystem()` 获取其加载路径。
+   Java Module 是 Java 9 中新引入的一种打包机制，每个 module 文件本质上是一个
+   zip 文件加上 4 bytes 文件头。我们已为你写好了这个类，你在实现自己的类时可以以
+   它为参考。
 
 这三种加载路径事实上具有同样的接口（interface）：给定一个 class，从中搜索对应的
 文件。我们将这个接口抽象成了 `ClassSearchPath` 类。
+
+Bootstrap Loader 仅加载 system modules，User Loader 从命令行的 `-cp` 参数中读取
+加载路径并加载相应的类。该参数可能包含一个或多个加载路径，每两个之间以路径分隔符
+（path separator）隔开。对于类 Unix 环境，separator 为 `:`，Windows 下则是 `;`。
+你可以使用 `System.getProperty("path.separator")` 获取路径分隔符。比如，
+`/a:/b.jar` 中包含了两个路径，第一个是 `/a` 这个目录，第二个是 `/b.jar` 这个 jar
+文件。
 
 > 利用接口提高代码可维护性
 >
@@ -161,20 +208,13 @@ assert a == b;
 > 判断。4 种情况或许还在可控范围之类，但如果有 10 种、100 种，那么代码就会变得冗
 > 长无比并且很有可能充满错误了。
 >
-> 将“搜索类”这个动作抽象成一个接口之后，我们可以在多个类种分别去实现它。这样，每
-> 个类只需要关心自己查找的方式，使用这个接口的代码也不需要关心具体有哪些查找路径。
-> 如此，代码的可读性和可维护性得到了巨大的提升。
+> 将“搜索类”这个动作抽象成一个接口之后，我们可以在多个类中分别去实现它。每个类只
+> 需要关心自己查找的方式，使用这个接口的代码也不需要关心具体有哪些查找路径。如此，
+> 代码的可读性和可维护性得到了巨大的提升。
 >
-> 与这种接口常常相伴的，是“工厂方法”，你可以在 `ClassSearchPath` 这个基类下找到
-> 它。我们在将加载路径转换成具体的类时不可避免地需要根据每种路径创建不同的类，但
-> 使用这个接口的代码也不应该关心具体哪种路径创建哪种类。因此，我们将解析路径的工
-> 作移到了这样一个单独的方法中：它完成路径的解析，并返回实现了这个接口的一组类。
-> 这样，我们把解析路径的负担也从使用者移到了接口的实现者身上。
-
-Bootstrap Loader 仅加载 system modules，User Loader 从命令行的 `-cp` 参数中读取
-加载路径并加载相应的类。该参数可能包含一个或多个加载路径，每两个之间以路径分隔符
-（path separator）隔开。对于类 Unix 环境，separator 为 `:`，Windows 下则是 `;`。
-你可以使用`System.getProperty("path.separator")` 获取路径分隔符。
+> 与这种接口常常相伴的，是“工厂方法”，即 `ClassSearthPath.constructSearthPath`。
+> 这个方法的作用时解析字符串并为其中每一个路径构造一个 `ClassSearchPath` 的子类。
+> 这样我们在 `ClassLoader` 中也不需要关心如何解析路径了。
 
 在成功找到所需类时，我们要求你的命令返回 0；找不到时需返回非 0 值。你可以利用标
 准错误流 `System.err` 输出任意调试信息，但请勿使用标准输出流 `System.out`。我们

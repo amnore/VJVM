@@ -54,6 +54,9 @@ Player](https://www.vmware.com/products/workstation-player/workstation-player-ev
 网上有大量的 GNU/Linux 入门教程，如有需要请自行搜索。这里我们给出 [ICS
 PA0](https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA0.html) 的相关链接。
 
+大作业教程中有许多 Shell 命令，你可以在终端模拟器（Terminal）中执行它们。Ubuntu
+已自带终端模拟器，安装完成后请在应用中打开它。
+
 > 请使用英文版本 GNU/Linux
 >
 > 无论是在 GNU/Linux 中还是在 Windows 中，许多软件都没有高质量的中文翻译。对于开
