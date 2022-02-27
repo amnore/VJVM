@@ -1,5 +1,6 @@
 package vjvm.interpreter;
 
+import lombok.var;
 import org.apache.commons.lang3.tuple.Triple;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.classfiledefs.MethodDescriptors;

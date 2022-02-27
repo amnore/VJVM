@@ -1,5 +1,6 @@
 package vjvm.interpreter.instruction.extended;
 
+import lombok.var;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;

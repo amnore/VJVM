@@ -1,5 +1,8 @@
 package vjvm.classfiledefs;
 
+import lombok.var;
+
+import lombok.var;
 
 import static vjvm.classfiledefs.Descriptors.DESC_array;
 import static vjvm.classfiledefs.Descriptors.DESC_reference;

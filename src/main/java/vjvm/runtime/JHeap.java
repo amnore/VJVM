@@ -1,5 +1,6 @@
 package vjvm.runtime;
 
+import lombok.var;
 import vjvm.runtime.object.JObject;
 import vjvm.runtime.object.StringObject;
 import vjvm.vm.VMContext;

@@ -1,5 +1,6 @@
 package vjvm.runtime.classdata.constant;
 
+import lombok.var;
 import lombok.SneakyThrows;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.runtime.JClass;

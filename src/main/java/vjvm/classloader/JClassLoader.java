@@ -1,5 +1,6 @@
 package vjvm.classloader;
 
+import lombok.var;
 import lombok.SneakyThrows;
 import vjvm.classfiledefs.ClassAccessFlags;
 import vjvm.classfiledefs.Descriptors;

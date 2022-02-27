@@ -1,5 +1,6 @@
 package vjvm.runtime;
 
+import lombok.var;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Pair;
@@ -174,7 +175,7 @@ public class JClass {
     initState = InitState.PREPARING;
     // create static fields
     int staticSize = 0;
-    var staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::static_).toList();
+    var staticFieldInfos = Arrays.stream(fields).filter(FieldInfo::static_).toArray(FieldInfo[]::new);
     for (var field : staticFieldInfos) {
       field.offset(staticSize);
       staticSize += Descriptors.size(field.descriptor());
@@ -189,13 +190,23 @@ public class JClass {
           int offset = field.offset();
           // TODO: Make it more lazy
           Object value = ((ConstantValue) field.attribute(i)).value();
-          switch (field.descriptor().charAt(0)) {
-            case DESC_boolean, DESC_byte, DESC_char, DESC_short, DESC_int ->
-              // The stored value is an Integer
+          switch (field.descriptor().charAt(0)) {// The stored value is an Integer
+            case DESC_boolean:
+            case DESC_byte:
+            case DESC_char:
+            case DESC_short:
+            case DESC_int:
               staticFields.int_(offset, (Integer) value);
-            case DESC_float -> staticFields.float_(offset, (Float) value);
-            case DESC_long -> staticFields.long_(offset, (Long) value);
-            case DESC_double -> staticFields.double_(offset, (Double) value);
+              break;
+            case DESC_float:
+              staticFields.float_(offset, (Float) value);
+              break;
+            case DESC_long:
+              staticFields.long_(offset, (Long) value);
+              break;
+            case DESC_double:
+              staticFields.double_(offset, (Double) value);
+              break;
           }
           break;
         }

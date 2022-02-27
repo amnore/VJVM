@@ -1,5 +1,6 @@
 package vjvm.runtime;
 
+import lombok.var;
 import java.nio.ByteBuffer;
 
 public class ProgramCounter {

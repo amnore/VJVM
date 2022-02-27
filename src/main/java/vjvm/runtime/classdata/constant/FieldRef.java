@@ -1,5 +1,6 @@
 package vjvm.runtime.classdata.constant;
 
+import lombok.var;
 import lombok.SneakyThrows;
 import vjvm.runtime.JClass;
 import vjvm.runtime.classdata.FieldInfo;

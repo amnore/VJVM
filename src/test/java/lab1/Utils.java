@@ -1,12 +1,13 @@
 package lab1;
 
-import static java.util.Map.entry;
+import lombok.var;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.BiFunction;
@@ -17,11 +18,15 @@ import picocli.CommandLine;
 import vjvm.vm.Main;
 
 public class Utils {
-  private static final Map<DumpSection, BiFunction<String, String, DumpSection>> checkFunction = Map.ofEntries(
-      entry(DumpSection.HEADER, Utils::checkHeader),
-      entry(DumpSection.CONSTANT_POOL, Utils::checkConstantPool),
-      entry(DumpSection.INTERFACES, Utils::checkInterfaces), entry(DumpSection.FIELDS, Utils::checkFields),
-      entry(DumpSection.METHODS, Utils::checkMethods));
+  private static final Map<DumpSection, BiFunction<String, String, DumpSection>> checkFunction = new HashMap<>();
+
+  static {
+    checkFunction.put(DumpSection.HEADER, Utils::checkHeader);
+    checkFunction.put(DumpSection.CONSTANT_POOL, Utils::checkConstantPool);
+    checkFunction.put(DumpSection.INTERFACES, Utils::checkInterfaces);
+    checkFunction.put(DumpSection.FIELDS, Utils::checkFields);
+    checkFunction.put(DumpSection.METHODS, Utils::checkMethods);
+  }
 
   private static final Pattern constantPattern = Pattern.compile("#(\\d+) = (\\w+):(?: (.+))?");
 
@@ -42,8 +47,8 @@ public class Utils {
         return;
       }
 
-      expectedLine = expectedLine.strip();
-      actualLine = actualLine.strip();
+      expectedLine = expectedLine.trim();
+      actualLine = actualLine.trim();
       currentSection = checkFunction.get(currentSection).apply(expectedLine, actualLine);
     }
   }
@@ -59,7 +64,7 @@ public class Utils {
 
     args.add("dump");
     args.add(clazz);
-    return cmd.execute(args.toArray(String[]::new));
+    return cmd.execute(args.toArray(new String[0]));
   }
 
   private static DumpSection checkHeader(String expected, String actual) {
@@ -82,15 +87,25 @@ public class Utils {
     assertEquals(expectedVars.group(2), actualVars.group(2));
 
     switch (expectedVars.group(2)) {
-    case "Class", "Fieldref", "Methodref", "InterfaceMethodref", "String", "Utf8", "Integer", "Long", "NameAndType", "Float", "Double" -> {
-      assertEquals(expectedVars.group(3), actualVars.group(3));
-    }
-    case "Unknown" -> {
-      // skip check actual
-    }
-    default -> {
-      assertTrue(false, "BUG! Please report to TA");
-    }
+      case "Class":
+      case "Fieldref":
+      case "Methodref":
+      case "InterfaceMethodref":
+      case "String":
+      case "Utf8":
+      case "Integer":
+      case "Long":
+      case "NameAndType":
+      case "Float":
+      case "Double":
+        assertEquals(expectedVars.group(3), actualVars.group(3));
+        break;
+// skip check actual
+      case "Unknown":
+        break;
+      default:
+        assertTrue(false, "BUG! Please report to TA");
+        break;
     }
 
     return DumpSection.CONSTANT_POOL;
@@ -116,7 +131,7 @@ public class Utils {
     String s;
     while (true) {
       s = reader.readLine();
-      if (s == null || !s.isBlank()) {
+      if (s == null || !s.trim().isEmpty()) {
         return s;
       }
     }

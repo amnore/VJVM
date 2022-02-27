@@ -1,51 +1,51 @@
 class name: lab1/cases/Foo
 minor version: 0
-major version: 61
+major version: 52
 flags: 0x20
 this class: lab1/cases/Foo
 super class: java/lang/Object
 
 constant pool:
 #1 = Methodref: java/lang/Object.<init>:()V
-#2 = Class: java/lang/Object
-#3 = NameAndType: <init>:()V
-#4 = Utf8: "java/lang/Object"
-#5 = Utf8: "<init>"
-#6 = Utf8: "()V"
-#7 = Fieldref: lab1/cases/Foo.a:I
-#8 = Class: lab1/cases/Foo
-#9 = NameAndType: a:I
-#10 = Utf8: "lab1/cases/Foo"
-#11 = Utf8: "a"
-#12 = Utf8: "I"
-#13 = String: "foo"
-#14 = Utf8: "foo"
-#15 = Fieldref: lab1/cases/Foo.c:Ljava/lang/String;
-#16 = NameAndType: c:Ljava/lang/String;
+#2 = Fieldref: lab1/cases/Foo.a:I
+#3 = String: "foo"
+#4 = Fieldref: lab1/cases/Foo.c:Ljava/lang/String;
+#5 = Float: 0x1.8p1
+#6 = Fieldref: lab1/cases/Foo.d:F
+#7 = Long: 2
+#9 = Fieldref: lab1/cases/Foo.b:J
+#10 = Class: lab1/cases/Foo
+#11 = Class: java/lang/Object
+#12 = Class: java/io/Closeable
+#13 = Utf8: "a"
+#14 = Utf8: "I"
+#15 = Utf8: "b"
+#16 = Utf8: "J"
 #17 = Utf8: "c"
 #18 = Utf8: "Ljava/lang/String;"
-#19 = Float: 0x1.8p1
-#20 = Fieldref: lab1/cases/Foo.d:F
-#21 = NameAndType: d:F
-#22 = Utf8: "d"
-#23 = Utf8: "F"
-#24 = Long: 2
-#26 = Fieldref: lab1/cases/Foo.b:J
-#27 = NameAndType: b:J
-#28 = Utf8: "b"
-#29 = Utf8: "J"
-#30 = Class: java/io/Closeable
-#31 = Utf8: "java/io/Closeable"
-#32 = Utf8: "ConstantValue"
-#33 = Utf8: "Code"
-#34 = Utf8: "LineNumberTable"
-#35 = Utf8: "LocalVariableTable"
-#36 = Utf8: "this"
-#37 = Utf8: "Llab1/cases/Foo;"
-#38 = Utf8: "close"
-#39 = Utf8: "<clinit>"
-#40 = Utf8: "SourceFile"
-#41 = Utf8: "Foo.java"
+#19 = Utf8: "d"
+#20 = Utf8: "F"
+#21 = Utf8: "ConstantValue"
+#22 = Utf8: "<init>"
+#23 = Utf8: "()V"
+#24 = Utf8: "Code"
+#25 = Utf8: "LineNumberTable"
+#26 = Utf8: "LocalVariableTable"
+#27 = Utf8: "this"
+#28 = Utf8: "Llab1/cases/Foo;"
+#29 = Utf8: "close"
+#30 = Utf8: "<clinit>"
+#31 = Utf8: "SourceFile"
+#32 = Utf8: "Foo.java"
+#33 = NameAndType: <init>:()V
+#34 = NameAndType: a:I
+#35 = Utf8: "foo"
+#36 = NameAndType: c:Ljava/lang/String;
+#37 = NameAndType: d:F
+#38 = NameAndType: b:J
+#39 = Utf8: "lab1/cases/Foo"
+#40 = Utf8: "java/lang/Object"
+#41 = Utf8: "java/io/Closeable"
 
 interfaces:
 java/io/Closeable

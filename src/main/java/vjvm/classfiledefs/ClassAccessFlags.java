@@ -1,5 +1,6 @@
 package vjvm.classfiledefs;
 
+import lombok.var;
 public class ClassAccessFlags {
   public static final short ACC_PUBLIC = 0x0001;
   public static final short ACC_FINAL = 0x0010;

@@ -1,5 +1,6 @@
 package vjvm.classloader.searchpath;
 
+import lombok.var;
 import lombok.SneakyThrows;
 
 import java.io.FileNotFoundException;

@@ -1,5 +1,6 @@
 package vjvm.classloader.searchpath;
 
+import lombok.var;
 import java.io.Closeable;
 import java.io.InputStream;
 import java.util.Arrays;

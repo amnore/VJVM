@@ -73,11 +73,11 @@ PA0](https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA0.html) 的相关�
 作业的构建工具。框架源码树中已包含了 gradle，请在根目录使用 `./gradlew` 运行。
 （Windows 用户请使用 `gradlew.bat`）
 
-框架代码基于 Java 17 进行开发，Windows 用户请自行搜索对应版本 JDK 下载。对于
+框架代码基于 Java 8 进行开发，Windows 用户请自行搜索对应版本 JDK 下载。对于
 Ubuntu 用户，你们可以使用以下命令进行安装：
 
 ```
-# apt install openjdk-17-jdk
+# apt install openjdk-8-jdk
 ```
 
 > 对于 Shell 命令，我们约定以‘$’开始时为普通用户权限，以‘#’开始时为 root 权限。

@@ -81,9 +81,9 @@ class Dummy {
 ```groovy
 // ...
 
-// 本项目使用 Java 17
-sourceCompatibility = 17
-targetCompatibility = 17
+// 本项目使用 Java 8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 // ...
 

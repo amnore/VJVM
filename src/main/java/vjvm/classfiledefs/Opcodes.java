@@ -1,5 +1,6 @@
 package vjvm.classfiledefs;
 
+import lombok.var;
 /**
  * Opcodes in JVM. See spec. 7
  */

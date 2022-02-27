@@ -1,5 +1,6 @@
 package vjvm.vm;
 
+import lombok.var;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

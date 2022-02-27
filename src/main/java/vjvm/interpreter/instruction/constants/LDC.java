@@ -1,5 +1,6 @@
 package vjvm.interpreter.instruction.constants;
 
+import lombok.var;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;

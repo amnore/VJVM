@@ -1,5 +1,6 @@
 package vjvm.classfiledefs;
 
+import lombok.var;
 public class Descriptors {
   public static final char DESC_byte = 'B';
   public static final char DESC_char = 'C';
@@ -33,17 +34,27 @@ public class Descriptors {
   }
 
   public static String of(String name) {
-    return switch (name) {
-      case "boolean" -> Character.toString(DESC_boolean);
-      case "byte" -> Character.toString(DESC_byte);
-      case "char" -> Character.toString(DESC_char);
-      case "double" -> Character.toString(DESC_double);
-      case "float" -> Character.toString(DESC_float);
-      case "int" -> Character.toString(DESC_int);
-      case "long" -> Character.toString(DESC_long);
-      case "short" -> Character.toString(DESC_short);
-      case "void" -> Character.toString(DESC_void);
-      default -> 'L' + name.replace('.', '/') + ';';
-    };
+    switch (name) {
+      case "boolean":
+        return Character.toString(DESC_boolean);
+      case "byte":
+        return Character.toString(DESC_byte);
+      case "char":
+        return Character.toString(DESC_char);
+      case "double":
+        return Character.toString(DESC_double);
+      case "float":
+        return Character.toString(DESC_float);
+      case "int":
+        return Character.toString(DESC_int);
+      case "long":
+        return Character.toString(DESC_long);
+      case "short":
+        return Character.toString(DESC_short);
+      case "void":
+        return Character.toString(DESC_void);
+      default:
+        return 'L' + name.replace('.', '/') + ';';
+    }
   }
 }

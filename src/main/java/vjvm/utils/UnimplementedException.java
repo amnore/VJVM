@@ -1,5 +1,6 @@
 package vjvm.utils;
 
+import lombok.var;
 public class UnimplementedException extends RuntimeException {
   public UnimplementedException() {
   }

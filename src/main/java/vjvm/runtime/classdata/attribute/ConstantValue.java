@@ -1,5 +1,6 @@
 package vjvm.runtime.classdata.attribute;
 
+import lombok.var;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;

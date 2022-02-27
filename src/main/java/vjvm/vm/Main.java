@@ -1,5 +1,7 @@
 package vjvm.vm;
 
+import lombok.var;
+import lombok.var;
 import picocli.CommandLine;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.runtime.JClass;
@@ -75,14 +77,19 @@ class Dump implements Callable<Integer> {
   private void dump(JClass c) {
     var out = System.out;
 
-    out.printf("""
-        class name: %s
-        minor version: %d
-        major version: %d
-        flags: 0x%x
-        this class: %s
-        super class: %s
-        """, c.name(), c.minorVersion(), c.majorVersion(), c.accessFlags(), c.thisClass().name(),
+    out.printf("\n" +
+        "class name: %s\n" +
+        "minor version: %d\n" +
+        "major version: %d\n" +
+        "flags: 0x%x\n" +
+        "this class: %s\n" +
+        "super class: %s\n" +
+        "\n",
+      c.name(),
+      c.minorVersion(),
+      c.majorVersion(),
+      c.accessFlags(),
+      c.thisClass().name(),
       c.superClass().name());
 
     out.printf("\nconstant pool:\n");

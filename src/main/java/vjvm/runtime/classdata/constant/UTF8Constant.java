@@ -1,5 +1,6 @@
 package vjvm.runtime.classdata.constant;
 
+import lombok.var;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import org.apache.commons.text.StringEscapeUtils;

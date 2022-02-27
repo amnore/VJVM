@@ -6,9 +6,7 @@ parent: Lab1 类加载与解析
 # 1.1 ClassLoader
 
 > 本章对应 JVM 规范内容：5.3.1、5.3.2，另请参阅 [ClassLoader 的 JDK 文
-> 档
-> ](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html)
-> 。
+> 档](https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html)。
 
 ## 一个 class 的一生 —— 加载
 
@@ -64,11 +62,6 @@ parent-first 的策略：每个 loader（除 Bootstrap Loader 外）均有一个
   ClassLoader 和 Application ClassLoader 分别被称为 Platform ClassLoader 和
   System ClassLoader。</figcaption>
 </figure>
-
-关于 JDK 中内置 ClassLoader 的更多信息，请阅读 [相应 JDK 文
-档
-](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html#builtinLoaders)
-。
 
 当然，不是所有的 ClassLoader 都需要遵守 parent-first 策略。
 [Tomcat](https://tomcat.apache.org/tomcat-10.0-doc/class-loader-howto.html) 等应
@@ -170,7 +163,7 @@ var b = loader.loadClass("Ljava/lang/String;");
 assert a == b;
 ```
 
-在查找 class 文件时，Lab 1 中有以下三种路径：
+在查找 class 文件时，Lab 1 中有以下两种路径：
 
 1. 搜索单个目录
 
@@ -185,21 +178,15 @@ assert a == b;
 
    > 你可以使用 `bsdtar -tf <jarfile>` 命令查看 Jar 文件的内容。
 
-3. System Modules
-
-   Java Module 是 Java 9 中新引入的一种打包机制，每个 module 文件本质上是一个
-   zip 文件加上 4 bytes 文件头。我们已为你写好了这个类，你在实现自己的类时可以以
-   它为参考。
-
-这三种加载路径事实上具有同样的接口（interface）：给定一个 class，从中搜索对应的
+这两种加载路径事实上具有同样的接口（interface）：给定一个 class，从中搜索对应的
 文件。我们将这个接口抽象成了 `ClassSearchPath` 类。
 
-Bootstrap Loader 仅加载 system modules，User Loader 从命令行的 `-cp` 参数中读取
-加载路径并加载相应的类。该参数可能包含一个或多个加载路径，每两个之间以路径分隔符
-（path separator）隔开。对于类 Unix 环境，separator 为 `:`，Windows 下则是 `;`。
-你可以使用 `System.getProperty("path.separator")` 获取路径分隔符。比如，
-`/a:/b.jar` 中包含了两个路径，第一个是 `/a` 这个目录，第二个是 `/b.jar` 这个 jar
-文件。
+Bootstrap Loader 从 `System.getProperty("sun.boot.class.path")` 这个路径下搜索系
+统类，User Loader 从命令行的 `-cp` 参数中读取加载路径并加载相应的类。该参数可能
+包含一个或多个加载路径，每两个之间以路径分隔符（path separator）隔开。对于类
+Unix 环境，separator 为 `:`，Windows 下则是 `;`。你可以使用
+`System.getProperty("path.separator")` 获取路径分隔符。比如，`/a:/b.jar` 中包含
+了两个路径，第一个是 `/a` 这个目录，第二个是 `/b.jar` 这个 jar文件。
 
 > 利用接口提高代码可维护性
 >

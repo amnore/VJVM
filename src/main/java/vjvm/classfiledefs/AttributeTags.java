@@ -1,5 +1,6 @@
 package vjvm.classfiledefs;
 
+import lombok.var;
 public class AttributeTags {
   public static final String ATTR_ConstantValue = "ConstantValue";
   public static final String ATTR_Code = "Code";

@@ -1,26 +1,26 @@
 class name: lab1/cases/jar/Bar
 minor version: 0
-major version: 61
+major version: 52
 flags: 0x20
 this class: lab1/cases/jar/Bar
 super class: java/lang/Object
 
 constant pool:
 #1 = Methodref: java/lang/Object.<init>:()V
-#2 = Class: java/lang/Object
-#3 = NameAndType: <init>:()V
-#4 = Utf8: "java/lang/Object"
-#5 = Utf8: "<init>"
-#6 = Utf8: "()V"
-#7 = Class: lab1/cases/jar/Bar
-#8 = Utf8: "lab1/cases/jar/Bar"
-#9 = Utf8: "Code"
-#10 = Utf8: "LineNumberTable"
-#11 = Utf8: "LocalVariableTable"
-#12 = Utf8: "this"
-#13 = Utf8: "Llab1/cases/jar/Bar;"
-#14 = Utf8: "SourceFile"
-#15 = Utf8: "Bar.java"
+#2 = Class: lab1/cases/jar/Bar
+#3 = Class: java/lang/Object
+#4 = Utf8: "<init>"
+#5 = Utf8: "()V"
+#6 = Utf8: "Code"
+#7 = Utf8: "LineNumberTable"
+#8 = Utf8: "LocalVariableTable"
+#9 = Utf8: "this"
+#10 = Utf8: "Llab1/cases/jar/Bar;"
+#11 = Utf8: "SourceFile"
+#12 = Utf8: "Bar.java"
+#13 = NameAndType: <init>:()V
+#14 = Utf8: "lab1/cases/jar/Bar"
+#15 = Utf8: "java/lang/Object"
 
 interfaces:
 

@@ -1,5 +1,6 @@
 package vjvm.runtime.object;
 
+import lombok.var;
 import lombok.Getter;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.runtime.JClass;
@@ -22,7 +23,9 @@ public class ArrayObject extends JObject {
 
   public ArrayObject(JClass jClass, byte[] data) {
     this(jClass, data.length);
-    elements.put(0, data);
+    for (int i = 0; i < data.length; i++) {
+      elements.put(i, data[i]);
+    }
   }
 
   public byte[] value() {

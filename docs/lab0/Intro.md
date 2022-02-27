@@ -15,9 +15,9 @@ nav_order: 1
 > using a virtual machine; the best-known virtual machine may be the P-Code
 > machine of UCSD Pascal.
 
-上面摘自 [The Java® Virtual Machine Specification Java SE 17
-Edition](https://docs.oracle.com/javase/specs/jvms/se17/jvms17.pdf)。简而言之，
-JVM 就是一个执行 [**指令**
+上面摘自 [The Java® Virtual Machine Specification Java SE 8
+Edition](https://docs.oracle.com/javase/specs/jvms/se8/jvms8.pdf)。简而言之，JVM
+就是一个执行 [**指令**
 ](https://en.wikipedia.org/wiki/Instruction_set_architecture) 的程序。JVM 规范中
 定义了约 200 条指令，每一条负责完成一件特定的事情。通过将这些指令排列成一个**指
 令序列**并逐条执行，我们可以完成 C、Java 等编程语言可以做的任何事情。

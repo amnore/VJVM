@@ -1,5 +1,6 @@
 package vjvm.classfiledefs;
 
+import lombok.var;
 public class ConstantTags {
   public static final byte CONSTANT_Class = 7;
   public static final byte CONSTANT_Fieldref = 9;

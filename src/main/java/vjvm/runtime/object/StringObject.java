@@ -1,5 +1,6 @@
 package vjvm.runtime.object;
 
+import lombok.var;
 import vjvm.vm.VMContext;
 
 import java.nio.charset.StandardCharsets;
