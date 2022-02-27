@@ -89,7 +89,7 @@ Java 程序和打印 class 文件信息两个功能。我们在 Lab 1 中将实�
 在 `VMContext.java` 中，我们调用了 `ClassLoader` 的构造函数来进行初始化。这个构
 造函数接受三个参数：亲代加载器（用于实现双亲委托）、搜索路径和 `context` 自身
 （保存以备后用）。搜索路径由一个 `ClassSearchPath` 的数组构成。其中，
-bootstrapLoader 的路径为系统 JDK 的模组路径，而用户加载器的路径由
+bootstrapLoader 的路径为系统 JDK 路径，而用户加载器的路径由
 `ClassSearchPath.constructSearthPath` 解析生成。
 
 接下来是加载 class 的部分。我们将 `ClassLoader.loadClass` 方法留空，你需要按照双
