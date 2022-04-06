@@ -163,6 +163,9 @@ var b = loader.loadClass("Ljava/lang/String;");
 assert a == b;
 ```
 
+我们在 `ClassLoader` 中定义了 `definedClass` 属性用于保存该加载器已加载的类，你
+应该在完成加载之后将一个类记录到其中。
+
 在查找 class 文件时，Lab 1 中有以下两种路径：
 
 1. 搜索单个目录
@@ -200,7 +203,7 @@ Unix 环境，separator 为 `:`，Windows 下则是 `;`。你可以使用
 > 代码的可读性和可维护性得到了巨大的提升。
 >
 > 与这种接口常常相伴的，是“工厂方法”，即 `ClassSearthPath.constructSearthPath`。
-> 这个方法的作用时解析字符串并为其中每一个路径构造一个 `ClassSearchPath` 的子类。
+> 这个方法的作用是解析字符串并为其中每一个路径构造一个 `ClassSearchPath` 的子类。
 > 这样我们在 `ClassLoader` 中也不需要关心如何解析路径了。
 
 在成功找到所需类时，我们要求你的命令返回 0；找不到时需返回非 0 值。你可以利用标

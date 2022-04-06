@@ -1,0 +1,86 @@
+#+title: Review Lab 1 2
+#+AUTHOR: czg
+#+DATE: <2022-04-04 09:48>
+#+REVEAL_THEME: white
+#+REVEAL_TRANS: slide
+#+REVEAL_PLUGINS: (highlight)
+#+REVEAL_HIGHLIGHT_CSS: ../assets/atom-one-light.css
+#+OPTIONS: toc:nil reveal_width:1920 reveal_height:1080
+
+* 概要
+
+** 总体设计
+
+- 配置环境：安装 openjdk、配置 git、拉取框架代码
+- 第一部分：Class 文件查找与解析
+  - 作业一：在 =classpath= 中查找 class
+  - 作业二：解析并打印 class 文件
+- 第二部分：简单指令的执行
+- 第三部分：类初始化
+
+** 任务描述
+
+- 作业一：给一个 =classpath= ，从中找出需要加载的 class 文件
+  - =classpath= 可能是一个文件夹、一个 jar 包或一个通配符
+- 作业二：解析作业一中得到的 class 文件，打印出各个部分
+  - 包含常量池、属性、方法（解析指令留到第二部分）等
+
+* 配置环境（作业零）
+
+- 安装 git 与 openjdk
+- 使用 git 拉取项目
+- checkout 到 lab0 分支
+- 阅读框架代码、编译脚本和测试代码
+- 运行 dummy 测试（介绍 JUnit 基本使用）
+- checkout 到 master 分支，合并 lab0
+- push -> oj
+
+* 作业一
+
+** 框架代码
+
+- 给出的部分： =main= 函数（测试接口）、 =JClassLoader= 和 =JClass= 的定义、不同种类
+  =classpath= 的公共接口 =ClassSearchPath=
+- 需实现的部分：在 =JClassLoader= 中构造和调用 =ClassSearchPath= ，实现三种
+  =ClassSearchPath= 实现查找
+- 留给作业二的部分：解析 class 文件的内容
+
+** 主要内容
+
+- 熟悉框架代码
+- 利用静态工厂方法抽象不同 =ClassSearchPath= 的创建过程
+- 熟悉接口方法的使用
+
+** 作业量
+
+- 预计代码量：100？
+- 作为第一个 lab，需要自己设计的部分比较少，主要是熟悉 Java 语法、框架代码的结构
+
+* 作业二
+
+** 框架代码
+
+- 给出的部分：无（在作业一的基础上实现）
+- 需实现的部分：定义 =JClass= 的内容，即 class 文件中的各部分数据；从文件中读取
+  并解析 class 文件；输出结果到 =System.out=
+- 留给第二部分的内容：解析静态方法，执行指令
+- 留给第三部分的内容：利用 class 文件的数据构造其运行时表示，完成链接、初始化等
+  工作
+
+** 主要内容
+
+- 读手册、理解 class 文件的结构
+- 设计 class 数据中各个字段的存储方式
+- 解析常量池等内容（JDK 中已有从原始字节流中解析各种常量值的工具）
+
+** 作业量
+
+- 预计代码量：500
+- 需要定义并解析各个字段（大量重复工作），但主要是读手册
+
+* 其他
+
+** 测试与提交
+
+- 作业一一共也就 3 * 2 = 6 种情况。😂
+- 一和二都写了用例，但没必要分开两次布置。
