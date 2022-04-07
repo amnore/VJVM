@@ -89,8 +89,8 @@ $ javap -verbose A.class | less
       描述符}` 的形式输出
     - String、Utf8：以 `"${字符串}"` 的形式输出，其中字符串应使用
       `org.apache.commons.text.StringEscapeUtils.escapeJava` 进行转义。
-    - Integer、Float：以默认格式输出
-    - Long、Double：为了保证不丢失精度，我们要求你使用 16 进制浮点数输出。
+    - Integer、Long：以默认格式输出
+    - Float、Double：为了保证不丢失精度，我们要求你使用 16 进制浮点数输出。
     - NameAndType：以 `${名称}:${描述符}` 的形式输出
 
   对于其它类型的常量（MethodHandle、MethodType、Dynamic、InvokeDynamic、Module、
