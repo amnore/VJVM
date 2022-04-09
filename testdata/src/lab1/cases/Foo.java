@@ -1,6 +1,5 @@
 package lab1.cases;
 
-import lombok.var;
 import java.io.Closeable;
 
 class Foo implements Closeable {

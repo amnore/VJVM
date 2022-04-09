@@ -47,54 +47,17 @@ jar {
   }
 }
 
-tasks.register('buildTestRes') {
-  dependsOn 'testClasses'
+tasks.register('buildTestData') {
+  dependsOn 'jar'
 
-  doLast {
-    var srcs = file('src/test/java').toPath()
-    var classes = file("$buildDir/classes/java/test").toPath()
-    var dst = file("$buildDir/testres").toPath()
-
-    Consumer<File> copyOrZip
-    copyOrZip = {
-      var p = it.toPath()
-      var relpath = classes.relativize(p)
-      var dir = dst.resolve(relpath).parent
-
-      if (!it.directory) {
-        println "cp: $p -> $dir/${p.toFile().name}"
-        copy { from p; into dir }
-      } else if (Files.exists(srcs.resolve("$relpath/.mkjar"))) {
-        var jarPath = file("$dst/${relpath}.jar")
-        println "jar: $p -> $jarPath"
-
-        jarPath.parentFile.mkdirs()
-        var jar = new JarOutputStream(new FileOutputStream(jarPath))
-
-        Files.walk(p)
-          .filter({
-            var f = it.toFile()
-            return !f.isDirectory() && f.name != ".mkjar"
-          })
-          .forEach({
-            var entry = new ZipEntry("${classes.relativize(it)}")
-            jar.putNextEntry(entry)
-            Files.copy(it, jar)
-            jar.closeEntry()
-          })
-        jar.close()
-      } else {
-        Arrays.stream(it.listFiles()).forEach(copyOrZip)
-      }
-    }
-
-    copyOrZip classes.toFile()
+  exec {
+    commandLine 'make', '-C', "$projectDir/testdata", "VJVM_JAR=${jar.archiveFile.get().asFile}"
   }
 }
 
 test {
-  dependsOn 'buildTestRes'
-  environment 'VJVM_TESTRES_PATH', "$buildDir/testres"
-  environment 'VJVM_TESTRESULT_PATH', "$projectDir/src/test/java"
+  dependsOn 'buildTestData'
+  environment 'VJVM_TESTRES_PATH', "$projectDir/testdata/build/"
+  environment 'VJVM_TESTRESULT_PATH', "$projectDir/testdata/dump/"
   useJUnitPlatform()
 }
