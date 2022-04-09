@@ -88,7 +88,7 @@ targetCompatibility = 1.8
 // ...
 
 dependencies {
-  // 这一块中包含了项目使用的库
+  // 项目使用的库
   implementation 'org.apache.commons:commons-lang3:3.12.0'
   implementation 'org.apache.commons:commons-text:1.9'
   implementation 'info.picocli:picocli:4.6.2'
@@ -99,17 +99,12 @@ dependencies {
 }
 
 jar {
-  // 这一块将整个项目打包到 build/libs/VJVM-0.0.1.jar
-  // ...
-}
-
-tasks.register('buildTestRes') {
-  // 这一块负责从 src/test 目录中的源代码生成测试数据
+  // 将整个项目打包到 build/libs/VJVM-0.0.1.jar
   // ...
 }
 
 test {
-  // ...
+  // 运行测试时的配置
 }
 ```
 
