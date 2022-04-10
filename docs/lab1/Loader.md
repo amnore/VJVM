@@ -5,9 +5,6 @@ parent: Lab1 类加载与解析
 
 # 1.1 ClassLoader
 
-> 本章对应 JVM 规范内容：5.3.1、5.3.2，另请参阅 [ClassLoader 的 JDK 文
-> 档](https://docs.oracle.com/javase/8/docs/api/java/lang/ClassLoader.html)。
-
 ## 实验要求
 
 正如你运行程序时会双击 `.exe` 文件一样，JVM 在运行时也会从文件中加载代码。JVM 认
