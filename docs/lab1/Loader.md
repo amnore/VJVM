@@ -194,8 +194,9 @@ $ grep -irH UnimplementedError
 
 ## 及时 commit 你的更改
 
-我们会根据你的 Git 日志来评判你是否有抄袭的嫌疑。如果你把全部更改都放在一次
-commit 中，那么我们就有很大可能怀疑你是 copy-paste 的。
+~~我们会根据你的 Git 日志来评判你是否有抄袭的嫌疑。如果你把全部更改都放在一次
+commit 中，那么我们就有很大可能怀疑你是 copy-paste 的。~~（由于 OJ 系统的限制，
+检查 git 历史碰到了一些困难...）
 
 即使我们不检查日志，你也应该养成及时 commit 的习惯。每次 commit 都会生成一份你
 的仓库当前状态的副本，及时你不小心删除了某个文件也可以从这个副本中恢复。
@@ -215,4 +216,19 @@ Git](https://git.nju.edu.cn) 上，这样即使你删除了电脑上的全部文
 $ git add ${需要 commit 的文件}
 $ git status
 $ git commit -m "${描述本次 commit 的内容}"
+```
+
+---
+
+Lab 1.1 到此结束，请将你的代码提交到 OJ 上。
+
+由于 OJ 系统的作业仓库并非原本的仓库，你无法直接把本仓库的提交合并到 OJ 中。作为
+workaround，请把你的代码直接拷贝到 OJ 仓库中提交：
+
+```
+$ cp -r ${本仓库路径}/src ${作业路径}
+$ cd ${作业路径}
+$ git add src
+$ git commit -m "Upload code"
+$ git push
 ```

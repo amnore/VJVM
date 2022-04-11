@@ -241,6 +241,6 @@ Lab 1 到此结束，请整理你的 Git 分支并提交到 OJ 上。
 ```
 $ git checkout master
 $ git merge lab1
-$ git remote add lab1-oj ${OJ 提交地址}
-$ git push lab1-oj master
 ```
+
+提交方式与 Lab1.1 相同。

@@ -36,8 +36,8 @@ nav_order: 1
 以极大地提升你的开发效
 率
 ](https://nju-projectn.github.io/ics-pa-gitbook/ics2021/0.5.html#why-gnulinux-and-how-to)
-；我们在编写文档时给出的一些例子会假设你在 Linux 命令行环境中；编写框架代码和 OJ
-测试都主要在 Linux 环境下进行，不保证没有平台环境差异导致的 bug。
+。我们在编写文档时给出的一些例子会假设你在 Linux 命令行环境中；编写框架代码和 OJ
+测试也都 Linux 环境下进行。
 
 当然，如果你仍然希望使用 Windows，请跳过这一节内容。对于 MacOS 用户，你们也可以
 跳过这一节内容，但我们推荐你首先熟悉命令行的使用。
@@ -51,46 +51,28 @@ Player](https://www.vmware.com/products/workstation-player/workstation-player-ev
 21.10](https://mirrors.nju.edu.cn/ubuntu-releases/impish/ubuntu-21.10-desktop-amd64.iso)
 镜像进行安装。
 
-网上有大量的 GNU/Linux 入门教程，如有需要请自行搜索。这里我们给出 [ICS
-PA0](https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA0.html) 的相关链接。
+网上有大量的 GNU/Linux 入门教程，如有需要请自行搜索。这里我们推荐 MIT 的 [The
+Missing Semester of Your CS Education](https://missing.csail.mit.edu/) 的相关链
+接。
 
 大作业教程中有许多 Shell 命令，你可以在终端模拟器（Terminal）中执行它们。Ubuntu
-已自带终端模拟器，安装完成后请在应用中打开它。
-
-> 请使用英文版本 GNU/Linux
->
-> 无论是在 GNU/Linux 中还是在 Windows 中，许多软件都没有高质量的中文翻译。对于开
-> 发环境这个问题更明显：如果你尝试过使用 GCC 在中文环境下编译程序，你应该知道我
-> 说的是什么了。同时，网络上大量高质量的资料都只有英文版本，只看中文会极大地限制
-> 你能搜集到的资源。
->
-> 所以，好好学英语吧。以后无论是做科研还是做项目，这都是一项必不可少的技能。
+已自带终端模拟器，安装完成后可以在应用中找到它。
 
 ## 安装 Java 工具链
 
 [gradle](https://gradle.org/)（以及 [maven](https://maven.apache.org/)）是用于构
 建 Java 项目的工具。由于 gradle 有更友好的构建脚本语法和命令行，我们选择它作为大
-作业的构建工具。框架源码树中已包含了 gradle，请在根目录使用 `./gradlew` 运行。
+作业的构建工具。框架仓库中已包含了 gradle，请在根目录使用 `./gradlew` 运行。
 （Windows 用户请使用 `gradlew.bat`）
 
 框架代码基于 Java 8 进行开发，Windows 用户请自行搜索对应版本 JDK 下载。对于
 Ubuntu 用户，你们可以使用以下命令进行安装：
 
 ```
-# apt install openjdk-8-jdk
+$ sudo apt install openjdk-8-jdk
 ```
 
-> 对于 Shell 命令，我们约定以‘$’开始时为普通用户权限，以‘#’开始时为 root 权限。
-> 你可以使用 sudo 来以 root 权限执行命令。
-
-> 如非必要，不要使用 root 用户！
->
-> root 用户具有整个系统的最高权限，可以任意更改、删除任何文件。不适当操作极有可
-> 能导致系统无法启动。在完成大作业时请使用普通用户。
-
 ## 选择称手的编辑器
-
-如果你已经是熟练的 Vim/Emacs 用户，请忽略这一节。
 
 对于新用户，我们推荐你使用 [VSCode](https://code.visualstudio.com/)。你可以在
 “Ubuntu Software”中下载到它。同时，我们推荐使用 Vim 插件以获得更高效的编辑体验。
@@ -109,6 +91,11 @@ $ git clone https://git.nju.edu.cn/czg/VJVM-public jvm-2022
 $ cd jvm-2022
 $ git checkout lab0
 ```
+
+> 由于 OJ 系统的功能限制，你使用以上命令获得的仓库与从 OJ 作业地址中 clone 的并
+> 非同一个仓库。在大作业中，你的每次作业也需要以之前的代码为基础，同时随着大作业
+> 的进行，我们也会在这个仓库中给出更多的框架代码。因此请全程使用本仓库进行开发。
+> 在 lab1.1 的最后，我们会给出提交的方法。
 
 进入框架目录后，请设置你的学号和邮箱：
 
