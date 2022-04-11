@@ -23,11 +23,6 @@ class FindClasses {
     Function<String, Integer> exec = (c) -> runCmd(resPath.toString(), "lab1.cases." + c);
 
     assertEquals(0, exec.apply("Foo"));
-    assertEquals(0, exec.apply("A"));
-    assertEquals(0, exec.apply("A$B"));
-    assertEquals(0, exec.apply("A$C"));
-    assertNotEquals(0, exec.apply("None"));
-    assertNotEquals(0, exec.apply("jar.Bar"));
   }
 
   @Test
@@ -35,15 +30,5 @@ class FindClasses {
     Function<String, Integer> exec = (c) -> runCmd(jarPath.toString(), "lab1.cases." + c);
 
     assertEquals(0, exec.apply("jar.Bar"));
-    assertNotEquals(0, exec.apply("Foo"));
-    assertNotEquals(0, exec.apply("jar.None"));
-  }
-
-  @Test
-  void findInJDK() {
-    Function<String, Integer> exec = (c) -> runCmd(null, c);
-
-    assertEquals(0, exec.apply("java.lang.String"));
-    assertNotEquals(0, exec.apply("java.lang.None1234"));
   }
 }
