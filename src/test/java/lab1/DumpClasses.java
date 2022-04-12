@@ -26,9 +26,6 @@ public class DumpClasses {
   void dumpInDir() {
     Consumer<String> run = clazz -> checkDump(resPath.toString(), "lab1.cases." + clazz);
 
-    run.accept("A");
-    run.accept("A$B");
-    run.accept("A$C");
     run.accept("Foo");
   }
 
@@ -37,13 +34,6 @@ public class DumpClasses {
     Consumer<String> run = clazz -> checkDump(jarPath.toString(), "lab1.cases." + clazz);
 
     run.accept("jar.Bar");
-  }
-
-  @Test
-  void dumpInJDK() {
-    Consumer<String> run = clazz -> checkDump("", clazz);
-
-    run.accept("java.lang.String");
   }
 
   @SneakyThrows

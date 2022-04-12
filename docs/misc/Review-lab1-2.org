@@ -18,6 +18,13 @@
 - 第二部分：简单指令的执行
 - 第三部分：类初始化
 
+** ClassLoader
+
+- ClassLoader 的作用：给出一个类名，找到对应类的二进制表示
+- 链接、初始化等工作是 JVM 做的（第三部分）
+- 在这个最简单的 JVM 中，ClassLoader 的行为也十分简单
+- 之后作业的全部内容也都依赖 ClassLoader 来查找类
+
 ** 框架代码结构
 
 #+ATTR_HTML: :style display:flex;gap:10%;

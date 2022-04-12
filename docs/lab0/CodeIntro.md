@@ -29,9 +29,9 @@ src/main/java/vjvm
 $ vim src/main/java/vjvm/vm/Main.java
 ```
 
-框架代码使用了 [picocli](https://picocli.info/) 库来处理命令行的解析。我们不会在
-此讲解这个库的使用，请自行阅读文档。代码中以 `@` 开始的部分被称为注解
-（Annotation），picocli 通过这种形式来指定命令行参数、解析规则、参数的描述等。
+框架代码使用了 [picocli](https://picocli.info/) 库来处理命令行的解析。代码中以
+`@` 开始的部分被称为注解（Annotation），picocli 通过这种形式来指定命令行参数、解
+析规则、参数的描述等。
 
 除了命令行的三个类，我们还有一个异常类 `UnimplementedException` 用于标注未实现的
 代码。由于我们当前什么都没实现，你在运行时会看到这样的信息：
@@ -88,7 +88,7 @@ targetCompatibility = 1.8
 // ...
 
 dependencies {
-  // 这一块中包含了项目使用的库
+  // 项目使用的库
   implementation 'org.apache.commons:commons-lang3:3.12.0'
   implementation 'org.apache.commons:commons-text:1.9'
   implementation 'info.picocli:picocli:4.6.2'
@@ -99,40 +99,27 @@ dependencies {
 }
 
 jar {
-  // 这一块将整个项目打包到 build/libs/VJVM-0.0.1.jar
-  // ...
-}
-
-tasks.register('buildTestRes') {
-  // 这一块负责从 src/test 目录中的源代码生成测试数据
+  // 将整个项目打包到 build/libs/VJVM-0.0.1.jar
   // ...
 }
 
 test {
-  // ...
+  // 运行测试时的配置
 }
 ```
 
 请勿对 `build.gradle` 作任何修改。在 OJ 上运行测试时我们会替换掉该文件，因此你的
 修改可能会导致本地与 OJ 的编译配置不同，无法正确运行。
 
-新手教程到此就结束了。请期待接下来的 Lab1：Class 文件读取与解析吧！
+新手教程到此结束。请继续阅读下一章 Lab1.1 并完成作业。
 
 > 整理你的 Git 分支
 >
-> 在每个 Lab 的最后，你都需要将本次作业的更改合并到 master 分支下并提交给 OJ 系
-> 统。
+> 在每个 Lab 的最后，你都需要将本次作业的更改合并到 master 分支下。
 >
 > 请使用以下命令将 lab0 合并到 master：
 >
 > ```
 > $ git checkout master
 > $ git merge lab0
-> ```
->
-> 在合并完成后，请将 master 分支 push 到 OJ 上：
->
-> ```
-> $ git remote add lab0-oj ${OJ 系统中显示的提交地址}
-> $ git push lab0-oj master
 > ```
