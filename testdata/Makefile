@@ -28,6 +28,6 @@ build/lab1/%.jar: compile
 	rm -rf $(@:.jar=)
 
 clean:
-	rm -rf build
+	rm -rf build dump
 
 .PHONY: clean

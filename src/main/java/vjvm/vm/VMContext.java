@@ -37,7 +37,7 @@ public class VMContext {
   @Getter
   private final JClassLoader userLoader;
 
-  VMContext(String userClassPath) {
+  public VMContext(String userClassPath) {
     interpreter = new JInterpreter();
     heap = new JHeap(heapSize, this);
 

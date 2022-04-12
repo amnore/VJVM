@@ -32,14 +32,4 @@ class FindClasses {
 
     assertEquals(0, exec.apply("jar.Bar"));
   }
-
-  @Test
-  void findInDirTwice() {
-    Function<String, Integer> exec = (c) -> runCmd(resPath.toString(), "lab1.cases." + c);
-
-    assertEquals(0, exec.apply("LoadedTest"));
-    File file = new File(resPath.toString(), "lab1.cases.LoadedTest".replace(".", File.separator) + ".class");
-    assertTrue(file.delete());
-    assertEquals(0, exec.apply("LoadedTest"));
-  }
 }

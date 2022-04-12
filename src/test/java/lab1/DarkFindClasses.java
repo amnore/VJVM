@@ -4,7 +4,9 @@ import lombok.var;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 import vjvm.vm.Main;
+import vjvm.vm.VMContext;
 
+import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static lab1.Utils.runCmd;
 
 class DarkFindClasses {
@@ -42,5 +45,16 @@ class DarkFindClasses {
 
     assertEquals(0, exec.apply("java.lang.String"));
     assertNotEquals(0, exec.apply("java.lang.None1234"));
+  }
+
+  @Test
+  void findInDirTwice() {
+    var ctx = new VMContext(utils.resPath.toString());
+    Function<String, Object> exec = (c) -> ctx.userLoader().loadClass("Llab1/cases/" + c + ";");
+
+    assertNotEquals(null, exec.apply("LoadedTest"));
+    var file = utils.resPath.resolve("lab1/cases/LoadedTest.class").toFile();
+    assertTrue(file.delete());
+    assertNotEquals(null, exec.apply("LoadedTest"));
   }
 }
