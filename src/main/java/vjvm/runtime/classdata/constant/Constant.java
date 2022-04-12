@@ -12,7 +12,7 @@ import static vjvm.classfiledefs.ConstantTags.*;
 
 public abstract class Constant {
   @SneakyThrows
-  public static Pair<Constant, Integer> construntFromData(DataInput input, JClass jClass) {
+  public static Pair<Constant, Integer> constructFromData(DataInput input, JClass jClass) {
     var tag = input.readByte();
     var count = (tag == CONSTANT_Long || tag == CONSTANT_Double) ? 2 : 1;
 

@@ -31,7 +31,7 @@ public class ConstantPool {
     this.count = dataInput.readUnsignedShort();
     constants = new Constant[count];
     for (int i = 1; i < count; ) {
-      var r = Constant.construntFromData(dataInput, jClass);
+      var r = Constant.constructFromData(dataInput, jClass);
       constants[i] = r.getLeft();
       i += r.getRight();
     }
