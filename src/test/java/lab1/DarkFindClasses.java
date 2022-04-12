@@ -54,7 +54,9 @@ class DarkFindClasses {
 
     assertNotEquals(null, exec.apply("LoadedTest"));
     var file = utils.resPath.resolve("lab1/cases/LoadedTest.class").toFile();
-    assertTrue(file.delete());
+    var renamedFile = utils.resPath.resolve("lab1/cases/RenamedLoadedTest.class").toFile();
+    assertTrue(file.renameTo(renamedFile));
     assertNotEquals(null, exec.apply("LoadedTest"));
+    assertTrue(renamedFile.renameTo(file));
   }
 }
