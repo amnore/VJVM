@@ -5,7 +5,7 @@ import lombok.Getter;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.classloader.JClassLoader;
 import vjvm.classloader.searchpath.ClassSearchPath;
-import vjvm.classloader.searchpath.JarSearchPath;
+import vjvm.classloader.searchpath.ModuleSearchPath;
 import vjvm.interpreter.JInterpreter;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JHeap;
@@ -43,7 +43,7 @@ public class VMContext {
 
     bootstrapLoader = new JClassLoader(
       null,
-      ClassSearchPath.constructSearchPath(System.getProperty("sun.boot.class.path")),
+      getSystemSearchPaths(),
       this
     );
 
@@ -72,5 +72,16 @@ public class VMContext {
     var mainMethod = entry.findMethod("main", "([Ljava/lang/String;)V", true);
     assert mainMethod.jClass() == entry;
     interpreter.invoke(mainMethod, initThread, new Slots(1));
+  }
+
+  private static ClassSearchPath[] getSystemSearchPaths() {
+    var bootClassPath = System.getProperty("sun.boot.class.path");
+
+    if (bootClassPath != null) {
+      return ClassSearchPath.constructSearchPath(bootClassPath);
+    }
+
+    // For compatibility with JDK9+
+    return new ClassSearchPath[] { new ModuleSearchPath() };
   }
 }
