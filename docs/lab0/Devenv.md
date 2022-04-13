@@ -58,6 +58,16 @@ Missing Semester of Your CS Education](https://missing.csail.mit.edu/) 的相关
 大作业教程中有许多 Shell 命令，你可以在终端模拟器（Terminal）中执行它们。Ubuntu
 已自带终端模拟器，安装完成后可以在应用中找到它。
 
+## 选择称手的编辑器
+
+对于新用户，我们推荐你使用 [VSCode](https://code.visualstudio.com/)。同时，我们
+推荐使用 Vim 插件以获得更高效的编辑体验。
+
+如果你更偏好 IDE，我们推荐 IDEA Community。同样地，我们推荐使用 IDEAVim 插件。
+
+本项目使用 lombok 库，需要特殊设置才能在编辑器中正常使用自动补全、错误检查等功能。
+请自行查找设置方法。
+
 ## 安装 Java 工具链
 
 [gradle](https://gradle.org/)（以及 [maven](https://maven.apache.org/)）是用于构
@@ -72,15 +82,8 @@ Ubuntu 用户，你们可以使用以下命令进行安装：
 $ sudo apt install openjdk-8-jdk
 ```
 
-## 选择称手的编辑器
-
-对于新用户，我们推荐你使用 [VSCode](https://code.visualstudio.com/)。你可以在
-“Ubuntu Software”中下载到它。同时，我们推荐使用 Vim 插件以获得更高效的编辑体验。
-
-如果你更偏好 IDE，我们推荐 IDEA Community。同样地，我们推荐使用 IDEAVim 插件。
-
-本项目使用 lombok 库，需要特殊设置才能在编辑器中正常使用自动补全、错误检查等功能。
-请自行查找设置方法。
+VSCode 的 Java 语言支持需要 Java 11 以上的版本，因此你需要把以上安装的包替换成
+`openjdk-11-jdk`。
 
 ## 获取框架代码
 

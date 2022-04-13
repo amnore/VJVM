@@ -133,7 +133,7 @@ Java 程序和打印 class 文件信息两个功能。我们在 Lab 1 中将实�
 在 `VMContext.java` 中，我们调用了 `ClassLoader` 的构造函数来进行初始化。这个构
 造函数接受三个参数：亲代加载器（用于实现双亲委托）、搜索路径和 `context` 自身
 （保存以备后用）。搜索路径是一个 `ClassSearchPath` 的数组。其中，bootstrapLoader
-的路径为系统 JDK 路径，通过`System.getProperty("sun.boot.class.path")` 得到；用
+的路径为系统 JDK 路径，通过 `getSystemSearchPaths` 得到；用
 户加载器的路径来自 `Dump` 命令的参数（classpath），由
 `ClassSearchPath.constructSearthPath` 解析生成。
 
@@ -181,6 +181,25 @@ $ grep -irH UnimplementedError
 
 我们在 `ClassLoader` 中定义了 `definedClass` 属性用于保存该加载器已加载的类，你
 应该在完成加载之后将一个类记录到其中，以保证加载的类唯一。
+
+> Java 8 与 Java 9+ 中加载系统类的差异
+>
+> 你可能注意到了 `getSystemSearchPaths` 中关于 JDK9+ 的注释和神秘的
+> `ModuleSearchPath` 类。这是因为 Java 9 中引入了新的模块（module）系统，Java 8
+> 上加载系统类的方式在这些版本上不能继续使用（即
+> `System.getProperty("sun.boot.class.path")` 会返回 `null`）然而，vscode 等编辑
+> 器的 Java 语言支持（[jdtls](https://github.com/eclipse/eclipse.jdt.ls)）要求
+> Java 11 以上的版本。为了避免配置两个 java 环境的麻烦，我们在框架代码中加入了对
+> Java 9+ 的支持。
+>
+> 为了能同时在 Java 8 和 Java 9+ 中编译，框架代码在 `ModuleSearchPath` 中使用了
+> 反射在运行时访问 Java 8 中不存在的类。你不需要关心这些“丑陋的实现细节”。
+>
+> OJ 平台仍使用 Java 8 进行评测。Java 8 中系统类保存在一个 jar 文件当中，因此你
+> 需要实现从 jar 文件加载类以通过相关测试。
+>
+> 框架代码对 Java 9+ 的支持未经过太多测试。因此如果你发现同一份代码在 Java 8 中
+> 可以运行，而在 Java 9+ 中会报错，请报告给助教。
 
 ## 及时 commit 你的更改
 
