@@ -1,6 +1,6 @@
-SRCS := $(shell find src -name '*.java' | sed 's#^src/##')
+SRCS := $(shell find src -name '*.java' | sed 's,^src/,,')
 CLASSES := $(SRCS:.java=.class)
-LAB1_JARS := $(shell find src/lab1 -name '.mkjar' | sed 's#^src/##')
+LAB1_JARS := $(shell find src/lab1 -name '.mkjar' | sed 's,^src/,,')
 LAB1_JDK_CLASSES := java/lang/String
 
 all: clean lab1
@@ -13,7 +13,7 @@ lab1-dump: compile
 ifeq ($(VJVM_JAR),)
 	$(error VJVM_JAR not set)
 endif
-	@for i in $(LAB1_JDK_CLASSES) $$(find build/lab1 -type f | sed -E -e 's#^build/(.+)\.class#\1#'); do \
+	@for i in $(LAB1_JDK_CLASSES) $$(find build/lab1 -type f | sed -E -e 's,^build/(.+)\.class,\1,'); do \
 		mkdir -p dump/$$(dirname $$i); \
 		echo "java -jar $(VJVM_JAR) -cp build dump $${i//\//.} > dump/$$i.dump"; \
 		java -jar $(VJVM_JAR) -cp build dump $${i//\//.} > dump/$$i.dump; \
