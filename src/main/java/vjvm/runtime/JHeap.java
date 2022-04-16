@@ -1,19 +1,21 @@
 package vjvm.runtime;
 
+import lombok.Getter;
 import lombok.var;
 import vjvm.runtime.object.JObject;
 import vjvm.runtime.object.StringObject;
 import vjvm.vm.VMContext;
-import vjvm.vm.VMGlobalObject;
 
 import java.util.HashMap;
 
-public class JHeap extends VMGlobalObject {
+public class JHeap {
   private final HashMap<String, Integer> internMap;
   private final JObject[] objects;
+  @Getter
+  private final VMContext context;
 
   public JHeap(int heapSize, VMContext context) {
-    super(context);
+    this.context = context;
     internMap = new HashMap<>();
     objects = new JObject[heapSize];
   }

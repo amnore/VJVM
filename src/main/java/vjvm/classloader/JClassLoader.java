@@ -1,6 +1,7 @@
 package vjvm.classloader;
 
 import lombok.var;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import vjvm.classfiledefs.ClassAccessFlags;
 import vjvm.classfiledefs.Descriptors;
@@ -11,7 +12,6 @@ import vjvm.runtime.classdata.FieldInfo;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.attribute.Attribute;
 import vjvm.vm.VMContext;
-import vjvm.vm.VMGlobalObject;
 
 import java.io.Closeable;
 import java.io.DataInputStream;
@@ -22,8 +22,10 @@ import java.util.HashSet;
 import static vjvm.classfiledefs.ClassAccessFlags.ACC_FINAL;
 import static vjvm.classfiledefs.ClassAccessFlags.ACC_PUBLIC;
 
-public class JClassLoader extends VMGlobalObject implements Closeable {
+public class JClassLoader implements Closeable {
   private static final HashSet<String> primitiveClasses = new HashSet<>();
+  @Getter
+  private final VMContext context;
 
   static {
     primitiveClasses.add("Z");
@@ -43,7 +45,7 @@ public class JClassLoader extends VMGlobalObject implements Closeable {
   private final HashMap<String, JClass> definedClass = new HashMap<>();
 
   public JClassLoader(JClassLoader parent, ClassSearchPath[] searchPaths, VMContext context) {
-    super(context);
+    this.context = context;
     this.parent = parent;
     this.searchPaths = searchPaths;
   }

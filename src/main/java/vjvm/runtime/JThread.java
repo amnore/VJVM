@@ -5,18 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 import vjvm.runtime.object.JObject;
 import vjvm.vm.VMContext;
-import vjvm.vm.VMGlobalObject;
 
 import java.util.Stack;
 
-public class JThread extends VMGlobalObject {
+public class JThread {
   private final Stack<JFrame> frames = new Stack<>();
   @Getter
   @Setter
   private JObject exception;
+  @Getter
+  private final VMContext context;
 
   public JThread(VMContext context) {
-    super(context);
+    this.context = context;
   }
 
   public JFrame top() {
