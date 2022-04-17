@@ -7,24 +7,49 @@ parent: Lab1 类加载与解析
 
 ## 实验要求
 
-正如你运行程序时会双击 `.exe` 文件一样，JVM 在运行时也会从文件中加载代码。JVM 认
-识的格式并非 `.exe`，而是以 `.class` 结尾。负责加载 class 文件的模块被称为
-ClassLoader，我们将在本次 Lab 中实现它。
+无论是 `.exe` 可执行程序，还是 Java 代码，它们在运行前都是被保存在硬盘上的。程序
+不能直接在硬盘上运行，因此我们需要将它们首先加载到内存当中。
+
+`.exe` 文件的加载由操作系统完成，你们会在后续的《操作系统》课程中学到（？）。而
+对于 Java 程序，JVM 中内置了一个被称为 ClassLoader 的模块来加载它们。我们将在本
+次作业中实现 ClassLoader。
+
+你或许曾在双击 `.exe` 文件时碰到过“找不到动态链接库”的错误。事实上，大部分程序的
+代码并不是保存在一个单独的文件中。除了 `.exe` 外，还有各种库的代码保存在 `.dll
+(Windows)`、`.so (Unix)` 和 `.dylib (MacOS)` 文件中。动态链接库（[Dynamic-link
+Library](https://en.wikipedia.org/wiki/Dynamic-link_library)）便是 `.dll` 后缀名
+的来源。在加载程序时，操作系统会在一些路径下面搜索这个程序需要的动态链接库，如果
+找不到便会报出以上错误。
+
+<figure> <img src="{{ site.baseurl }}{% link assets/os-loader.jpg %}" />
+  <figcaption>操作系统加载可执行文件的细节相当复杂，我们就不在此处详细介绍了。如
+  果感兴趣可以自己搜索相关资料。（[doge double
+  click](http://jyywiki.cn/OS/2022/slides/17.slides#/4) by
+  [jyy](http://jyywiki.cn/) /
+  [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/)）</figcaption>
+</figure>
+
+加载 Java 程序的过程也是相似的。所有的 Java 程序经过编译会生成 `.class` 文件，而
+ClassLoader 的作用便是搜索指定路径下的这些文件。如果找到了匹配的 class 文件，
+ClassLoader 会把其中数据交给 JVM 其他模块完成加载。
+
+为了更灵活地完成类的加载，JVM 允许一个 ClassLoader 调用另一个的方法搜索 class 文
+件。我们把这种方式称为委托。
 
 在我们的 JVM 中有两个 ClassLoader：第一个为 Bootstrap Loader，负责加载 Java 标准
 库的 class 文件；第二个为 User Loader，负责从用户指定的路径中搜索 class。
 
 User Loader 在查找 class 文件前会首先委托 Bootstrap Loader 查找同一个类，如果找
-到则直接返回，否则才会在自己的路径中搜索。我们把 Bootstrap Loader 称为 parent，
-把 User Loader 称为 child。
+到则直接返回，否则才会在自己的路径中搜索。因此，我们把 Bootstrap Loader 称为
+parent，把 User Loader 称为 child。
 
-你在多次加载同一个类时应返回同一个对象，而非多个拷贝。虽然受限于测试方式，我们在
-本次 lab 中无法测试这一要求，但在以后的 lab 中你会遇到下面这种代码：
+你在多次加载同一个类时应返回同一个对象，而非多个拷贝。这意味着你会遇到下面这种测
+试用例：
 
 ```java
 var a = loader.loadClass("Ljava/lang/String;");
 var b = loader.loadClass("Ljava/lang/String;");
-assert a == b;
+assertEquals(a, b);
 ```
 
 在查找 class 文件时，一个 loader 可能会搜索以下两种路径：
@@ -46,8 +71,8 @@ assert a == b;
 息，但请勿使用标准输出流 `System.out`。我们在之后的 Lab 中会将其中的信息作为测试
 输出。
 
-以上便是 Lab1.1 的全部要求，你可以丢开本文档开始写代码了。但作为背景，我们在下面
-还准备了更多 ClassLoader 的介绍和一些实验的 tips。
+以上便是 Lab1.1 的全部要求。接下来，我们会介绍更多 ClassLoader 的相关知识（本次
+作业中不会直接用到）和框架代码的逻辑。
 
 ## 一个 class 的一生 —— 加载
 
@@ -65,10 +90,6 @@ $ javac a.java
 $ ls
 A.class A$B.class
 ```
-
-在每个 class 行使它的功能前，JVM 首先需要利用 class 文件中的数据创建运行时的数据
-结构。这个步骤被称为“加载”，是由 JVM 和 ClassLoader 共同完成的。（注意以上步骤只
-适用于正常的类。数组和基本类型是由 JVM 直接创建的，不需要 ClassLoader 的参与）
 
 更具体地，在需要创建一个 class 时，JVM 会做以下几件事情：
 
@@ -216,7 +237,10 @@ Git](https://git.nju.edu.cn) 上，这样即使你删除了电脑上的全部文
 
 <figure>
   <img src="{{ site.baseurl }}{% link assets/git-commit-in-case-of-fire.webp %}" />
-  <figcaption>着火时需做的三件事</figcaption>
+  <figcaption>着火时需做的三件事（
+  [git commit on fire](http://jyywiki.cn/OS/2022/slides/17.slides#/4) by
+  [jyy](http://jyywiki.cn/) /
+  [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/)）</figcaption>
 </figure>
 
 你可以使用以下命令来完成 commit：
