@@ -4,21 +4,27 @@ import lombok.var;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JThread;
+import vjvm.runtime.ProgramCounter;
 import vjvm.runtime.classdata.FieldInfo;
+import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.constant.FieldRef;
 
 public class GETSTATIC extends Instruction {
+  private final JClass jClass;
+  private final FieldInfo field;
 
-  @Override
-  public void fetchAndRun(JThread thread) {
-    var frame = thread.top();
-    var stack = frame.stack();
-    FieldInfo field;
-    JClass jClass;
-
-    var ref = (FieldRef) frame.link().constant(thread.pc().ushort());
+  public GETSTATIC(ProgramCounter pc, MethodInfo method) {
+    var cp = method.jClass().constantPool();
+    var ref = (FieldRef) cp.constant(pc.ushort());
     field = ref.value();
     jClass = field.jClass();
+  }
+
+  @Override
+  public void run(JThread thread) {
+    var frame = thread.top();
+    var stack = frame.stack();
+
     jClass.initialize(thread);
     assert jClass.initState() == JClass.InitState.INITIALIZED;
 
@@ -28,4 +34,8 @@ public class GETSTATIC extends Instruction {
       stack.pushInt(jClass.staticFields().int_(field.offset()));
   }
 
+  @Override
+  public String toString() {
+    return String.format("getstatic %s", field.descriptor());
+  }
 }

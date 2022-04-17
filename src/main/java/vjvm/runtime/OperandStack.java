@@ -58,6 +58,30 @@ public class OperandStack {
     return popInt();
   }
 
+  public void pushByte(byte value) {
+    slots.byte_(top++, value);
+  }
+
+  public byte popByte() {
+    return slots.byte_(--top);
+  }
+
+  public void pushChar(char value) {
+    slots.char_(top++, value);
+  }
+
+  public char popChar() {
+    return slots.char_(--top);
+  }
+
+  public void pushShort(short value) {
+    slots.short_(top++, value);
+  }
+
+  public short popShort() {
+    return slots.short_(--top);
+  }
+
   public Slots popSlots(int count) {
     assert top >= count;
 

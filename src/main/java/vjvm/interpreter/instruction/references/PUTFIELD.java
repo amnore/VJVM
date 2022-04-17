@@ -4,19 +4,27 @@ import lombok.var;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
+import vjvm.runtime.ProgramCounter;
+import vjvm.runtime.classdata.FieldInfo;
+import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.classdata.constant.FieldRef;
 
 public class PUTFIELD extends Instruction {
+  private final FieldInfo field;
+
+  public PUTFIELD(ProgramCounter pc, MethodInfo method) {
+    var cp = method.jClass().constantPool();
+    var fieldRef = (FieldRef) cp.constant(pc.ushort());
+    field = fieldRef.value();
+  }
 
   @Override
-  public void fetchAndRun(JThread thread) {
+  public void run(JThread thread) {
     var frame = thread.top();
-    var fieldRef = (FieldRef) frame.link().constant(thread.pc().ushort());
-
     var stack = frame.stack();
-    var field = fieldRef.value();
     var heap = thread.context().heap();
-    if (fieldRef.value().size() == 1) {
+
+    if (field.size() == 1) {
       var value = stack.popInt();
       var obj = heap.get(stack.popAddress());
 
@@ -30,4 +38,8 @@ public class PUTFIELD extends Instruction {
     }
   }
 
+  @Override
+  public String toString() {
+    return String.format("putfield %s", field.descriptor());
+  }
 }

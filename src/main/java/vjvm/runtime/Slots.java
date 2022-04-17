@@ -54,6 +54,30 @@ public class Slots {
     buf.putInt(index, value);
   }
 
+  public byte byte_(int index) {
+    return (byte)int_(index);
+  }
+
+  public void byte_(int index, byte value) {
+    int_(index, value);
+  }
+
+  public char char_(int index) {
+    return (char)int_(index);
+  }
+
+  public void char_(int index, char value) {
+    int_(index, value);
+  }
+
+  public short short_(int index) {
+    return (short)int_(index);
+  }
+
+  public void short_(int index, short value) {
+    int_(index, value);
+  }
+
   public int size() {
     return buf.limit() / 4;
   }
