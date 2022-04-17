@@ -22,11 +22,13 @@ Library](https://en.wikipedia.org/wiki/Dynamic-link_library)）便是 `.dll` 后
 找不到便会报出以上错误。
 
 <figure> <img src="{{ site.baseurl }}{% link assets/os-loader.jpg %}" />
-  <figcaption>操作系统加载可执行文件的细节相当复杂，我们就不在此处详细介绍了。如
-  果感兴趣可以自己搜索相关资料。（[doge double
-  click](http://jyywiki.cn/OS/2022/slides/17.slides#/4) by
-  [jyy](http://jyywiki.cn/) /
-  [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/)）</figcaption>
+  <figcaption>
+    操作系统加载可执行文件的细节相当复杂，我们就不在此处详细介绍了。如
+    果感兴趣可以自己搜索相关资料。（
+    <a href="http://jyywiki.cn/OS/2022/slides/17.slides#/4">doge double
+    click</a> by <a href="http://jyywiki.cn/">jyy</a> /
+    <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC</a>）
+  </figcaption>
 </figure>
 
 加载 Java 程序的过程也是相似的。所有的 Java 程序经过编译会生成 `.class` 文件，而
@@ -237,10 +239,7 @@ Git](https://git.nju.edu.cn) 上，这样即使你删除了电脑上的全部文
 
 <figure>
   <img src="{{ site.baseurl }}{% link assets/git-commit-in-case-of-fire.webp %}" />
-  <figcaption>着火时需做的三件事（
-  [git commit on fire](http://jyywiki.cn/OS/2022/slides/17.slides#/4) by
-  [jyy](http://jyywiki.cn/) /
-  [CC-BY-NC](https://creativecommons.org/licenses/by-nc/4.0/)）</figcaption>
+  <figcaption>着火时需做的三件事</figcaption>
 </figure>
 
 你可以使用以下命令来完成 commit：
