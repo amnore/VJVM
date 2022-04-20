@@ -40,6 +40,20 @@ public class DarkDumpClasses {
   }
 
   @Test
+  void dumpJDKString() {
+    Consumer<String> run = clazz -> utils.checkDump(utils.resPath.toString(), "java.lang." + clazz);
+
+    run.accept("String");
+  }
+
+  @Test
+  void dumpOurString() {
+    Consumer<String> run = clazz -> utils.checkDump(utils.resPath.toString(), "lab1.cases." + clazz);
+
+    run.accept("String");
+  }
+
+  @Test
   void dumpInJDK() {
     Consumer<String> run = clazz -> utils.checkDump("", clazz);
     run.accept("java.lang.String");
