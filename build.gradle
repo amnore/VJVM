@@ -15,7 +15,9 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 repositories {
-  mavenCentral()
+  maven {
+    url 'https://maven.aliyun.com/repository/public/'
+  }
 }
 
 dependencies {
@@ -51,7 +53,7 @@ tasks.register('buildTestData') {
   dependsOn 'jar'
 
   exec {
-    commandLine 'make', '-C', "$projectDir/testdata", "VJVM_JAR=${jar.archiveFile.get().asFile}"
+    commandLine 'make', '-C', "$projectDir/testdata", "VJVM_JAR=$projectDir/build/libs/VJVM-0.0.1.jar"
   }
 }
 

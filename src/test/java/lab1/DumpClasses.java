@@ -1,21 +1,17 @@
 package lab1;
 
+import lombok.SneakyThrows;
 import lombok.var;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.PrintStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.junit.jupiter.api.Test;
-
-import lombok.SneakyThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DumpClasses {
   final Path resPath = FileSystems.getDefault().getPath(System.getenv("VJVM_TESTRES_PATH"));
@@ -50,4 +46,5 @@ public class DumpClasses {
 
     Utils.assertDumpEquals(expected, stdout.toString());
   }
+
 }

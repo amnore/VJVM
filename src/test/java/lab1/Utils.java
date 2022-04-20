@@ -1,21 +1,20 @@
 package lab1;
 
+import lombok.SneakyThrows;
 import lombok.var;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import picocli.CommandLine;
+import vjvm.vm.Main;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.regex.Pattern;
 
-import lombok.SneakyThrows;
-import picocli.CommandLine;
-import vjvm.vm.Main;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Utils {
   private static final Map<DumpSection, BiFunction<String, String, DumpSection>> checkFunction = new HashMap<>();
