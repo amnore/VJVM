@@ -6,10 +6,13 @@ import lombok.Setter;
 import vjvm.runtime.object.JObject;
 import vjvm.vm.VMContext;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class JThread {
-  private final Stack<JFrame> frames = new Stack<>();
+  private final ArrayList<JFrame> frames = new ArrayList<>();
   @Getter
   @Setter
   private JObject exception;
@@ -21,15 +24,15 @@ public class JThread {
   }
 
   public JFrame top() {
-    return empty() ? null : frames.lastElement();
+    return empty() ? null : frames.get(frames.size() - 1);
   }
 
   public void pop() {
-    frames.pop();
+    frames.remove(frames.size() - 1);
   }
 
   public void push(JFrame frame) {
-    frames.push(frame);
+    frames.add(frame);
   }
 
   public ProgramCounter pc() {
@@ -37,6 +40,10 @@ public class JThread {
   }
 
   public boolean empty() {
-    return frames.empty();
+    return frames.isEmpty();
+  }
+
+  public List<JFrame> frames() {
+    return Collections.unmodifiableList(frames);
   }
 }

@@ -13,10 +13,10 @@ import java.util.concurrent.Callable;
 import static picocli.CommandLine.*;
 
 @Command(name = "vjvm", mixinStandardHelpOptions = true, version = "vjvm 0.0.1", description = "A toy JVM written in java", subcommands = {
-  Run.class, Dump.class})
+    Run.class, Dump.class })
 public class Main implements Callable<Integer> {
-  @Option(names = {"-cp",
-    "--classpath"}, paramLabel = "CLASSPATH", description = "the class path to search, multiple paths should be separated by ':'")
+  @Option(names = { "-cp",
+      "--classpath" }, paramLabel = "CLASSPATH", description = "the class path to search, multiple paths should be separated by ':'")
   String userClassPath = ".";
 
   public static void main(String[] args) {
@@ -30,11 +30,14 @@ public class Main implements Callable<Integer> {
   }
 }
 
-@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
+@SuppressWarnings({ "FieldMayBeFinal", "FieldCanBeLocal" })
 @Command(name = "run", description = "Execute java program")
 class Run implements Callable<Integer> {
   @ParentCommand
   private Main parent;
+
+  @Option(names = { "-d", "--debug" }, description = "Stop at the first instruction and start monitor")
+  boolean debug = false;
 
   @Parameters(index = "0", description = "Class to run, e.g. vjvm.vm.Main")
   private String entryClass = "";
@@ -45,13 +48,17 @@ class Run implements Callable<Integer> {
   @Override
   public Integer call() {
     var ctx = new VMContext(parent.userClassPath);
+    if (debug) {
+      ctx.interpreter().step(0);
+    }
+
     ctx.run(entryClass);
     return 0;
   }
 
 }
 
-@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
+@SuppressWarnings({ "FieldMayBeFinal", "FieldCanBeLocal" })
 @Command(name = "dump", description = "Dump class file")
 class Dump implements Callable<Integer> {
   @ParentCommand
@@ -77,24 +84,13 @@ class Dump implements Callable<Integer> {
   private void dump(JClass c) {
     var out = System.out;
 
-    out.printf("\n" +
-        "class name: %s\n" +
-        "minor version: %d\n" +
-        "major version: %d\n" +
-        "flags: 0x%x\n" +
-        "this class: %s\n" +
-        "super class: %s\n" +
-        "\n",
-      c.name(),
-      c.minorVersion(),
-      c.majorVersion(),
-      c.accessFlags(),
-      c.thisClass().name(),
-      c.superClass().name());
+    out.printf(
+        "\nclass name: %s\nminor version: %d\nmajor version: %d\nflags: 0x%x\nthis class: %s\nsuper class: %s\n\n",
+        c.name(), c.minorVersion(), c.majorVersion(), c.accessFlags(), c.thisClass().name(), c.superClass().name());
 
     out.printf("\nconstant pool:\n");
     var p = c.constantPool();
-    for (int i = 1; i < p.size(); ) {
+    for (int i = 1; i < p.size();) {
       var v = p.constant(i);
       out.printf("#%d = %s\n", i, v);
 

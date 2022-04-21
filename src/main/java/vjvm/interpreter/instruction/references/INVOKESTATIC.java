@@ -32,6 +32,6 @@ public class INVOKESTATIC extends Instruction {
 
   @Override
   public String toString() {
-    return String.format("invokestatic %s", method.descriptor());
+    return String.format("invokestatic %s:%s:%s", method.jClass().name(), method.name(), method.descriptor());
   }
 }

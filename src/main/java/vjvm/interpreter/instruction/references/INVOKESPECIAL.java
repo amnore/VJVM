@@ -40,6 +40,6 @@ public class INVOKESPECIAL extends Instruction {
 
   @Override
   public String toString() {
-    return String.format("invokespecial %s", method.descriptor());
+    return String.format("invokespecial %s:%s:%s", method.jClass().name(), method.name(), method.descriptor());
   }
 }

@@ -20,6 +20,7 @@ import vjvm.interpreter.instruction.math.LIOPR;
 import vjvm.interpreter.instruction.math.XNEG;
 import vjvm.interpreter.instruction.math.XOPR;
 import vjvm.interpreter.instruction.references.*;
+import vjvm.interpreter.instruction.reserved.BREAKPOINT;
 import vjvm.interpreter.instruction.stack.DUPX;
 import vjvm.interpreter.instruction.stack.DUPX_XY;
 import vjvm.interpreter.instruction.stack.POPX;
@@ -85,7 +86,7 @@ public abstract class Instruction {
     /* 0xbc */  NEWARRAY::new, ANEWARRAY::new, ARRAYLENGTH::new, ATHROW::new,
     /* 0xc0 */  CHECKCAST::new, INSTANCEOF::new, null, null,
     /* 0xc4 */  null, MULTIANEWARRAY::new, IFCOND::IFNULL, IFCOND::IFNONNULL,
-    /* 0xc8 */  null, null, null, null,
+    /* 0xc8 */  null, null, BREAKPOINT::new, null,
     /* 0xcc */  null, null, null, null,
     /* 0xd0 */  null, null, null, null,
     /* 0xd4 */  null, null, null, null,

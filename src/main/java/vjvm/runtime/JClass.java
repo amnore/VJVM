@@ -332,13 +332,7 @@ public class JClass {
 
   @Override
   public String toString() {
-    return "JClass{" + "thisClass=" + thisClass +
-      ", superClass=" + superClass +
-      ", interfaces=" + Arrays.toString(interfaces) +
-      ", fields=" + Arrays.toString(fields) +
-      ", methods=" + Arrays.toString(methods) +
-      ", vtable=" + vtable +
-      '}';
+    return name();
   }
 
   /**

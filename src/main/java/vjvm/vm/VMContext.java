@@ -7,6 +7,7 @@ import vjvm.classloader.JClassLoader;
 import vjvm.classloader.searchpath.ClassSearchPath;
 import vjvm.classloader.searchpath.ModuleSearchPath;
 import vjvm.interpreter.JInterpreter;
+import vjvm.interpreter.JMonitor;
 import vjvm.runtime.JClass;
 import vjvm.runtime.JHeap;
 import vjvm.runtime.JThread;
@@ -36,10 +37,13 @@ public class VMContext {
   private final JHeap heap;
   @Getter
   private final JClassLoader userLoader;
+  @Getter
+  private final JMonitor monitor;
 
   public VMContext(String userClassPath) {
     interpreter = new JInterpreter();
     heap = new JHeap(heapSize, this);
+    monitor = new JMonitor(this);
 
     bootstrapLoader = new JClassLoader(
       null,

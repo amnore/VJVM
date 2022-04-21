@@ -4,6 +4,7 @@ import lombok.var;
 import lombok.Getter;
 
 public class OperandStack {
+  @Getter
   private final Slots slots;
 
   @Getter

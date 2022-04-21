@@ -38,6 +38,6 @@ public class INVOKEINTERFACE extends Instruction {
 
   @Override
   public String toString() {
-    return String.format("invokeinterface %s", method.descriptor());
+    return String.format("invokeinterface %s:%s:%s", method.jClass().name(), method.name(), method.descriptor());
   }
 }

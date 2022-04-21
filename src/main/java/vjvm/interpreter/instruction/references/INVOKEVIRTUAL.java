@@ -34,6 +34,6 @@ public class INVOKEVIRTUAL extends Instruction {
 
   @Override
   public String toString() {
-    return String.format("invokevirtual %s", method.descriptor());
+    return String.format("invokevirtual %s:%s:%s", method.jClass().name(), method.name(), method.descriptor());
   }
 }
