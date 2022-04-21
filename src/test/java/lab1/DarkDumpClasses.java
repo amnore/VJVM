@@ -28,7 +28,7 @@ public class DarkDumpClasses {
     Consumer<String> run = clazz -> utils.checkDump(utils.jarPath.toString(), "lab1.cases." + clazz);
 
     run.accept("jar.Same");
-    assertEquals(-1, Utils.runCmd(utils.jarPath.toString(), "lab1.cases.Same"));
+    assertNotEquals(0, Utils.runCmd(utils.jarPath.toString(), "lab1.cases.Same"));
   }
 
   @Test
@@ -36,7 +36,7 @@ public class DarkDumpClasses {
     Consumer<String> run = clazz -> utils.checkDump(utils.resPath.toString(), "lab1.cases." + clazz);
 
     run.accept("Same");
-    assertEquals(-1, Utils.runCmd(utils.resPath.toString(), "lab1.cases.jar.Same"));
+    assertNotEquals(0, Utils.runCmd(utils.resPath.toString(), "lab1.cases.jar.Same"));
   }
 
   @Test
