@@ -1,0 +1,26 @@
+#+title: Lab1 Changes
+#+AUTHOR: czg
+#+DATE: <2022-04-23 08:40>
+#+REVEAL_THEME: white
+#+REVEAL_TRANS: slide
+#+REVEAL_PLUGINS: (highlight)
+#+REVEAL_HIGHLIGHT_CSS: ../assets/atom-one-light.css
+#+OPTIONS: toc:nil reveal_width:1920 reveal_height:1080
+
+* 相比于上次的更改
+
+** Lab 1.2 文档
+
+[[https://amnore.github.io/VJVM/lab1/Parser.html#class-%E6%96%87%E4%BB%B6%E7%9A%84%E7%BB%93%E6%9E%84][
+  多了一节]]介绍 class 文件的结构。现在基本不用看手册就可以完成 lab1 了。
+
+
+** Lab 1.2 框架代码
+
+常量池解析部分多给了一个框架和 =Integer= 和 =NameAndType= 作为例子。
+
+其它的大部分都在 Lab1 中跳过了，所以没太多工作量。
+
+** Lab 1.1 + Lab 1.2 文档
+
+重新组织了一下顺序，现在实验要求是在最开始了。基本上把第一部分读完就能做。
