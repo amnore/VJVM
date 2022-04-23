@@ -51,7 +51,7 @@ parent，把 User Loader 称为 child。
 ```java
 var a = loader.loadClass("Ljava/lang/String;");
 var b = loader.loadClass("Ljava/lang/String;");
-assertEquals(a, b);
+assertTrue(a == b);
 ```
 
 在查找 class 文件时，一个 loader 可能会搜索以下两种路径：
