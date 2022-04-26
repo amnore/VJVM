@@ -38,8 +38,9 @@ ClassLoader 会把其中数据交给 JVM 其他模块完成加载。
 为了更灵活地完成类的加载，JVM 允许一个 ClassLoader 调用另一个的方法搜索 class 文
 件。我们把这种方式称为委托。
 
-在我们的 JVM 中有两个 ClassLoader：第一个为 Bootstrap Loader，负责加载 Java 标准
-库的 class 文件；第二个为 User Loader，负责从用户指定的路径中搜索 class。
+VJVM 中有两个 ClassLoader：第一个为 Bootstrap Loader，负责加载 Java 标准库的
+class 文件；第二个为 User Loader，负责从用户指定的路径中搜索 class。在本次作业中，
+你需要补全相关代码使它们能够正常工作。
 
 User Loader 在查找 class 文件前会首先委托 Bootstrap Loader 查找同一个类，如果找
 到则直接返回，否则才会在自己的路径中搜索。因此，我们把 Bootstrap Loader 称为
