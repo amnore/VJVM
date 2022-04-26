@@ -151,7 +151,7 @@ public class JInterpreter {
 
     var bp = breakpoints.stream().filter(t -> t.getLeft().equals(method) && t.getMiddle().equals(offset)).findFirst();
 
-    if (bp.isEmpty()) {
+    if (!bp.isPresent()) {
       throw new Error("no breakpoint found");
     }
 
