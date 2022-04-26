@@ -95,12 +95,3 @@ int c = a + b;
   [类](https://en.wikipedia.org/wiki/Class_(computer_programming)) 是 Java 语言
   的核心，JVM 中也对它提供了特殊支持。在这个 Lab 中我们将实现类的初始化、虚函数
   调用等功能。在完成这些之后，你的 JVM 就能正常运行大部分的 Java 程序。
-
-## JVM 大作业的历史
-
-你们并不是第一届被这个大作业折磨的软院人。🤣
-
-初代 JVVM 原本是 [wym 童鞋](https://github.com/wym0120) 的毕业设计，在他做软工一
-助教时被用于设计 19 级大作业。今年，[wyh](https://github.com/wyh2023) 和
-[czg](https://github.com/amnore) ~~发扬软院祖传大作业的优秀传统~~对 JVVM 的代码
-和作业进行了重构。希望能给大家带来一个完成度更高，各部分作业分配更合理的版本。
