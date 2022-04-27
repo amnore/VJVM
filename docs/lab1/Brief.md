@@ -15,9 +15,12 @@ VJVM 的最终目标是实现一个执行 Java 程序的虚拟机，但在这之
 > 便写出了难以维护的代码，IT WILL BITE YOU EVENTUALLY!!! 请仔细思考代码的结构和
 > 各个模块的接口设计。
 
-> 在开始之前，请拉取 lab1 的框架代码：
->
-> ```
-> $ git pull origin
-> $ git checkout lab1
-> ```
+在开始之前，请拉取 lab1 的框架代码：
+
+```
+$ git pull origin
+$ git checkout lab1
+```
+
+**再次提醒，请全程使用你在 Lab 0 中克隆的仓库进行开发。OJ 仓库与本仓库历史不统一，
+仅作提交用。**
