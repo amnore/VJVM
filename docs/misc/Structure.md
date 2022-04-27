@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # 项目结构
 
 ## JVM 一览
