@@ -1,7 +1,7 @@
 ---
 has_children: true
 permalink: /lab2/
-nav_order: 2
+nav_order: 3
 ---
 
 # Lab2 字节码解释执行
