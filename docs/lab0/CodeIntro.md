@@ -37,7 +37,7 @@ $ vim src/main/java/vjvm/vm/Main.java
 代码。由于我们当前什么都没实现，你在运行时会看到这样的信息：
 
 ```
-$ ./gradlew jar
+$ ./gradlew jar  # Windows 用户请使用 gradlew.bat
 $ java -jar build/libs/VJVM-0.0.1.jar dump java.lang.String
 vjvm.utils.UnimplementedException
   at vjvm.vm.Dump.call(Main.java:58)

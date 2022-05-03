@@ -55,6 +55,22 @@ var b = loader.loadClass("Ljava/lang/String;");
 assertTrue(a == b);
 ```
 
+看起来很复杂，但 `JClassLoader` 的逻辑实际上可以用下面几行伪代码说明：
+
+```
+if 需要加载的 class 已被保存在 definedClass 中：
+    返回已加载的 class
+else if parent 不为 null：
+    使用 parent 加载 class
+
+if parent 未找到相应的 class：
+    for searchPaths 中的每一项：
+        尝试使用它来加载类，并调用 JClass 构造函数构造类
+
+if 所有的 searchPath 都没有找到需要加载的类：
+    返回 null
+```
+
 在查找 class 文件时，一个 loader 可能会搜索以下两种路径：
 
 1. 搜索单个目录
@@ -76,6 +92,27 @@ assertTrue(a == b);
 
 以上便是 Lab1.1 的全部要求。接下来，我们会介绍更多 ClassLoader 的相关知识（本次
 作业中不会直接用到）和框架代码的逻辑。
+
+> 不知道要做什么？
+>
+> 这很正常。如果你以前写的全是 AC 即丢的 OJ 题，那么你在第一次拿到这种有一定规模
+> 的项目的时候必定很茫然。Lab 1.1 需要你编写的代码事实上只有几十行。你需要做的最
+> 重要的事其实是理解框架相关部分的逻辑。如果你不知道该如何上手，请回答以下几个问
+> 题：
+>
+> 1. 如果不使用 IDE，我应该如何编译？（提示：回去看 Lab 0.3）
+>
+> 2. 编译后生成的 jar 文件在哪？我应该如何运行它？
+>
+> 3. main 函数在哪？Main.java 中的几个命令在给 main 函数传入什么参数的时候会执行？
+>
+> 5. 运行时抛出的第一个异常在哪里？为了实现这部分我应该做什么？
+>
+> 6. 代码正常运行一次需要经过哪些类的哪些方法？
+>
+> 7. user loader 与 bootstrap loader 之间是如何调用的？
+>
+> 8. 测试的代码是如何调用 Main.java 中的命令的？
 
 ## 一个 class 的一生 —— 加载
 
