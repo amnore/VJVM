@@ -70,6 +70,9 @@ public class VMContext {
     }
 
     var entry = userLoader.loadClass(Descriptors.of(entryClass));
+    if (entry == null) {
+      throw new Error(String.format("class %s not found", entry));
+    }
     entry.initialize(initThread);
     assert entry.initState() == JClass.InitState.INITIALIZED;
 

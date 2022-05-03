@@ -1,7 +1,7 @@
 package lab1.cases;
 
 class Same {
-  public String sayTwins() {
+  public java.lang.String sayTwins() {
     return "MyCousin!";
   }
 }

@@ -21,103 +21,103 @@ public class XSTORE<T> extends Instruction {
   private final String name;
 
   public static XSTORE<Integer> ISTORE(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popInt, Slots::int_, pc.ubyte(), "iload");
+    return new XSTORE<>(OperandStack::popInt, Slots::int_, pc.ubyte(), "istore");
   }
 
   public static XSTORE<Integer> ISTORE_0(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popInt, Slots::int_, 0, "iload");
+    return new XSTORE<>(OperandStack::popInt, Slots::int_, 0, "istore");
   }
 
   public static XSTORE<Integer> ISTORE_1(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popInt, Slots::int_, 1, "iload");
+    return new XSTORE<>(OperandStack::popInt, Slots::int_, 1, "istore");
   }
 
   public static XSTORE<Integer> ISTORE_2(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popInt, Slots::int_, 2, "iload");
+    return new XSTORE<>(OperandStack::popInt, Slots::int_, 2, "istore");
   }
 
   public static XSTORE<Integer> ISTORE_3(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popInt, Slots::int_, 3, "iload");
+    return new XSTORE<>(OperandStack::popInt, Slots::int_, 3, "istore");
   }
 
   public static XSTORE<Long> LSTORE(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popLong, Slots::long_, pc.ubyte(), "lload");
+    return new XSTORE<>(OperandStack::popLong, Slots::long_, pc.ubyte(), "lstore");
   }
 
   public static XSTORE<Long> LSTORE_0(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popLong, Slots::long_, 0, "lload");
+    return new XSTORE<>(OperandStack::popLong, Slots::long_, 0, "lstore");
   }
 
   public static XSTORE<Long> LSTORE_1(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popLong, Slots::long_, 1, "lload");
+    return new XSTORE<>(OperandStack::popLong, Slots::long_, 1, "lstore");
   }
 
   public static XSTORE<Long> LSTORE_2(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popLong, Slots::long_, 2, "lload");
+    return new XSTORE<>(OperandStack::popLong, Slots::long_, 2, "lstore");
   }
 
   public static XSTORE<Long> LSTORE_3(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popLong, Slots::long_, 3, "lload");
+    return new XSTORE<>(OperandStack::popLong, Slots::long_, 3, "lstore");
   }
 
   public static XSTORE<Float> FSTORE(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popFloat, Slots::float_, pc.ubyte(), "fload");
+    return new XSTORE<>(OperandStack::popFloat, Slots::float_, pc.ubyte(), "fstore");
   }
 
   public static XSTORE<Float> FSTORE_0(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 0, "fload");
+    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 0, "fstore");
   }
 
   public static XSTORE<Float> FSTORE_1(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 1, "fload");
+    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 1, "fstore");
   }
 
   public static XSTORE<Float> FSTORE_2(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 2, "fload");
+    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 2, "fstore");
   }
 
   public static XSTORE<Float> FSTORE_3(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 3, "fload");
+    return new XSTORE<>(OperandStack::popFloat, Slots::float_, 3, "fstore");
   }
 
   public static XSTORE<Double> DSTORE(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popDouble, Slots::double_, pc.ubyte(), "dload");
+    return new XSTORE<>(OperandStack::popDouble, Slots::double_, pc.ubyte(), "dstore");
   }
 
   public static XSTORE<Double> DSTORE_0(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 0, "dload");
+    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 0, "dstore");
   }
 
   public static XSTORE<Double> DSTORE_1(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 1, "dload");
+    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 1, "dstore");
   }
 
   public static XSTORE<Double> DSTORE_2(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 2, "dload");
+    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 2, "dstore");
   }
 
   public static XSTORE<Double> DSTORE_3(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 3, "dload");
+    return new XSTORE<>(OperandStack::popDouble, Slots::double_, 3, "dstore");
   }
 
   public static XSTORE<Integer> ASTORE(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popAddress, Slots::address, pc.ubyte(), "aload");
+    return new XSTORE<>(OperandStack::popAddress, Slots::address, pc.ubyte(), "astore");
   }
 
   public static XSTORE<Integer> ASTORE_0(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popAddress, Slots::address, 0, "aload");
+    return new XSTORE<>(OperandStack::popAddress, Slots::address, 0, "astore");
   }
 
   public static XSTORE<Integer> ASTORE_1(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popAddress, Slots::address, 1, "aload");
+    return new XSTORE<>(OperandStack::popAddress, Slots::address, 1, "astore");
   }
 
   public static XSTORE<Integer> ASTORE_2(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popAddress, Slots::address, 2, "aload");
+    return new XSTORE<>(OperandStack::popAddress, Slots::address, 2, "astore");
   }
 
   public static XSTORE<Integer> ASTORE_3(ProgramCounter pc, MethodInfo method) {
-    return new XSTORE<>(OperandStack::popAddress, Slots::address, 3, "aload");
+    return new XSTORE<>(OperandStack::popAddress, Slots::address, 3, "astore");
   }
 
   @Override

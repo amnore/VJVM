@@ -16,11 +16,9 @@ import vjvm.runtime.Slots;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.object.ArrayObject;
 import vjvm.runtime.object.StringObject;
+import vjvm.utils.InputUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -28,34 +26,34 @@ import static vjvm.classfiledefs.Descriptors.*;
 
 public class JInterpreter {
   // (ClassName, MethodName, MethodDescriptor) -> HackFunction
-  private static final HashMap<Triple<String, String, String>, BiFunction<JThread, Slots, Object>> hackTable = new HashMap<>();
+  private static final HashMap<Triple<String, String, String>, BiFunction<JThread, Slots, Object>> nativeTable = new HashMap<>();
 
   static {
-    hackTable.put(Triple.of("java/lang/Object", "registerNatives", "()V"), (t, a) -> null);
-    hackTable.put(Triple.of("java/lang/Class", "registerNatives", "()V"), (t, a) -> null);
-    hackTable.put(Triple.of("java/lang/Class", "desiredAssertionStatus0", "(Ljava/lang/Class;)Z"), (t, a) -> true);
-    hackTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"), (t, a) -> {
+    nativeTable.put(Triple.of("java/lang/Object", "registerNatives", "()V"), (t, a) -> null);
+    nativeTable.put(Triple.of("java/lang/Class", "registerNatives", "()V"), (t, a) -> null);
+    nativeTable.put(Triple.of("java/lang/Class", "desiredAssertionStatus0", "(Ljava/lang/Class;)Z"), (t, a) -> true);
+    nativeTable.put(Triple.of("java/lang/String", "intern", "()Ljava/lang/String;"), (t, a) -> {
       var h = t.context().heap();
       var s = (StringObject) t.context().heap().get(a.address(0));
       return h.intern(s);
     });
-    hackTable.put(Triple.of("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"),
+    nativeTable.put(Triple.of("java/lang/Throwable", "fillInStackTrace", "(I)Ljava/lang/Throwable;"),
         (t, a) -> a.address(0));
-    hackTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"),
+    nativeTable.put(Triple.of("java/lang/Class", "getPrimitiveClass", "(Ljava/lang/String;)Ljava/lang/Class;"),
         (t, a) -> {
           var c = t.context();
           var str = (StringObject) c.heap().get(a.address(0));
           var desc = Descriptors.of(str.value());
           return c.bootstrapLoader().loadClass(desc).classObject().address();
         });
-    hackTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), (t, a) -> a.int_(0));
-    hackTable.put(Triple.of("java/lang/Double", "doubleToRawLongBits", "(D)J"), (t, a) -> a.long_(0));
-    hackTable.put(Triple.of("java/lang/Double", "longBitsToDouble", "(J)D"), (t, a) -> a.double_(0));
-    hackTable.put(Triple.of("java/lang/System", "registerNatives", "()V"), (t, a) -> null);
-    hackTable.put(Triple.of("java/lang/StrictMath", "sin", "(D)D"), (t, a) -> Math.sin(a.double_(0)));
-    hackTable.put(Triple.of("java/lang/StrictMath", "exp", "(D)D"), (t, a) -> Math.exp(a.double_(0)));
-    hackTable.put(Triple.of("java/lang/StrictMath", "pow", "(DD)D"), (t, a) -> Math.pow(a.double_(0), a.double_(2)));
-    hackTable.put(Triple.of("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"), (t, a) -> {
+    nativeTable.put(Triple.of("java/lang/Float", "floatToRawIntBits", "(F)I"), (t, a) -> a.int_(0));
+    nativeTable.put(Triple.of("java/lang/Double", "doubleToRawLongBits", "(D)J"), (t, a) -> a.long_(0));
+    nativeTable.put(Triple.of("java/lang/Double", "longBitsToDouble", "(J)D"), (t, a) -> a.double_(0));
+    nativeTable.put(Triple.of("java/lang/System", "registerNatives", "()V"), (t, a) -> null);
+    nativeTable.put(Triple.of("java/lang/StrictMath", "sin", "(D)D"), (t, a) -> Math.sin(a.double_(0)));
+    nativeTable.put(Triple.of("java/lang/StrictMath", "exp", "(D)D"), (t, a) -> Math.exp(a.double_(0)));
+    nativeTable.put(Triple.of("java/lang/StrictMath", "pow", "(DD)D"), (t, a) -> Math.pow(a.double_(0), a.double_(2)));
+    nativeTable.put(Triple.of("java/lang/System", "arraycopy", "(Ljava/lang/Object;ILjava/lang/Object;II)V"), (t, a) -> {
       // only support char[], no checks
       var heap = t.context().heap();
       var src = (ArrayObject) heap.get(a.address(0));
@@ -67,6 +65,30 @@ public class JInterpreter {
       for (int i = 0; i < length; ++i) {
         dest.char_(destPos + 1, src.char_(srcPos + i));
       }
+      return null;
+    });
+
+    nativeTable.put(Triple.of("lab2/IOUtil", "readInt", "()I"), (t, a) -> InputUtils.readInt());
+    nativeTable.put(Triple.of("lab2/IOUtil", "readLong", "()J"), (t, a) -> InputUtils.readLong());
+    nativeTable.put(Triple.of("lab2/IOUtil", "readChar", "()C"), (t, a) -> InputUtils.readChar());
+    nativeTable.put(Triple.of("lab2/IOUtil", "writeInt", "(I)V"), (t, a) -> {
+      System.out.println(a.int_(0));
+      return null;
+    });
+    nativeTable.put(Triple.of("lab2/IOUtil", "writeFloat", "(F)V"), (t, a) -> {
+      System.out.println(a.float_(0));
+      return null;
+    });
+    nativeTable.put(Triple.of("lab2/IOUtil", "writeLong", "(J)V"), (t, a) -> {
+      System.out.println(a.long_(0));
+      return null;
+    });
+    nativeTable.put(Triple.of("lab2/IOUtil", "writeDouble", "(D)V"), (t, a) -> {
+      System.out.println(a.double_(0));
+      return null;
+    });
+    nativeTable.put(Triple.of("lab2/IOUtil", "writeChar", "(C)V"), (t, a) -> {
+      System.out.println(a.char_(0));
       return null;
     });
   }
@@ -195,7 +217,7 @@ public class JInterpreter {
     assert method.native_();
 
     var key = Triple.of(method.jClass().name(), method.name(), method.descriptor());
-    var impl = hackTable.get(key);
+    var impl = nativeTable.get(key);
     if (impl == null) {
       // TODO: throw exception in thread
       throw new Error(String.format("Unimplemented native method: %s", key));

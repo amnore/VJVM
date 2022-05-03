@@ -24,7 +24,6 @@ public class INVOKESTATIC extends Instruction {
     var frame = thread.top();
 
     jClass.initialize(thread);
-    assert jClass.initState() == JClass.InitState.INITIALIZED;
 
     var args = frame.stack().popSlots(method.argc());
     thread.context().interpreter().invoke(method, thread, args);

@@ -27,7 +27,6 @@ public class PUTSTATIC extends Instruction {
 
     if (jClass.initState() != JClass.InitState.INITIALIZED) {
       jClass.initialize(thread);
-      assert jClass.initState() == JClass.InitState.INITIALIZED;
     }
 
     var slots = jClass.staticFields();
