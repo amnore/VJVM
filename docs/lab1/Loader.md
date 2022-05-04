@@ -208,9 +208,9 @@ Classpath 可能包含一个或多个加载路径，每两个之间以路径分�
 `ClassLoader.loadClass`。该方法接受一个字符串，返回加载的类。在 Lab 1.2 中，你将
 解析 class 文件并填入返回的类。需要注意的是，这里传入的不是 class 名称，而是它的
 描述符（descriptor）。如 `java.lang.String` 类对应 `Ljava/lang/String;`。对于
-descriptor 我们将[在 Lab 1.2 中再次提及]({% post_url lab1/Parser %}#class-文件中
-的名称)。我们将 `ClassLoader.loadClass` 方法留空，你需要按照双亲委托的逻辑来实现
-类的加载。
+descriptor 我们将[在 Lab 1.2 中再次提及]({{ site.baseurl }}{% link
+lab1/Parser.html %}#class-文件中的名称)。我们将 `ClassLoader.loadClass` 方法留空，
+你需要按照双亲委托的逻辑来实现类的加载。
 
 本次作业要求的两种加载路径事实上具有同样的接口（interface）：给定一个 class，从
 中搜索对应的文件。我们将这一行为抽象成了 `ClassSearchPath` 及它的 `findClass` 方
