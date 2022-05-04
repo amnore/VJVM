@@ -311,3 +311,6 @@ $ git add src
 $ git commit -m "Upload code"
 $ git push
 ```
+
+由于 OJ 仓库中的代码并非最新版本，请把原始仓库中的全部代码全部复制进 OJ 仓库再提
+交。
