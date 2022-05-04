@@ -82,7 +82,7 @@ if 所有的 searchPath 都没有找到需要加载的类：
 
    Jar 文件事实上是一个 zip 压缩包，将多个 class 文件打包在一起。在从
    `/foo/bar.jar` 中加载 `baz.B` 时，你应该读取该文件并搜索其中的 `baz/B.class`
-   路径。JDK 中提供了 `JarFile` 类来读取 jar 文件。（你可以使用 `bsdtar -tf
+   路径。JDK 中提供了 `JarFile` 类来读取 jar 文件。（你可以使用 `jar -tf
    <jarfile>`查看 Jar 文件的内容）
 
 我们将通过 `Dump` 命令调用你的代码进行测试。在成功找到所需类时，我们要求你的命令
