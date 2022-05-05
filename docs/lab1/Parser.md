@@ -38,7 +38,7 @@ class 文件的结构。我们不会完全实现规范中所有的内容，请�
       描述符}` 的形式输出
     - Utf8：以 `"${字符串}"` 的形式输出，其中字符串应使用
       `org.apache.commons.text.StringEscapeUtils.escapeJava` 进行转义。
-    - String：输出该常量指向的 Utf8 常量
+    - String：以相同方式输出该常量指向的 Utf8 常量所包含的字符串
     - Integer、Long：以十进制默认格式输出
     - Float、Double：为了保证不丢失精度，我们要求你使用 16 进制浮点数输出。
     - NameAndType：以 `${名称}:${描述符}` 的形式输出
