@@ -28,14 +28,17 @@ class 文件的结构。我们不会完全实现规范中所有的内容，请�
 
   对于每一行，以 `#${索引} = ${常量类型}: ${常量值}` 的形式输出。其中，常量类型
   为 JVM 规范表 4.4 中的名称去除 `CONSTANT_` 前缀；对于值，我们要求你解析以下形
-  式的常量：
+  式的常量（整数与浮点数的格式化方式参见 [JDK 文
+  档
+  ](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html#syntax])
+  ）：
 
     - Class：输出其名称
     - Fieldref、Methodref、InterfaceMethodref：以 `${类名}.${成员名}:${方法/成员
       描述符}` 的形式输出
     - String、Utf8：以 `"${字符串}"` 的形式输出，其中字符串应使用
       `org.apache.commons.text.StringEscapeUtils.escapeJava` 进行转义。
-    - Integer、Long：以默认格式输出
+    - Integer、Long：以十进制默认格式输出
     - Float、Double：为了保证不丢失精度，我们要求你使用 16 进制浮点数输出。
     - NameAndType：以 `${名称}:${描述符}` 的形式输出
 
