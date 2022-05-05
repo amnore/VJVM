@@ -36,8 +36,9 @@ class 文件的结构。我们不会完全实现规范中所有的内容，请�
     - Class：输出其名称
     - Fieldref、Methodref、InterfaceMethodref：以 `${类名}.${成员名}:${方法/成员
       描述符}` 的形式输出
-    - String、Utf8：以 `"${字符串}"` 的形式输出，其中字符串应使用
+    - Utf8：以 `"${字符串}"` 的形式输出，其中字符串应使用
       `org.apache.commons.text.StringEscapeUtils.escapeJava` 进行转义。
+    - String：输出该常量指向的 Utf8 常量
     - Integer、Long：以十进制默认格式输出
     - Float、Double：为了保证不丢失精度，我们要求你使用 16 进制浮点数输出。
     - NameAndType：以 `${名称}:${描述符}` 的形式输出
