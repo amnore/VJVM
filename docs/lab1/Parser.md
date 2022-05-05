@@ -30,7 +30,7 @@ class 文件的结构。我们不会完全实现规范中所有的内容，请�
   为 JVM 规范表 4.4 中的名称去除 `CONSTANT_` 前缀；对于值，我们要求你解析以下形
   式的常量（整数与浮点数的格式化方式参见 [JDK 文
   档
-  ](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html#syntax])
+  ](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html#syntax)
   ）：
 
     - Class：输出其名称
