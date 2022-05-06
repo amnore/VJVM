@@ -216,10 +216,6 @@ descriptor 我们将在 Lab 1.2 中再次提及。我们将 `ClassLoader.loadCla
 中搜索对应的文件。我们将这一行为抽象成了 `ClassSearchPath` 及它的 `findClass` 方
 法。
 
-Lab1.1 的测试代码在 `src/test` 目录下，你可以运行其中的测试代码来弄清楚测试的输
-入与输出。在执行测试前，我们会把 `VJVM_TESTRES_PATH` 环境变量指向 `testdata` 目
-录，其中包含了测试数据与输出结果。
-
 > 利用接口提高代码可维护性
 >
 > 我们当然可以直接在 `loadClass` 方法中直接解析三种加载路径并完成加载，但如果以
@@ -234,6 +230,23 @@ Lab1.1 的测试代码在 `src/test` 目录下，你可以运行其中的测试�
 > 与这种接口常常相伴的，是“工厂方法”，即 `ClassSearthPath.constructSearthPath`。
 > 这个方法的作用是解析字符串并为其中每一个路径构造一个 `ClassSearchPath` 的子类。
 > 这样我们在 `ClassLoader` 中也不需要关心如何解析路径了。
+
+Lab1.1 的测试代码在 `src/test` 目录下，你可以运行其中的测试代码来弄清楚测试的输
+入与输出。在执行测试前，我们会把 `VJVM_TESTRES_PATH` 环境变量指向 `testdata` 目
+录，其中包含了测试数据与输出结果。
+
+> VSCode 执行测试时报错 `NullPointerException`？
+>
+> 测试框架使用了 `VJVM_TESTRES_PATH` 与 `VJVM_TESTRESULT_PATH` 两个环境变量来指
+> 定测试数据与输出结果的路径。虽然 `build.gradle` 中已经设置了这两个变量，但
+> VSCode 不会从中导入它们。因此你需要自己设置这两个变量的值。
+>
+> 如何设置两个环境变量请参阅 [VSCode 文
+> 档](https://github.com/microsoft/vscode-java-test/wiki/Run-with-Configuration)。
+> 两个变量应有的值可在 `build.gradle` 的 `test` 部分找到，你需要将其中的
+> `$projectDir` 替换成 VSCode 使用的
+> [`${workspaceFolder}`](https://code.visualstudio.com/docs/editor/variables-reference#_predefined-variables)
+> 。
 
 对于类的创建，我们调用了 `JClass` 的构造方法。框架中只包含了一部分的构造过程，剩
 下的我们会在 Lab 1.2 中实现它。
