@@ -243,8 +243,8 @@ Lab1.1 的测试代码在 `src/test` 目录下，你可以运行其中的测试�
 >
 > 如何设置两个环境变量请参阅 [VSCode 文
 > 档](https://github.com/microsoft/vscode-java-test/wiki/Run-with-Configuration)。
-> 两个变量应有的值可在 `build.gradle` 的 `test` 部分找到，你需要将其中的
-> `$projectDir` 替换成 VSCode 使用的
+> 两个变量应有的值可在 `build.gradle` 的 `test` 部分找到，你在 VSCode 设置中需要
+> 将 `$projectDir` 替换成 VSCode 使用的
 > [`${workspaceFolder}`](https://code.visualstudio.com/docs/editor/variables-reference#_predefined-variables)
 > 。
 
