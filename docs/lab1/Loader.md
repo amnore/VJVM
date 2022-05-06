@@ -35,8 +35,9 @@ Library](https://en.wikipedia.org/wiki/Dynamic-link_library)）便是 `.dll` 后
 ClassLoader 的作用便是搜索指定路径下的这些文件。如果找到了匹配的 class 文件，
 ClassLoader 会把其中数据交给 JVM 其他模块完成加载。
 
-为了更灵活地完成类的加载，JVM 允许一个 ClassLoader 调用另一个的方法搜索 class 文
-件。我们把这种方式称为委托。
+在加载时，JVM 会使用类的全名（包括了类名及它所在的包名）进行搜索。为了更灵活地完
+成类的加载，JVM 允许一个 ClassLoader 调用另一个的方法搜索 class 文件。我们把这种
+方式称为委托。
 
 VJVM 中有两个 ClassLoader：第一个为 Bootstrap Loader，负责加载 Java 标准库的
 class 文件；第二个为 User Loader，负责从用户指定的路径中搜索 class。在本次作业中，
@@ -214,6 +215,10 @@ descriptor 我们将在 Lab 1.2 中再次提及。我们将 `ClassLoader.loadCla
 本次作业要求的两种加载路径事实上具有同样的接口（interface）：给定一个 class，从
 中搜索对应的文件。我们将这一行为抽象成了 `ClassSearchPath` 及它的 `findClass` 方
 法。
+
+Lab1.1 的测试代码在 `src/test` 目录下，你可以运行其中的测试代码来弄清楚测试的输
+入与输出。在执行测试前，我们会把 `VJVM_TESTRES_PATH` 环境变量指向 `testdata` 目
+录，其中包含了测试数据与输出结果。
 
 > 利用接口提高代码可维护性
 >
