@@ -231,6 +231,10 @@ descriptor 我们将在 Lab 1.2 中再次提及。我们将 `ClassLoader.loadCla
 > 这个方法的作用是解析字符串并为其中每一个路径构造一个 `ClassSearchPath` 的子类。
 > 这样我们在 `ClassLoader` 中也不需要关心如何解析路径了。
 
+从目录或 jar 文件中找到 class 之后，我们会将其中数据交给 `JClass` 构造方法构造类
+的运行时表示。此处我们将原始字节流用 `DataInputStream` 进行封装，以便读取其中的
+数据结构。框架中只包含了一部分的构造过程，剩下的我们会在 Lab 1.2 中实现它。
+
 Lab1.1 的测试代码在 `src/test` 目录下，你可以运行其中的测试代码来弄清楚测试的输
 入与输出。在执行测试前，我们会把 `VJVM_TESTRES_PATH` 环境变量指向 `testdata` 目
 录，其中包含了测试数据与输出结果。
@@ -247,9 +251,6 @@ Lab1.1 的测试代码在 `src/test` 目录下，你可以运行其中的测试�
 > 将 `$projectDir` 替换成 VSCode 使用的
 > [`${workspaceFolder}`](https://code.visualstudio.com/docs/editor/variables-reference#_predefined-variables)
 > 。
-
-对于类的创建，我们调用了 `JClass` 的构造方法。框架中只包含了一部分的构造过程，剩
-下的我们会在 Lab 1.2 中实现它。
 
 代码中需要你自己实现的部分我们已用 `UnimplementedError` 标识出来。你可以使用以下
 命令来查找所有未实现的内容：
