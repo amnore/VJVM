@@ -40,7 +40,8 @@ public class JMonitor {
       try {
         command = reader.readLine("> ");
       } catch (EndOfFileException e) {
-        command = "";
+        commandLine.execute("q");
+        continue;
       }
 
       if (command.isEmpty()) {
@@ -156,7 +157,10 @@ public class JMonitor {
     private int locals() {
       var locals = currentThread.top().vars();
       for (var i = 0; i < locals.size(); i++) {
-        System.err.printf("#%-4d = 0x%x\n", i, locals.int_(i));
+        var value = locals.value(i);
+        if (value != null) {
+          System.err.printf("#%-4d = %s\n", i, value);
+        }
       }
 
       return -1;
@@ -178,11 +182,11 @@ public class JMonitor {
     private int operandStack() {
       var stack = currentThread.top().stack();
       var slots = stack.slots();
-      for (var i = 0; i < slots.size(); i++) {
-        System.err.printf("#%-4d = 0x%-8x %s\n", i, slots.int_(i), i == stack.top() ? "<-- top" : "");
-      }
-      if (stack.top() == slots.size()) {
-        System.err.printf("%19s%s\n", "", "<-- top");
+      for (var i = 0; i < stack.top(); i++) {
+        var value = slots.value(i);
+        if (value != null) {
+          System.err.printf("#%-4d = %s\n", i, value);
+        }
       }
       return -1;
     }

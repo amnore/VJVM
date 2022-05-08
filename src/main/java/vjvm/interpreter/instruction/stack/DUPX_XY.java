@@ -7,37 +7,38 @@ import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JThread;
 import vjvm.runtime.OperandStack;
 import vjvm.runtime.ProgramCounter;
+import vjvm.runtime.Slots;
 import vjvm.runtime.classdata.MethodInfo;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class DUPX_XY<T, U> extends Instruction {
-  private final Function<OperandStack, T> popFunc1;
-  private final Function<OperandStack, U> popFunc2;
-  private final BiConsumer<OperandStack, T> pushFunc1;
-  private final BiConsumer<OperandStack, U> pushFunc2;
+public class DUPX_XY extends Instruction {
+  private final Function<OperandStack, Slots> popFunc1;
+  private final Function<OperandStack, Slots> popFunc2;
+  private final BiConsumer<OperandStack, Slots> pushFunc1;
+  private final BiConsumer<OperandStack, Slots> pushFunc2;
   private final String name;
 
-  public static DUPX_XY<Long, Integer> DUP2_X1(ProgramCounter pc, MethodInfo method) {
-    return new DUPX_XY<>(OperandStack::popLong, OperandStack::popInt, OperandStack::pushLong, OperandStack::pushInt,
-      "dup2_x1");
+  public static DUPX_XY DUP2_X1(ProgramCounter pc, MethodInfo method) {
+    return new DUPX_XY(s -> s.popSlots(2), s -> s.popSlots(1), (s, t) -> s.pushSlots(t), (s, t) -> s.pushSlots(t),
+        "dup2_x1");
   }
 
-  public static DUPX_XY<Long, Long> DUP2_X2(ProgramCounter pc, MethodInfo method) {
-    return new DUPX_XY<>(OperandStack::popLong, OperandStack::popLong, OperandStack::pushLong, OperandStack::pushLong,
-      "dup2_x2");
+  public static DUPX_XY DUP2_X2(ProgramCounter pc, MethodInfo method) {
+    return new DUPX_XY(s -> s.popSlots(2), s -> s.popSlots(2), (s, t) -> s.pushSlots(t), (s, t) -> s.pushSlots(t),
+        "dup2_x2");
   }
 
-  public static DUPX_XY<Integer, Integer> DUP_X1(ProgramCounter pc, MethodInfo method) {
-    return new DUPX_XY<>(OperandStack::popInt, OperandStack::popInt, OperandStack::pushInt, OperandStack::pushInt,
-      "dup_x1");
+  public static DUPX_XY DUP_X1(ProgramCounter pc, MethodInfo method) {
+    return new DUPX_XY(s -> s.popSlots(1), s -> s.popSlots(1), (s, t) -> s.pushSlots(t), (s, t) -> s.pushSlots(t),
+        "dup_x1");
   }
 
-  public static DUPX_XY<Integer, Long> DUP_X2(ProgramCounter pc, MethodInfo method) {
-    return new DUPX_XY<>(OperandStack::popInt, OperandStack::popLong, OperandStack::pushInt, OperandStack::pushLong,
-      "dup_x2");
+  public static DUPX_XY DUP_X2(ProgramCounter pc, MethodInfo method) {
+    return new DUPX_XY(s -> s.popSlots(1), s -> s.popSlots(2), (s, t) -> s.pushSlots(t), (s, t) -> s.pushSlots(t),
+        "dup_x2");
   }
 
   @Override

@@ -83,6 +83,11 @@ public class OperandStack {
     return slots.short_(--top);
   }
 
+  public void pushSlots(Slots slots) {
+    slots.copyTo(0, slots.size(), this.slots, top);
+    top += slots.size();
+  }
+
   public Slots popSlots(int count) {
     assert top >= count;
 

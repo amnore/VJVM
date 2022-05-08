@@ -13,10 +13,10 @@ public class SWAP extends Instruction {
   @Override
   public void run(JThread thread) {
     var stack = thread.top().stack();
-    var value = stack.popInt();
-    var value2 = stack.popInt();
-    stack.pushInt(value);
-    stack.pushInt(value2);
+    var value = stack.popSlots(1);
+    var value2 = stack.popSlots(1);
+    stack.pushSlots(value);
+    stack.pushSlots(value2);
   }
 
   @Override
