@@ -100,12 +100,12 @@ GOTO i # 跳转到第 i 条指令
 <figure>
   <img src="https://imgs.xkcd.com/comics/new_bug.png" />
   <figcaption>
-    <link href="https://en.wikipedia.org/wiki/Heisenbug">Concurrency</link>
+    <a href="https://en.wikipedia.org/wiki/Heisenbug">Concurrency</a>
     is
-    <link href="https://www.bilibili.com/video/BV13u411X72Q">HARD!</link>
-    (<link href="https://xkcd.com/1700/">New Bug</link>
+    <a href="https://www.bilibili.com/video/BV13u411X72Q">HARD!</a>
+    (<a href="https://xkcd.com/1700/">New Bug</a>
     by xkcd /
-    <link href="https://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5</link>)
+    <a href="https://creativecommons.org/licenses/by-nc/2.5/">CC BY-NC 2.5</a>)
   </figcaption>
 </figure>
 
