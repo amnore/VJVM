@@ -230,17 +230,22 @@ public class A extends Object implements Cloneable {
 }
 ```
 
-将这个类保存到 `A.java` 中，然后命令行执行以下两条命令：
+将这个类保存到 `A.java` 中，然后命令行执行以下两条命令，便可看到 class 文件的内
+容：
 
 ```
 $ javac A.java
 $ javap -verbose A.class | less
 ```
 
-你就可以看到这个类都有哪些内容了。
-
 实际上，我们在本次作业中实现的便是一个简化版 `javap` 程序，因此你在编写代码时可
-以以它为参考。
+以以它为参考。在完成 Lab 1.2 后，你也可以用相似的方式执行作业程序来打印 class 文
+件内容：
+
+```
+$ ./gradlew jar # Windows 用户请使用  gradlew.bat
+$ java -jar build/libs/VJVM-0.0.1.jar dump A.class
+```
 
 > javac 和 javap 命令用不了？
 >
