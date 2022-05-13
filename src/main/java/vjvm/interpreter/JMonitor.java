@@ -14,6 +14,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import vjvm.classfiledefs.Descriptors;
+import vjvm.interpreter.instruction.Decoder;
 import vjvm.interpreter.instruction.Instruction;
 import vjvm.runtime.JFrame;
 import vjvm.runtime.JThread;
@@ -69,7 +70,7 @@ public class JMonitor {
     var pc = thread.pc();
     var pos = pc.position();
 
-    var instr = Instruction.decode(pc, f.method());
+    var instr = Decoder.decode(pc, f.method());
     pc.position(pos);
 
     if (thread.top().method() != currentMethod) {
@@ -172,10 +173,10 @@ public class JMonitor {
         try {
           var bp = bpMap.get(pc.position());
           if (bp != null) {
-            op = Instruction.decode(new ProgramCounter(bp.instruction()), currentMethod);
+            op = Decoder.decode(new ProgramCounter(bp.instruction()), currentMethod);
             pc.move(bp.instruction().length);
           } else {
-            op = Instruction.decode(pc, currentMethod);
+            op = Decoder.decode(pc, currentMethod);
           }
         } catch (UnimplementedInstructionError e) {
           pc.position(pos);

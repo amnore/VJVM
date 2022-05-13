@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import lombok.Data;
 import lombok.var;
-import vjvm.interpreter.instruction.Instruction;
+import vjvm.interpreter.instruction.Decoder;
 import vjvm.runtime.ProgramCounter;
 import vjvm.runtime.classdata.MethodInfo;
 
@@ -23,7 +23,7 @@ public class Breakpoint {
     var pc = new ProgramCounter(code);
 
     pc.position(offset);
-    Instruction.decode(pc, method);
+    Decoder.decode(pc, method);
     instruction = Arrays.copyOfRange(method.code().code(), offset, pc.position());
   }
 }

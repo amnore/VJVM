@@ -8,7 +8,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.classfiledefs.MethodDescriptors;
 import vjvm.classfiledefs.Opcodes;
-import vjvm.interpreter.instruction.Instruction;
+import vjvm.interpreter.instruction.Decoder;
 import vjvm.runtime.JFrame;
 import vjvm.runtime.JThread;
 import vjvm.runtime.ProgramCounter;
@@ -127,7 +127,7 @@ public class JInterpreter {
         monitor.enter(thread);
       }
 
-      var op = Instruction.decode(thread.pc(), frame.method());
+      var op = Decoder.decode(thread.pc(), frame.method());
       steps--;
       op.run(thread);
 
