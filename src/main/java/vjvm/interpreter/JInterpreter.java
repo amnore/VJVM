@@ -3,7 +3,6 @@ package vjvm.interpreter;
 import lombok.Getter;
 import lombok.var;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import vjvm.classfiledefs.Descriptors;
 import vjvm.classfiledefs.MethodDescriptors;
@@ -11,7 +10,6 @@ import vjvm.classfiledefs.Opcodes;
 import vjvm.interpreter.instruction.Decoder;
 import vjvm.runtime.JFrame;
 import vjvm.runtime.JThread;
-import vjvm.runtime.ProgramCounter;
 import vjvm.runtime.Slots;
 import vjvm.runtime.classdata.MethodInfo;
 import vjvm.runtime.object.ArrayObject;
@@ -20,7 +18,6 @@ import vjvm.utils.InputUtils;
 
 import java.util.*;
 import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 import static vjvm.classfiledefs.Descriptors.*;
 
@@ -80,7 +77,7 @@ public class JInterpreter {
 
     var bp = new Breakpoint(method, offset);
     breakpoints.add(bp);
-    enableBreakpoint(bp);
+    bp.enable();
   }
 
   public void removeBreakpoint(int index) {
@@ -93,14 +90,6 @@ public class JInterpreter {
   }
 
   private void disableBreakpoint(Breakpoint bp) {
-    var code = bp.method().code().code();
-    var instr = bp.instruction();
-    System.arraycopy(instr, 0, code, bp.offset(), instr.length);
-  }
-
-  private void enableBreakpoint(Breakpoint bp) {
-    var code = bp.method().code().code();
-    Arrays.fill(code, bp.offset(), bp.offset() + bp.instruction().length, Opcodes.OPC_breakpoint);
   }
 
   private void findCurrentBreakpoint(JThread thread) {
@@ -132,13 +121,13 @@ public class JInterpreter {
       op.run(thread);
 
       if (currentBreakpoint != null) {
-        enableBreakpoint(currentBreakpoint);
+        currentBreakpoint.enable();
         currentBreakpoint = null;
       }
 
       if (status == Status.BREAK) {
         findCurrentBreakpoint(thread);
-        disableBreakpoint(currentBreakpoint);
+        currentBreakpoint.disable();
         monitor.enter(thread);
       }
     }
