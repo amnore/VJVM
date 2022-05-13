@@ -32,8 +32,8 @@ public class JInterpreter {
   private Status status = Status.CONTINUE;
   private long steps;
 
-  private final ArrayList<Triple<MethodInfo, Integer, byte[]>> breakpoints = new ArrayList<>();
-  private Triple<MethodInfo, Integer, byte[]> currentBreakpoint;
+  private final ArrayList<Breakpoint> breakpoints = new ArrayList<>();
+  private Breakpoint currentBreakpoint;
 
   /**
    * Invoke a method when there is no frames in a thread.
@@ -78,13 +78,9 @@ public class JInterpreter {
       return;
     }
 
-    var pc = new ProgramCounter(code);
-    pc.position(offset);
-    Instruction.decode(pc, method);
-    var end = pc.position();
-
-    breakpoints.add(Triple.of(method, offset, Arrays.copyOfRange(code, offset, end)));
-    Arrays.fill(code, offset, end, Opcodes.OPC_breakpoint);
+    var bp = new Breakpoint(method, offset);
+    breakpoints.add(bp);
+    enableBreakpoint(bp);
   }
 
   public void removeBreakpoint(int index) {
@@ -92,21 +88,28 @@ public class JInterpreter {
     breakpoints.remove(index);
   }
 
-  public List<Pair<MethodInfo, Integer>> breakpoints() {
-    return breakpoints.stream().map(t -> Pair.of(t.getLeft(), t.getMiddle())).collect(Collectors.toList());
+  public List<Breakpoint> breakpoints() {
+    return Collections.unmodifiableList(breakpoints);
   }
 
-  private void disableBreakpoint(Triple<MethodInfo, Integer, byte[]> bp) {
-    var code = bp.getLeft().code().code();
-    var instr = bp.getRight();
-    System.arraycopy(instr, 0, code, bp.getMiddle(), instr.length);
+  private void disableBreakpoint(Breakpoint bp) {
+    var code = bp.method().code().code();
+    var instr = bp.instruction();
+    System.arraycopy(instr, 0, code, bp.offset(), instr.length);
+  }
+
+  private void enableBreakpoint(Breakpoint bp) {
+    var code = bp.method().code().code();
+    Arrays.fill(code, bp.offset(), bp.offset() + bp.instruction().length, Opcodes.OPC_breakpoint);
   }
 
   private void findCurrentBreakpoint(JThread thread) {
     var method = thread.top().method();
     var offset = thread.pc().position();
 
-    var bp = breakpoints.stream().filter(t -> t.getLeft().equals(method) && t.getMiddle().equals(offset)).findFirst();
+    var bp = breakpoints.stream()
+      .filter(t -> t.method().equals(method) && t.offset() == offset)
+      .findFirst();
 
     if (!bp.isPresent()) {
       throw new Error("no breakpoint found");
@@ -129,7 +132,7 @@ public class JInterpreter {
       op.run(thread);
 
       if (currentBreakpoint != null) {
-        disableBreakpoint(currentBreakpoint);
+        enableBreakpoint(currentBreakpoint);
         currentBreakpoint = null;
       }
 
@@ -138,14 +141,8 @@ public class JInterpreter {
         disableBreakpoint(currentBreakpoint);
         monitor.enter(thread);
       }
-
-      if (thread.exception() != null && !handleException(thread)) {
-        thread.pop();
-        return;
-      }
     }
   }
-
   private void runNativeMethod(JThread thread) {
     var frame = thread.top();
     var method = frame.method();
