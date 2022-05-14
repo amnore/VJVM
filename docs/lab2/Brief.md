@@ -26,3 +26,5 @@ $ git pull origin
 $ git checkout lab2
 $ git merge master
 ```
+
+在 merge 的过程中你可能会遇到新增代码与 Lab 1 代码的冲突。你需要首先解决这些冲突。
