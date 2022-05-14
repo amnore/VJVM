@@ -2,10 +2,15 @@ package lab2_1;
 
 import org.junit.jupiter.api.Test;
 
-public class RunClasses {
+public class RunClassesTest {
   @Test
   public void runIOUtil() {
     Utils.runClss("lab2.IOUtil");
+  }
+
+  @Test
+  public void runHelloWorld() {
+    Utils.runClss("lab2.HelloWorld");
   }
 
   @Test
