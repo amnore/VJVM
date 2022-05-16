@@ -53,9 +53,6 @@ public class Utils {
     var expectedLines = expected.split("\r\n|\r|\n");
     var actualLines = actual.split("\r\n|\r|\n");
 
-    assertEquals(expectedLines.length, actualLines.length);
-    for (int i = 0; i < expectedLines.length; i++) {
-      assertEquals(expectedLines[i], actualLines[i]);
-    }
+    assertEquals(String.join("\n", expectedLines), String.join("\n", actualLines));
   }
 }
