@@ -431,6 +431,9 @@ Commands:
 > 区分开来。比如，一个 `String` 必定不为空而 `String?` 可能为空。你不能直接通过
 > `String?` 调用 `String` 的方法，必须首先进行空指针检查。这样，一个程序的大部分
 > 代码就不用担心空指针的问题了。
+>
+> 当然，框架代码中大部分地方由于历史原因仍是使用的 `null` 作为空值。你在自己加入
+> 新的代码是应避免这种做法。
 
 实现断点则需要更多的工作。`JInterpreter` 中分别有 `setBreakpoint` 和
 `removeBreakpoint` 两个方法，分别用于添加一个断点和删除一个断点。`setBreakpoint`
