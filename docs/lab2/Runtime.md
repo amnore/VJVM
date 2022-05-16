@@ -221,14 +221,17 @@ HelloWorld 程序。
 - 解析：
 
   除 opcode 外，每条 `invokestatic` 还编码了一个 `unsigned short` 指向当前类常量
-  池中一个 `CONSTANT_Methodref_info` 常量。你需要首先加载该方法所在类，然后从加
-  载的类中找到与 `Methodref` 相符的 `MethodInfo` 并保存至指令中。
+  池中一个 `CONSTANT_Methodref_info` 常量，你可以在 [JVM 手
+  册
+  ](https://docs.oracle.com/javase/specs/jvms/se17/html/jvms-6.html#jvms-6.5.invokestatic)
+  中找到该指令的编码格式。你需要首先加载该方法所在类，然后从加载的类中找到与
+  `Methodref` 相符的 `MethodInfo` 并保存至指令中。
 
 - 运行：
 
   首先从当前方法的操作数栈顶弹出 `argc` 个 slots，即弹出方法调用的参数。然后通过
   `Interpreter.invoke` 调用方法。我们已将调用的代码实现，但你需要实现
-  `MethodDescriptors.argc` 以计算参数数量。
+  `MethodDescriptors.argc` 以计算参数占用的 slots 数量。
 
 以上两个步骤的伪代码如下：
 
@@ -246,7 +249,8 @@ argc(descriptor /* 方法描述符，如 (I[JLjava/lang/String;)V */):
 INVOKDESTATIC(pc /* 当前 PC */, method /* 当前方法 */):
   cp = 当前类的常量池
   methodRef = cp[从 PC 读取下标]
-  jClass = 使用当前类的加载器加载 method 所在类
+  thisClass = method 所在的类
+  jClass = 使用 thisClass 中的 classLoader 加载 method 所在类
   this.method = 使用 findMethod 在 jClass 中查找与 methodRef 匹配的方法
 
 run(thread /* 执行时的线程 */):
