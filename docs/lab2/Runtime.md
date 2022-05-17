@@ -246,7 +246,7 @@ argc(descriptor /* 方法描述符，如 (I[JLjava/lang/String;)V */):
     n += 1
   return argc
 
-INVOKDESTATIC(pc /* 当前 PC */, method /* 当前方法 */):
+INVOKESTATIC(pc /* 当前 PC */, method /* 当前方法 */):
   cp = 当前类的常量池
   methodRef = cp[从 PC 读取下标]
   thisClass = method 所在的类
