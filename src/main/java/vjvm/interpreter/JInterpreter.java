@@ -81,7 +81,12 @@ public class JInterpreter {
   }
 
   public void removeBreakpoint(int index) {
-    disableBreakpoint(breakpoints.get(index));
+    var bp = breakpoints.get(index);
+    disableBreakpoint(bp);
+
+    if (bp == currentBreakpoint) {
+      currentBreakpoint = null;
+    }
     breakpoints.remove(index);
   }
 
