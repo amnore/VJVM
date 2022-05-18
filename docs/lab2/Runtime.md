@@ -454,9 +454,9 @@ while True:
     使用 Breakpoint.enable 启用断点
     当前断点 = null
   if 解释器处于 break 状态，即该指令为断点指令：
+    当前断点 = 从全部断点中找到当前指令对应的断点
     使用 Breakpoint.disable 禁用断点
     使用 JMonitor.enter 进入调试器
-    当前断点 = 从全部断点中找到当前指令对应的断点
 ```
 
 ### 调试 HelloWorld
