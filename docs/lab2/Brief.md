@@ -41,6 +41,11 @@ Lab 1 代码的冲突。你需要首先解决这些冲突。完成合并后，�
 > 你可以在互联网上找到很多 Git 教程。如 [Oh My Git!](https://ohmygit.org/) 是一
 > 个交互式学习 Git 的游戏；[Pro Git](https://git-scm.com/book/en/v2) 是一本关于
 > Git 的书。你可以通过这些资源学习 Git，也可以自己寻找其它资源。
+>
+> <figure>
+> <img src="{{ site.baseurl }}{% link assets/oh-my-git.jpg %}" />
+> <figcaption>是的，你甚至可以通过游戏来学 Git！</figcaption>
+> </figure>
 
 > 真的有必要学习 Git 吗？
 >
