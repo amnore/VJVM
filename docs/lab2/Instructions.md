@@ -52,3 +52,32 @@ parent: Lab2 字节码解释执行
 ### References、Extended 与 Reserved
 
 暂不需实现除 `invokestatic` 以外的其它指令。
+
+---
+
+恭喜！你现在已经得到了一个[图灵完
+备](https://en.wikipedia.org/wiki/Turing_completeness)的虚拟机。在接下来的 Lab
+3 中，我们将关注类的链接、初始化等过程，支持更多 Java 程序的运行。
+
+> 关于图灵完备性的一些有趣事实
+>
+> - [C++ 模板是图灵完备
+>   的
+>   ](https://matt.might.net/articles/c++-template-meta-programming-with-lambda-calculus/)
+>   。
+>
+> - SQL 是图灵完备的，你甚至可以[用 SQL 来做光
+>   追](https://www.pouet.net/prod.php?which=83222)。
+>
+> - x86 MOV 指令也是图灵完备的，有人写了一个[只生成 MOV 指令的编译
+>   器](https://github.com/Battelle/movfuscator)。
+>
+> - 你使用的正则表达式[也是图灵完备
+>   的
+>   ](http://neilk.net/blog/2000/06/01/abigails-regex-to-test-for-prime-numbers/)
+>   。
+>
+> - 没有哪台计算机是图灵完备的（[因为内存有
+>   限](https://en.wikipedia.org/wiki/Turing_machine)）。
+>
+> 你可以在[这里](https://www.gwern.net/Turing-complete)找到更多图灵完备的例子。
