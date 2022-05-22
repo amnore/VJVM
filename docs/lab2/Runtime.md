@@ -388,7 +388,7 @@ Commands:
   > b lab2.HelloWorld main # 在 HelloWorld 类的 main 的函数中设置断点
   > b lab2.HelloWorld main 50 # 在 main 函数中偏移量为 50 的指令处设置断点。
   # 偏移量是指令第一个字节距该方法字节码第一个指令的字节数，
-  # 可从 javap -verbose 命令的输出中找到
+  # 可从 javap -verbose 或 disas 的输出中找到
   ```
 
 - `c`：恢复执行
