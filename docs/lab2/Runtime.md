@@ -344,6 +344,7 @@ CPL 作业也是用的 IDE，那么它的调试器后端很有可能就是使用
 
 ```
 $ ./gradlew jar # Windows 用户请使用 gradlew.bat jar
+                # MacOS 用户如遇 permission denied 请尝试 chmod +x ./gradlew
 $ java -jar build/libs/VJVM-0.0.1.jar -cp testdata/build run -d lab2.HelloWorld
 ```
 
