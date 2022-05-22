@@ -123,7 +123,7 @@ ICONST_X.run(thread):
 因此，我们将这一共同的过程写在 `run` 方法当中，而将不同指令的常量保存为类的
 `value`属性。
 
-在解码时，我们需要填入不同的 `value` 属性。因此，我们分别编写了一个`ICONST_M1`、
+在解码时，我们需要填入不同的 `value` 属性。因此，我们分别编写了 `ICONST_M1`、
 `ICONST_0`、`ICONST_1` 等方法，用于解码不同的指令。这些指令以不同的参数调用
 `XCONST_Y` 的构造函数（构造函数通过 `@AllArgsConstructor` 生成，该注解的作用详见
 [文档](https://projectlombok.org/features/constructor)）。
