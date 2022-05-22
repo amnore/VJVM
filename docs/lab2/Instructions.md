@@ -141,7 +141,7 @@ public static final XCONST_Y<Float> FCONST_0(ProgramCounter pc, MethodInfo metho
 ```
 
 许多指令都可以使用类似的方式实现。正因如此，参考实现只用了 23 个类就实现了 Lab 2
-与 Lab 3 的全部指令（你可以猜到哪些类实现了哪些指令吗？）：
+的全部指令（你可以猜到哪些类实现了哪些指令吗？）：
 
 ```
 $ tree
