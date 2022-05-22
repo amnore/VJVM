@@ -273,11 +273,11 @@ argc(descriptor /* 方法描述符，如 (I[JLjava/lang/String;)V */):
     n += 1
   return argc
 
-INVOKESTATIC(pc /* 当前 PC */, method /* 当前方法 */):
+INVOKESTATIC(pc /* 当前 PC */, method /* 当前指令所在方法 */):
   cp = 当前类的常量池
   methodRef = cp[从 PC 读取下标]
   thisClass = method 所在的类
-  jClass = 使用 thisClass 中的 classLoader 加载 method 所在类
+  jClass = 使用 thisClass 中的 classLoader 加载 methodRef 所在类
   this.method = 使用 findMethod 在 jClass 中查找与 methodRef 匹配的方法
 
 run(thread /* 执行时的线程 */):
