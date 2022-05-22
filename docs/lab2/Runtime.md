@@ -343,6 +343,7 @@ CPL 作业也是用的 IDE，那么它的调试器后端很有可能就是使用
 在执行程序的时候，我们可以加入 `-d` 选项来启动调试器：
 
 ```
+$ ./gradlew jar # Windows 用户请使用 gradlew.bat jar
 $ java -jar build/libs/VJVM-0.0.1.jar -cp testdata/build run -d lab2.HelloWorld
 ```
 
@@ -402,8 +403,8 @@ Commands:
 
 - `si`：单步执行
 
-  - `si`：单步执行一条命令
-  - `si ${n}`：单步执行 `n` 条命令
+  - `si`：单步执行一条指令
+  - `si ${n}`：单步执行 `n` 条指令
 
 - `disas`：打印当前函数的指令序列，当前所在位置会以 `*` 标识。当遇到无法译码的指
   令时，该命令会打印之后全部原始字节。如：
