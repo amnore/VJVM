@@ -257,7 +257,7 @@ HelloWorld 程序。
 - 运行：
 
   首先从当前方法的操作数栈顶弹出 `argc` 个 slots，即弹出方法调用的参数。然后通过
-  `Interpreter.invoke` 调用方法。我们已将调用的代码实现，但你需要编写
+  `Interpreter.invoke` 调用方法。我们已将 `run` 的代码实现，但你需要编写
   `MethodDescriptors.argc` 以计算参数占用的 slots 数量。
 
 以上两个步骤的伪代码如下：
