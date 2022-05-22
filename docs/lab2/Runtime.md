@@ -362,7 +362,7 @@ Commands:
   b   set breakpoint
   c   continue
   d   delete breakpoint
-  disas  disassembly current function
+  disas  disassemble current function
   h   print help message
   q   quit
   si  step instruction
