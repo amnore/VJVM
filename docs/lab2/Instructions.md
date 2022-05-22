@@ -187,8 +187,7 @@ bug”的厉害。
 ---
 
 恭喜！你现在已经得到了一个[图灵完
-备](https://en.wikipedia.org/wiki/Turing_completeness)的虚拟机。在接下来的 Lab
-3 中，我们将关注类的链接、初始化等过程，支持更多 Java 程序的运行。
+备](https://en.wikipedia.org/wiki/Turing_completeness)的虚拟机。
 
 > 关于图灵完备性的一些有趣事实
 >
