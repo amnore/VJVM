@@ -16,13 +16,13 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class Utils {
+public class TestUtils {
   static final Path resPath = FileSystems.getDefault().getPath(System.getenv("VJVM_TESTRES_PATH"));
   static final Path resultPath = FileSystems.getDefault().getPath(System.getenv("VJVM_TESTRESULT_PATH"));
   static final Path inputPath = FileSystems.getDefault().getPath(System.getenv("VJVM_TESTINPUT_PATH"));
 
   @SneakyThrows
-  public static void runClss(String name) {
+  public static void runClass(String name) {
     var cmd = new CommandLine(new Main());
     var args = new ArrayList<String>();
     var outFile = resultPath.resolve(name.replace('.', '/') + ".dump");
