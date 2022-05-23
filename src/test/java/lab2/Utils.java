@@ -1,4 +1,4 @@
-package lab2_1;
+package lab2;
 
 import lombok.SneakyThrows;
 import lombok.var;
