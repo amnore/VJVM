@@ -20,6 +20,10 @@ parent: Lab2 字节码解释执行
 
 实现除 `aconst_null` 以外的全部指令。
 
+对于 `ldc`、`ldc_w` 与 `ldc2_w` 指令，我们限定其指向的常量池项类型只能为
+`CONSTANT_Integer_info`、`CONSTANT_Float_info`、`CONSTANT_Long_info` 或
+`CONSTANT_Double_info`。
+
 ### Loads
 
 实现除 `aload`、`aload_0`、`aload_1`、`aload_2`、`aload_3`、`iaload`、`laload`、
