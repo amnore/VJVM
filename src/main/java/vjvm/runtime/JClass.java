@@ -88,7 +88,7 @@ public class JClass {
     constantPool = new ConstantPool(dataInput, this);
     accessFlags = dataInput.readUnsignedShort();
     thisClass = (ClassRef) constantPool.constant(dataInput.readUnsignedShort());
-    packageName = name().substring(0, name().lastIndexOf('/'));
+    packageName = name().substring(0, Math.max(name().lastIndexOf('/'), 0));
 
     var superIndex = dataInput.readUnsignedShort();
     superClass = superIndex == 0 ? null : (ClassRef) constantPool.constant(superIndex);
