@@ -211,6 +211,8 @@ public class JMonitor {
     @Command(name = "lo", description = "print local variable slots")
     private int locals() {
       var locals = currentThread.top().vars();
+
+      System.err.printf("locals size=%d\n", locals.size());
       for (var i = 0; i < locals.size(); i++) {
         var value = locals.value(i);
         if (value != null) {
@@ -238,6 +240,8 @@ public class JMonitor {
     private int operandStack() {
       var stack = currentThread.top().stack();
       var slots = stack.slots();
+
+      System.err.printf("stack size=%d, top=%d\n", stack.slots().size(), stack.top());
       for (var i = 0; i < stack.top(); i++) {
         var value = slots.value(i);
         if (value != null) {
