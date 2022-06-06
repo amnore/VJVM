@@ -295,7 +295,7 @@ run(thread /* 执行时的线程 */):
 在实现以上内容后，让我们来运行 HelloWorld：
 
 ```
-$ ./gradlew jar # Windown 用户请使用 gradlew.bat
+$ ./gradlew jar # Windows 用户请使用 gradlew.bat
 $ java -jar build/libs/VJVM-0.0.1.jar -cp testdata/build run lab2.HelloWorld
 H
 e
