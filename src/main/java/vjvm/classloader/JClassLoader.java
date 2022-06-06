@@ -57,6 +57,7 @@ public class JClassLoader implements Closeable {
    * @param descriptor name of the class to load
    * @return the loaded class
    */
+  @SneakyThrows
   public JClass loadClass(String descriptor) {
     // array class
     if (descriptor.charAt(0) == Descriptors.DESC_array) {
@@ -92,8 +93,11 @@ public class JClassLoader implements Closeable {
     for (var p : searchPaths) {
       var iStream = p.findClass(name);
       // if the class was found
-      if (iStream != null)
-        return defineNonarrayClass(descriptor, iStream);
+      if (iStream != null) {
+        var clazz = defineNonarrayClass(descriptor, iStream);
+        iStream.close();
+        return clazz;
+      }
     }
 
     return null;
