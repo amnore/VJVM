@@ -244,8 +244,8 @@ $ javap -verbose A.class | less
 件内容：
 
 ```
-$ ./gradlew jar # Windows 用户请使用  gradlew.bat
-$ java -jar build/libs/VJVM-0.0.1.jar dump A.class
+$ ./gradlew jar # Windows 用户请使用 gradlew.bat
+$ java -jar build/libs/VJVM-0.0.1.jar dump A
 ```
 
 > javac 和 javap 命令用不了？
